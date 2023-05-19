@@ -1,4 +1,5 @@
 from pyrogram import Client
+import os
 from pyrogram.types import Message
 
 app = Client("my_bot")

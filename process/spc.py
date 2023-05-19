@@ -1,5 +1,5 @@
 import time
-from driver.spc_driver import Spc
+from driver.spc.spc_driver import Spc
 from selenium.webdriver.common.keys import Keys
 from dotenv import load_dotenv
 import os
