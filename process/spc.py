@@ -80,7 +80,7 @@ def include(
         spc.write('//*[@id="dataCompra"]', data_compra + Keys.TAB)
         spc.write('//*[@id="numeroContrato"]', cod_cliente + Keys.TAB)
         spc.write('//*[@id="valorDebito"]', valor_debito + Keys.TAB)
-        spc.include()
+        # spc.include()
         msgSucess = f'CPF: {cpf_cnpj} - Cadastrado com sucesso'
         logging.log(SUCESS, msgSucess)
         print(msgSucess)

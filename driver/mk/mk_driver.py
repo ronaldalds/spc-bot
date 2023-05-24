@@ -13,11 +13,22 @@ from selenium.webdriver.support.expected_conditions import (
 
 
 class Mk:
-    def __init__(self, username: str, password: str, url: str):
+    def __init__(self, username: str, password: str, url: str, headless: bool = False):
         self._username: str = username
         self._password: str = password
+        options = webdriver.ChromeOptions()
+        prefs = {
+            "download.default_directory": "",
+            "download.prompt_for_download": False,
+            "download.directory_upgrade": True,
+            "safebrowsing.enabled": True
+        }
+        options.add_experimental_option("prefs", prefs)
+        options.headless = headless
         self._driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()))
+            service=Service(ChromeDriverManager().install()),
+            options=options
+            )
         self._wdw = WebDriverWait(self._driver, 300)
         self._mouse = ActionChains(self._driver)
         self._driver.get(url)

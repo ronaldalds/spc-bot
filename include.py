@@ -20,25 +20,25 @@ include(
     )
 # if __name__ == '__main__':
 #     fileProduto = pandas.read_excel('mk01_inclusaospc_17_05_2023.xlsx')
-#     lista = []
+    lista = []
 
-#     for i in fileProduto.iterrows():
-#         if i[1]['Tipo de Pessoa'] == 'física':
-#             lista.append((
-#                 str(i[1]['CPF/CNPJ']),  # cpf_cnpj
-#                 str(i[1]['Data Nascimento']),  # data_nascimento
-#                 str(i[1]['DDD']),  # ddd
-#                 str(i[1]['Celular']),  # celular
-#                 str(i[1]['CEP']),  # cep
-#                 str(i[1]['Logradouro']),  # logradouro
-#                 str(i[1]['Número']),  # número
-#                 str(i[1]['Complemento']),  # complemento
-#                 str(i[1]['Bairro']),  # bairro
-#                 str(i[1]['Data Vencimento']),  # data_vencimento
-#                 str(i[1]['Data Compra']),  # data_compra
-#                 str(i[1]['Cod Cliente']),  # cod_cliente
-#                 str(i[1]['Valor do Débito']).replace('.', ','),  # valor_debito
-#             ))
+    for i in fileProduto.iterrows():
+        if i[1]['Tipo de Pessoa'] == 'física':
+            lista.append((
+                str(i[1]['CPF/CNPJ']),  # cpf_cnpj
+                str(i[1]['Data Nascimento']),  # data_nascimento
+                str(i[1]['DDD']),  # ddd
+                str(i[1]['Celular']),  # celular
+                str(i[1]['CEP']),  # cep
+                str(i[1]['Logradouro']),  # logradouro
+                str(i[1]['Número']),  # número
+                str(i[1]['Complemento']),  # complemento
+                str(i[1]['Bairro']),  # bairro
+                str(i[1]['Data Vencimento']),  # data_vencimento
+                str(i[1]['Data Compra']),  # data_compra
+                str(i[1]['Cod Cliente']),  # cod_cliente
+                str(i[1]['Valor do Débito']).replace('.', ','),  # valor_debito
+            ))
 
 
 

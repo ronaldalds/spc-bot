@@ -1,2 +1,6 @@
 *.log
+*.xlsx
 .env
+*__pycache__/
+*.session
+*.session-journal
