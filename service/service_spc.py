@@ -12,7 +12,7 @@ def handle_processar_include_spc(client, message: Message):
         # Verifique se a mensagem contém um documento e se o tipo MIME do documento é "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
             # Criando Pool
-            poolSpc = multiprocessing.Pool(processes=5)
+            pool_spc = multiprocessing.Pool(processes=5)
             # Baixe o arquivo XLSX
             message.reply_text("Preparando arquivo XLSX")
             file_path = message.download()
@@ -40,7 +40,7 @@ def handle_processar_include_spc(client, message: Message):
                         ))
                 resultados = []
                 for item in lista:
-                    resultados.append(poolSpc.apply_async(include, args=item))
+                    resultados.append(pool_spc.apply_async(include, args=item))
                 
                 resultados = [r.get() for r in resultados]
             # ...

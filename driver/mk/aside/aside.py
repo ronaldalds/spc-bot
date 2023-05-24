@@ -6,11 +6,9 @@ class Aside(ABC):
         self,
         painel: str,
         id: str,
-        xpath: str,
     ) -> None:
         self._painel: str = painel
         self._id: str = id
-        self._xpath: str = xpath
 
     @abstractmethod
     def painel(self) -> str:
@@ -20,6 +18,5 @@ class Aside(ABC):
     def id(self) -> str:
         pass
 
-    @abstractmethod
     def xpath(self) -> str:
-        pass
+        return f'//*[@id="{self._id}"]'
