@@ -38,6 +38,11 @@ class Mk:
             By.XPATH, xpath
         )).pause(5).click().pause(5).perform()
 
+    def dbclick(self, xpath: str):
+        self._mouse.move_to_element(self._driver.find_element(
+            By.XPATH, xpath
+        )).pause(5).double_click().pause(5).perform()
+
     def write(self, xpath: str, text: str):
         self._mouse.move_to_element(self._driver.find_element(
             By.XPATH, xpath
