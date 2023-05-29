@@ -2,6 +2,7 @@ from driver.mk.coin.coin import Coin
 from driver.mk.aside.aside import Aside
 from selenium.webdriver.common.by import By
 from selenium import webdriver
+import time
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.service import Service
@@ -9,6 +10,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.expected_conditions import (
     frame_to_be_available_and_switch_to_it,
     element_to_be_clickable,
+    alert_is_present
 )
 
 
@@ -65,6 +67,11 @@ class Mk:
 
     def close(self):
         self._driver.close()
+    
+    def include(self):
+        self._wdw.until(alert_is_present())
+        self._driver.switch_to.alert.accept()
+        time.sleep(5)
 
     def iframeMain(self):
         self._driver.switch_to.default_content()
@@ -79,6 +86,7 @@ class Mk:
             (By.XPATH, '//*[@class="FormIframe"]/iframe')))
         self._wdw.until(frame_to_be_available_and_switch_to_it(
             (By.XPATH, '//iframe[@name="mainform"]')))
+        return self
 
     def iframeCoin(self):
         self._driver.switch_to.default_content()
