@@ -1,31 +1,7 @@
 import pandas
 import re
-from datetime import datetime
-
-def formatar_data(data):
-
-    try:
-        data_excel = int(data)
-        data = datetime.fromordinal(datetime(1900, 1, 1).toordinal() + data_excel - 2)
-        data_formatada = data.strftime("%d/%m/%Y")
-        return data_formatada
-    except ValueError:
-        try:
-            formatos_data = [
-            r"\d{2}/\d{2}/\d{4}",                          # formato dd/mm/yyyy
-            r"\d{4}-\d{2}-\d{2}",                          # formato yyyy-mm-dd
-            r"\d{4}/\d{2}/\d{2}",                          # formato yyyy/mm/dd
-            r"\d{4}-\|/\d{2}-\|/\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z"  # formato yyyy-mm-ddTHH:MM:SS.000Z
-            ]
-            for formato in formatos_data:
-                if re.match(formato, data):
-                    data = datetime.strptime(data, formato)
-                    data_formatada = data.strftime("%d/%m/%Y")
-                    return data_formatada
-        except:
-            return None, "asdf"
-
-
+from datetime import datetime, timedelta
+from driver.formatador import formatar_data
 
 
 
@@ -63,7 +39,7 @@ def formatar_cpf(cpf):
         return cpf_formatado
     return None
 
-file = pandas.read_excel('mk03.xlsx')
+# file = pandas.read_excel('mk03.xlsx')
 
 # for i in file.iterrows():
 #     contrato = str(i[1]["Contrato"])
@@ -84,14 +60,17 @@ file = pandas.read_excel('mk03.xlsx')
 #     onu_serial = i[1]["Onu Serial"]
 
     # print(data_vcto_multa_contratual)
-print(formatar_data("2022-12-29T16:30:00.000Z"))
-print(formatar_data("2022/12/29T16:30:00.000Z"))
+
+
+    
+
+
+print(formatar_data("2022-12-01T16:30:00.000Z"))
+print(formatar_data("2022/12/02T16:30:00.000Z"))
+print(formatar_data("2022-06-03 00:00:00"))
 print(formatar_data("45086"))
-print(formatar_data("2022-12-09"))
-print(formatar_data("2022/12/09"))
-print(formatar_data("09/12/2022"))
-print(formatar_data(None))
-print(formatar_data(True))
-print(formatar_data(False))
-print(formatar_data(""))
-print(formatar_data())
+print(formatar_data("2022-12-04"))
+print(formatar_data("2022/12/05"))
+print(formatar_data("06/12/2022"))
+print(formatar_data("07-12-2022"))
+

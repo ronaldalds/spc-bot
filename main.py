@@ -37,8 +37,9 @@ def process(client, message: Message):
 """)
 
 @app.on_message(filters.command("chat"))
-def handle_chat_id(client, message):
+def handle_chat_id(client, message: Message):
     message.reply_text(message.from_user.id)
+    print(message.from_user.id)
 
 # incluir clientes no sistema do spc
 app.on_message(filters.command("includespc"))(handle_processar_include_spc)

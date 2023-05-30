@@ -73,8 +73,40 @@ def cancelamento(
     instance.click('//*[@title="Clique para fazer uma pesquisa avançada de clientes ou fornecedores"]')
 
     # pesquisar por Código de cadastro
-    instance.click('//*[@class="HTMLComboBox"]/div[1]/div/button')
+    instance.iframeForm()
+    instance.click('//*[@class="HTMLComboBox"]/div[2]/div')
+    instance.click('//option[@value="7"]')
+    instance.write('//input[@title="Código do cliente."]', cod_pessoa)
+    instance.click('//*[@title="Clique para efetivar sua pesquisa."]')
+
+    # click no resultado de pesquisa avançada
+    instance.iframeGrid(financeiro, painel_do_cliente)
+    instance.dbclick(f'//div[text()={cod_pessoa}]')
+
+    # click no resultado do click duplo no cadastro do cliente
+    instance.iframeGridRes(financeiro, painel_do_cliente)
+    instance.click(f'//div[text()={contrato}]')
+
+    # criar multa em caso do contrato ter multa
+    if incidencia_multa == "S":
+
+        # click no botão editar contrato
+        instance.iframePainel(financeiro, painel_do_cliente)
+        instance.click('//*[@title="Alterar contrato"]')
+
+        # click no botão contas associadas
+        instance.iframeForm()
+        instance.click('//button[@title="Contas associadas ao contrato"]')
+
+        # click inserir nova conta
+        instance.click('//button[@title="Inserir nova conta no contrato."]')
+
+
+        # criar multa
+        instance.iframeForm()
+        instance.write('//*[@title="Descrição identificativa da conta."]', "Multa por rescisão contratual")
+
+
 
     time.sleep(10)
     instance.close()
-

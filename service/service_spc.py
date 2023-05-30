@@ -4,6 +4,8 @@ from process.spc import include
 from pyrogram.types import Message
 import multiprocessing
 from dotenv import load_dotenv
+from driver.formatador import formatar_data
+
 
 load_dotenv()
 
@@ -19,13 +21,15 @@ def handle_processar_include_spc(client, message: Message):
             # Processar o arquivo XLSX conforme necessário
             try:
                 file = pandas.read_excel(file_path)
+
                 lista = []
                 message.reply_text(f"Processando arquivo XLSX com {file.shape[0]}")
                 for i in file.iterrows():
                     if i[1]['Tipo de Pessoa'] == 'física':
+                        # print(formatar_data(str(i[1]['Data Vencimento'])), formatar_data(str(i[1]['Data Compra'])))
                         lista.append((
                             str(i[1]['CPF/CNPJ']),  # cpf_cnpj
-                            str(i[1]['Data Nascimento']),  # data_nascimento
+                            formatar_data(str(i[1]['Data Nascimento'])),  # data_nascimento
                             str(i[1]['DDD']),  # ddd
                             str(i[1]['Celular']),  # celular
                             str(i[1]['CEP']),  # cep
@@ -33,8 +37,8 @@ def handle_processar_include_spc(client, message: Message):
                             str(i[1]['Número']),  # número
                             str(i[1]['Complemento']),  # complemento
                             str(i[1]['Bairro']),  # bairro
-                            str(i[1]['Data Vencimento']),  # data_vencimento
-                            str(i[1]['Data Compra']),  # data_compra
+                            formatar_data(str(i[1]['Data Vencimento'])),  # data_vencimento
+                            formatar_data(str(i[1]['Data Compra'])),  # data_compra
                             str(i[1]['Cod Cliente']),  # cod_cliente
                             str(i[1]['Valor do Débito']).replace('.', ','),  # valor_debito
                         ))

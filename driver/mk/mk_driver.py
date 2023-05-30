@@ -36,26 +36,34 @@ class Mk:
         self._driver.get(url)
 
     def click(self, xpath: str):
+        time.sleep(2)
         self._mouse.move_to_element(self._driver.find_element(
             By.XPATH, xpath
-        )).pause(5).click().pause(5).perform()
+        )).click().perform()
+        time.sleep(5)
 
     def dbclick(self, xpath: str):
+        time.sleep(2)
         self._mouse.move_to_element(self._driver.find_element(
             By.XPATH, xpath
-        )).pause(5).double_click().pause(5).perform()
+        )).double_click().perform()
+        time.sleep(5)
+
+    def text(self, xpath: str) -> str:
+        value = self._driver.find_element(By.XPATH, xpath).get_attribute("value")
+        return value
 
     def write(self, xpath: str, text: str):
+        time.sleep(2)
         self._mouse.move_to_element(self._driver.find_element(
             By.XPATH, xpath
-        )).pause(2).send_keys(text).pause(2).perform()
+        )).click().send_keys(text).perform()
+        time.sleep(5)
 
     def login(self):
-        self._driver.find_element(
-            By.XPATH, '//input[@placeholder="Nome do usuário"]').send_keys(self._username)
-        self._driver.find_element(
-            By.XPATH, '//input[@placeholder="Senha"]').send_keys(self._password)
-        self._driver.find_element(By.XPATH, '//button[@name="user"]').click()
+        self.write('//*[@name="user"]', self._username)
+        self.write('//*[@name="password"]', self._password)
+        self.click('//button[@name="user"]')
 
     def minimizeChat(self):
         self._driver.switch_to.default_content()
@@ -118,4 +126,11 @@ class Mk:
         self.iframePainel(coin, aside)
         self._wdw.until(frame_to_be_available_and_switch_to_it(
             (By.XPATH, '//div[@id="lay"]/div[2]/div[2]/div[1]/div/iframe')))
+        return self
+
+    def iframeGridRes(self, coin: Coin, aside: Aside):
+        self._driver.switch_to.default_content()
+        self.iframePainel(coin, aside)
+        self._wdw.until(frame_to_be_available_and_switch_to_it(
+            (By.XPATH, '//div[@id="lay"]/div[2]/div[3]/div[1]/div/iframe')))
         return self
