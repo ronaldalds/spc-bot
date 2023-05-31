@@ -43,7 +43,8 @@ def include(
             url=os.getenv('URL_SPC'),
             operation=os.getenv('OPERATION_SPC'),
             password=os.getenv('PASSWORD_SPC'),
-            secret=os.getenv('SECRET_KEY_SPC')
+            secret=os.getenv('SECRET_KEY_SPC'),
+            headless=True
         )
 
         spc.login()

@@ -2,10 +2,9 @@ import pandas
 import os
 from process.spc import include
 from pyrogram.types import Message
-import multiprocessing
+import concurrent.futures
 from dotenv import load_dotenv
 from driver.formatador import formatar_data
-
 
 load_dotenv()
 
@@ -14,7 +13,7 @@ def handle_processar_include_spc(client, message: Message):
         # Verifique se a mensagem contém um documento e se o tipo MIME do documento é "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
             # Criando Pool
-            pool_spc = multiprocessing.Pool(processes=5)
+            limite_threads = 4
             # Baixe o arquivo XLSX
             message.reply_text("Preparando arquivo XLSX")
             file_path = message.download()
@@ -42,11 +41,29 @@ def handle_processar_include_spc(client, message: Message):
                             str(i[1]['Cod Cliente']),  # cod_cliente
                             str(i[1]['Valor do Débito']).replace('.', ','),  # valor_debito
                         ))
-                resultados = []
-                for item in lista:
-                    resultados.append(pool_spc.apply_async(include, args=item))
+
+                def executar(arg):
+                    try:
+                        include(
+                            cpf_cnpj = arg[0],
+                            data_nascimento = arg[1],
+                            ddd = arg[2],
+                            celular = arg[3],
+                            cep = arg[4],
+                            logradouro = arg[5],
+                            numero = arg[6],
+                            complemento = arg[7],
+                            bairro = arg[8],
+                            data_vencimento = arg[9],
+                            data_compra = arg[10],
+                            cod_cliente = arg[11],
+                            valor_debito = arg[12],
+                        )
+                    except Exception as e:
+                        print(f"Error executing: {e}")
+                with concurrent.futures.ThreadPoolExecutor(max_workers=limite_threads) as executor:
+                    resultados = executor.map(executar, lista)
                 
-                resultados = [r.get() for r in resultados]
             # ...
             finally:
             # Excluir o arquivo XLSX
