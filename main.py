@@ -2,7 +2,7 @@ from pyrogram import Client, filters
 import os
 from pyrogram.types import Message
 from dotenv import load_dotenv
-from service.service_spc import handle_processar_include_spc
+from service.service_spc import handle_include_spc
 from driver.mk.aside.aside_estoque import EstoqueHome
 
 load_dotenv()
@@ -42,6 +42,6 @@ def handle_chat_id(client, message: Message):
     print(message.from_user.id)
 
 # incluir clientes no sistema do spc
-app.on_message(filters.command("includespc"))(handle_processar_include_spc)
+app.on_message(filters.command("includespc"))(handle_include_spc)
 
 app.run()

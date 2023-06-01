@@ -39,7 +39,7 @@ def cancelamento(
         planos_contas
         ):
 
-    if mk == 1:
+    if mk == "1":
         instance = Mk(
             username=os.getenv('USERNAME_MK_TEST'),
             password=os.getenv('PASSWORD_MK_TEST'),
@@ -101,10 +101,44 @@ def cancelamento(
         # click inserir nova conta
         instance.click('//button[@title="Inserir nova conta no contrato."]')
 
-
         # criar multa
-        instance.iframeForm()
+        instance.iframeFormRes()
+
+        # descricao da multa
         instance.write('//*[@title="Descrição identificativa da conta."]', "Multa por rescisão contratual")
+
+        # valor da multa
+        instance.write('//*[@title="Valor do lançamento"]', valor_multa)
+
+        # vencimento da multa
+        instance.write('//*[@title="Data de vencimento da conta."]', vencimento_multa)
+
+        # quantidade de parcelas
+        instance.write('//*[@title="Número de parcela"]', 1)
+
+        # plano de contas
+        instance.click('//*[@title="Unidade de plano de contas referenciada para o lançamento"]/div/button')
+        instance.click(f'//option[@value="{planos_contas.split()[0]}"]')
+
+        # próxima etapa
+        instance.click('//*[@title="Próxima etapa."]')
+
+        # faturar ?
+        instance.click('//div[@title="Deseja faturar agora estas contas?\nMarcando SIM, será criada uma fatura 1/1 para cada conta inserida."]/div/button')
+        instance.click('//option[@value="S"]')
+
+        # qual profile usar
+        instance.click('//div[@title="Selecione a profile desejada"]/div/button')
+        instance.click('//option[@value="590"]')
+
+        # marca check box
+        instance.click('//input[@title="Marque essa opção para confirmar seu desejo de inserir a nova conta."]')
+
+        # concluir multa
+        instance.click('//button[@title="Clique para realizar a inserção"]')
+
+
+
 
 
 

@@ -36,14 +36,14 @@ class Mk:
         self._driver.get(url)
 
     def click(self, xpath: str):
-        time.sleep(2)
+        time.sleep(5)
         self._mouse.move_to_element(self._driver.find_element(
             By.XPATH, xpath
         )).click().perform()
         time.sleep(5)
 
     def dbclick(self, xpath: str):
-        time.sleep(2)
+        time.sleep(5)
         self._mouse.move_to_element(self._driver.find_element(
             By.XPATH, xpath
         )).double_click().perform()
@@ -54,7 +54,7 @@ class Mk:
         return value
 
     def write(self, xpath: str, text: str):
-        time.sleep(2)
+        time.sleep(5)
         self._mouse.move_to_element(self._driver.find_element(
             By.XPATH, xpath
         )).click().send_keys(text).perform()
@@ -92,6 +92,15 @@ class Mk:
         self.iframeMain()
         self._wdw.until(frame_to_be_available_and_switch_to_it(
             (By.XPATH, '//*[@class="FormIframe"]/iframe')))
+        self._wdw.until(frame_to_be_available_and_switch_to_it(
+            (By.XPATH, '//iframe[@name="mainform"]')))
+        return self
+
+    def iframeFormRes(self):
+        self._driver.switch_to.default_content()
+        self.iframeMain()
+        self._wdw.until(frame_to_be_available_and_switch_to_it(
+            (By.XPATH, '//div[@class="WFRIframeForm WFRIframeForm-Active"]/div[2]/iframe')))
         self._wdw.until(frame_to_be_available_and_switch_to_it(
             (By.XPATH, '//iframe[@name="mainform"]')))
         return self

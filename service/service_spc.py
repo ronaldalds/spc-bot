@@ -8,7 +8,7 @@ from driver.formatador import formatar_data
 
 load_dotenv()
 
-def handle_processar_include_spc(client, message: Message):
+def handle_include_spc(client, message: Message):
     if str(message.from_user.id) == str(os.getenv("CHAT_ID_SPC")):
         # Verifique se a mensagem contém um documento e se o tipo MIME do documento é "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
