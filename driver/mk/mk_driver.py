@@ -18,6 +18,8 @@ class Mk:
     def __init__(self, username: str, password: str, url: str, headless: bool = False):
         self._username: str = username
         self._password: str = password
+        largura = 1920
+        altura = 1080
         options = webdriver.ChromeOptions()
         prefs = {
             "download.default_directory": "",
@@ -26,6 +28,9 @@ class Mk:
             "safebrowsing.enabled": True
         }
         options.add_experimental_option("prefs", prefs)
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument(f"--window-size={largura},{altura}")
         options.headless = headless
         self._driver = webdriver.Chrome(
             service=Service(ChromeDriverManager().install()),

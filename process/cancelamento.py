@@ -75,6 +75,7 @@ def cancelamento(
     # pesquisar por Código de cadastro
     instance.iframeForm()
     instance.click('//*[@class="HTMLComboBox"]/div[2]/div')
+    instance.write('//input[@id="lookupSearchQuery"]', "C" + Keys.ENTER)
     instance.click('//option[@value="7"]')
     instance.write('//input[@title="Código do cliente."]', cod_pessoa)
     instance.click('//*[@title="Clique para efetivar sua pesquisa."]')
@@ -118,6 +119,7 @@ def cancelamento(
 
         # plano de contas
         instance.click('//*[@title="Unidade de plano de contas referenciada para o lançamento"]/div/button')
+        instance.write('//input[@id="lookupSearchQuery"]', f"{planos_contas.split()[0]}" + Keys.ENTER)
         instance.click(f'//option[@value="{planos_contas.split()[0]}"]')
 
         # próxima etapa
@@ -129,6 +131,7 @@ def cancelamento(
 
         # qual profile usar
         instance.click('//div[@title="Selecione a profile desejada"]/div/button')
+        instance.write('//input[@id="lookupSearchQuery"]', "5155" + Keys.ENTER)
         instance.click('//option[@value="590"]')
 
         # marca check box
