@@ -3,6 +3,16 @@ from driver.mk.mk_driver import Mk
 from driver.mk.coin.coin import Financeiro
 from driver.mk.aside.aside_financeiro import PainelDoCliente
 from selenium.webdriver.common.keys import Keys
+from driver.mk.mk_select import (
+    TIPO_DA_OS,
+    DEFEITO,
+    MOTIVO_DE_CANCELAMENTO_TEST,
+    MOTIVO_DE_CANCELAMENTO_MK01,
+    MOTIVO_DE_CANCELAMENTO_MK03,
+    GRUPO_DE_ATENDIMENTO_TEST,
+    GRUPO_DE_ATENDIMENTO_MK01,
+    GRUPO_DE_ATENDIMENTO_MK03
+)
 from dotenv import load_dotenv
 import os
 import logging
@@ -39,30 +49,47 @@ def cancelamento(
         planos_contas
         ):
 
-    if mk == "1":
+    if mk == "test":
         instance = Mk(
             username=os.getenv('USERNAME_MK_TEST'),
             password=os.getenv('PASSWORD_MK_TEST'),
             url=os.getenv('URL_MK_TEST'),
         )
+        motivo_de_cancelamento  = MOTIVO_DE_CANCELAMENTO_TEST["Inadimplência"]
+        valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
+        valor_grupo_atendimento = GRUPO_DE_ATENDIMENTO_TEST[grupo_atendimento_os]
+    elif mk == 1:
+        instance = Mk(
+            username=os.getenv('USERNAME_MK1'),
+            password=os.getenv('PASSWORD_MK1'),
+            url=os.getenv('URL_MK1'),
+        )
+        motivo_de_cancelamento  = MOTIVO_DE_CANCELAMENTO_MK01["Inadimplência"]
+        valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
+        valor_grupo_atendimento = GRUPO_DE_ATENDIMENTO_MK01[grupo_atendimento_os]
+    elif mk == 3:
+        instance = Mk(
+            username=os.getenv('USERNAME_MK3'),
+            password=os.getenv('PASSWORD_MK3'),
+            url=os.getenv('URL_MK3'),
+        )
+        motivo_de_cancelamento  = MOTIVO_DE_CANCELAMENTO_MK03["Inadimplência"]
+        valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
+        valor_grupo_atendimento = GRUPO_DE_ATENDIMENTO_MK03[grupo_atendimento_os]
+
     else:
-        print('error: mk')
-        # instance = Mk(
-        #     username=os.getenv('URL_MK3'),
-        #     password=os.getenv('USERNAME_MK3'),
-        #     url=os.getenv('PASSWORD_MK3'),
-        # )
+        logging.warning('Error na escolha do mk')
 
     financeiro = Financeiro()
     painel_do_cliente = PainelDoCliente()
 
     instance.login()
 
+    instance.minimizeChat()
+
     # click na moeda financeiro
     instance.iframeCoin()
     instance.click(financeiro.xpath())
-
-    instance.minimizeChat()
 
     # click aside Painel do cliente
     instance.iframeAsideCoin(financeiro)
@@ -78,7 +105,7 @@ def cancelamento(
     instance.write('//input[@id="lookupSearchQuery"]', "C" + Keys.ENTER)
     instance.click('//option[@value="7"]')
     instance.write('//input[@title="Código do cliente."]', cod_pessoa)
-    instance.click('//*[@title="Clique para efetivar sua pesquisa."]')
+    instance.click('//button[@title="Clique para efetivar sua pesquisa."]')
 
     # click no resultado de pesquisa avançada
     instance.iframeGrid(financeiro, painel_do_cliente)
@@ -89,7 +116,7 @@ def cancelamento(
     instance.click(f'//div[text()={contrato}]')
 
     # criar multa em caso do contrato ter multa
-    if incidencia_multa == "S":
+    if incidencia_multa:
 
         # click no botão editar contrato
         instance.iframePainel(financeiro, painel_do_cliente)
@@ -122,7 +149,7 @@ def cancelamento(
         instance.write('//input[@id="lookupSearchQuery"]', f"{planos_contas.split()[0]}" + Keys.ENTER)
         instance.click(f'//option[@value="{planos_contas.split()[0]}"]')
 
-        # próxima etapa
+        # próxima etapa da multa
         instance.click('//*[@title="Próxima etapa."]')
 
         # faturar ?
@@ -140,10 +167,65 @@ def cancelamento(
         # concluir multa
         instance.click('//button[@title="Clique para realizar a inserção"]')
 
+        # fechar visualizar/Editar contrato
+        instance.iframeMain()
+        instance.click('//div[@class="OptionClose"]')
 
+    # click no resultado do click duplo no cadastro do cliente
+    instance.iframeGridRes(financeiro, painel_do_cliente)
+    instance.click(f'//div[text()={contrato}]')
 
+    # click cancelar contrato
+    instance.iframePainel(financeiro, painel_do_cliente)
+    instance.click('//*[@title="Cancelar contrato"]')
 
+    # Motivo de cancelamento
+    instance.iframeForm()
+    instance.click('//div[@title="Selecione um motivo de cancelamento."]/div/button')
+    instance.write('//input[@id="lookupSearchQuery"]', "Inadi" + Keys.ENTER)
+    instance.click(f'//option[@value="{motivo_de_cancelamento}"]') 
 
+    # detalhes do motivo de cancelamento
+    instance.write('//textarea[@title="Informe detalhes do cancelamento do contrato."]', detalhes_cancelamento)
+
+    # proxima etapa do cancelar contrato
+    instance.click('//div[@class="HTMLTabContainer"]/div[2]/div[@class="next"]')
+
+    # proxima etapa do cancelar contrato
+    instance.click('//div[@class="HTMLTabContainer"]/div[3]/div[@class="next"]')
+    
+    # checkbox Abrir O.S de retirada de equipamentos
+    instance.click('//*[@title="Marque esta opção, para que seja aberta uma O.S. de retirada de equipamentos para este cliente."]')
+
+    # Tipo da O.S
+    instance.click('//div[@title="Informa qual o tipo da Ordem de Serviço."]/div/button')
+    instance.write('//input[@id="lookupSearchQuery"]', tipo_da_os + Keys.ENTER)
+    instance.click(f'//option[@value="{valor_tipo_de_os}"]')
+
+    # Grupo de atendimento
+    instance.click('//div[@class="HTMLTabContainer"]/div[5]/div[7]/div[2]/div/button')
+    instance.write('//input[@id="lookupSearchQuery"]', grupo_atendimento_os + Keys.ENTER)
+    instance.click(f'//option[@value="{valor_grupo_atendimento}"]')
+
+    # Defeito
+    instance.click('//div[@title="Neste campo é informado o defeito associado a esta Ordem de Serviço."]/div/button')
+    instance.write('//input[@id="lookupSearchQuery"]', "C" + Keys.ENTER)
+    instance.click(f'//option[@value="{DEFEITO["Cancelamento contratual"]}"]')
+
+    # Descrição da O.S.
+    instance.write('//textarea[@title="Descreva as informações para a sua O.S."]', relato_do_problema)
+
+    # proxima etapa do cancelar contrato
+    instance.click('//div[@class="HTMLTabContainer"]/div[5]/div[@class="next"]')
+
+    # click checkbox cancelar contrato
+    instance.click('//div[@class="HTMLTabContainer"]/div[6]/div[12]/input[@type="checkbox"]')
+
+    # Terminar cancelamento contrato
+    instance.click('//button[@title="Clique para finalizar"]')
+
+    # alert concluir cancelamento
+    instance.include()
 
     time.sleep(10)
     instance.close()

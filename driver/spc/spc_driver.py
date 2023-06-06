@@ -21,6 +21,8 @@ class Spc:
         self._operation: str = operation
         self._password: str = password
         self._secret: str = secret
+        largura = 1280
+        altura = 960
         options = webdriver.ChromeOptions()
         prefs = {
             "download.default_directory": "",
@@ -29,12 +31,15 @@ class Spc:
             "safebrowsing.enabled": True
         }
         options.add_experimental_option("prefs", prefs)
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument(f"--window-size={largura},{altura}")
         options.headless = headless
         self._driver = webdriver.Chrome(
             service=Service(ChromeDriverManager().install()),
             options=options
             )
-        self._wdw = WebDriverWait(self._driver, 600)
+        self._wdw = WebDriverWait(self._driver, 300)
         self._mouse = ActionChains(self._driver)
         self._driver.get(url)
 

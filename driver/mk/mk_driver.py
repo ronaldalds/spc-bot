@@ -18,8 +18,8 @@ class Mk:
     def __init__(self, username: str, password: str, url: str, headless: bool = False):
         self._username: str = username
         self._password: str = password
-        largura = 1920
-        altura = 1080
+        largura = 1280
+        altura = 960
         options = webdriver.ChromeOptions()
         prefs = {
             "download.default_directory": "",
