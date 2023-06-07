@@ -87,6 +87,13 @@ def cancelamento(
 
     instance.minimizeChat()
 
+    # fechar tela de complete seu cadastro
+    try:
+        instance.iframeMain()
+        instance.click('//div[@class="OptionClose"]')
+    except:
+        print("Sem tela de complete seu cadastro")
+        
     # click na moeda financeiro
     instance.iframeCoin()
     instance.click(financeiro.xpath())

@@ -2,9 +2,9 @@ import re
 from datetime import datetime, timedelta
 
 def formatar_data(data):
-    if len(data) == 5:
+    if (type(data) == float) or (type(data) == int):
         data = datetime(1899, 12, 30) + timedelta(days=int(data))
-        return data.strftime("%d/%m/%Y")
+        return data.strftime("%d%m%Y")
     else:
         df = re.compile("([0-9]{2,4})[-]?[/]?([0-9]{2})[-]?[/]?([0-9]{2,4})")
         data = df.findall(data)[0]
@@ -18,6 +18,14 @@ def formatar_valor_multa(multa):
         return f"{float(multa):.2f}".replace(".", ",")
     else:
         return None
+
+def formatar_int(num):
+    try:
+        num = int(num)
+        if type(num) == int:
+            return num
+    except:
+        return False
 
 def formatar_incidencia(incidencia):
     # verifica se é S = a True ou N = a False

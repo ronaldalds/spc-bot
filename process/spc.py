@@ -61,28 +61,20 @@ def include(
             return
 
         if spc.text('//*[@id="consumidorPessoaFisica.dataNascimento"]') == '':
-            spc.write(
-                '//*[@id="consumidorPessoaFisica.dataNascimento"]', data_nascimento + Keys.TAB)
-        spc.write(
-            '//*[@id="consumidorPessoaFisica.telefones0.numeroDDD"]', ddd)
-        spc.write(
-            '//*[@id="consumidorPessoaFisica.telefones0.numero"]', celular)
-        spc.write(
-            '//input[@id="consumidorPessoaFisica.enderecos0.cep"]', cep + Keys.TAB)
-        spc.write(
-            '//*[@name="consumidorPessoaFisica.enderecos[0].logradouro"]', logradouro)
-        spc.write(
-            '//*[@id="consumidorPessoaFisica.enderecos0.numero"]', numero)
-        spc.write(
-            '//*[@id="consumidorPessoaFisica.enderecos0.complemento"]', complemento)
-        spc.write(
-            '//*[@id="consumidorPessoaFisica.enderecos0.bairro"]', bairro)
+            spc.write('//*[@id="consumidorPessoaFisica.dataNascimento"]', data_nascimento + Keys.TAB)
+        spc.write('//*[@id="consumidorPessoaFisica.telefones0.numeroDDD"]', ddd)
+        spc.write('//*[@id="consumidorPessoaFisica.telefones0.numero"]', celular)
+        spc.write('//input[@id="consumidorPessoaFisica.enderecos0.cep"]', cep + Keys.TAB)
+        spc.write('//*[@name="consumidorPessoaFisica.enderecos[0].logradouro"]', logradouro)
+        spc.write('//*[@id="consumidorPessoaFisica.enderecos0.numero"]', numero)
+        spc.write('//*[@id="consumidorPessoaFisica.enderecos0.complemento"]', complemento)
+        spc.write('//*[@id="consumidorPessoaFisica.enderecos0.bairro"]', bairro)
         spc.write('//*[@id="dataVencimento"]', data_vencimento + Keys.TAB)
         spc.write('//*[@id="dataCompra"]', data_compra + Keys.TAB)
         spc.write('//*[@id="numeroContrato"]', cod_cliente + Keys.TAB)
         spc.write('//*[@id="valorDebito"]', valor_debito + Keys.TAB)
-        # spc.click('//*[@id="idButtonNotificacaoDebitoFisica"]')
-        # spc.include()
+        spc.click('//*[@id="idButtonNotificacaoDebitoFisica"]')
+        spc.include()
         msgSucess = f'CPF: {cpf_cnpj} - Cadastrado com sucesso'
         logging.log(SUCESS, msgSucess)
         print(msgSucess)
