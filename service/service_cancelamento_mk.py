@@ -9,7 +9,7 @@ from driver.formatador import formatar_data, formatar_incidencia, formatar_valor
 load_dotenv()
 
 def handle_cancelamento_mk(client, message: Message):
-    if str(message.from_user.id) == str(os.getenv("CHAT_ID_SPC")):
+    if str(message.from_user.id) == str(os.getenv("CHAT_ID_FINANCEIRO")):
         # Verifique se a mensagem contém um documento e se o tipo MIME do documento é "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
             # Criando Pool
