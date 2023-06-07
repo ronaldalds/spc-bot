@@ -43,7 +43,7 @@ def handle_chat_id(client, message: Message):
     print(message.from_user.id)
 
 # incluir clientes no sistema do spc
-# app.on_message(filters.command("includespc"))(handle_include_spc)
+app.on_message(filters.command("includespc"))(handle_include_spc)
 
 # cancelar contrato no sistema mk
 app.on_message(filters.command("cancelamento"))(handle_cancelamento_mk)
