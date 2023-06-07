@@ -48,4 +48,6 @@ def handle_chat_id(client, message: Message):
 # cancelar contrato no sistema mk
 app.on_message(filters.command("cancelamento"))(handle_cancelamento_mk)
 
+
+print("Serve Telegram Up!")
 app.run()
