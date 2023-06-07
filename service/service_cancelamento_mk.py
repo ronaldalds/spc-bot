@@ -45,27 +45,27 @@ def handle_cancelamento_mk(client, message: Message):
                     ))
 
                 print(len(lista))
-                # def executar(arg):
-                #     try:
-                #         cancelamento(
-                #             mk = arg[0],
-                #             cod_pessoa = arg[1],
-                #             contrato = arg[2],
-                #             detalhes_cancelamento = arg[3],
-                #             tipo_da_os = arg[4],
-                #             grupo_atendimento_os = arg[5],
-                #             relato_do_problema = arg[6],
+                def executar(arg):
+                    try:
+                        cancelamento(
+                            mk = arg[0],
+                            cod_pessoa = arg[1],
+                            contrato = arg[2],
+                            detalhes_cancelamento = arg[3],
+                            tipo_da_os = arg[4],
+                            grupo_atendimento_os = arg[5],
+                            relato_do_problema = arg[6],
 
-                #             # dados para multa
-                #             incidencia_multa = arg[7],
-                #             valor_multa = arg[8],
-                #             vencimento_multa = arg[9],
-                #             planos_contas = arg[10]
-                #         )
-                #     except Exception as e:
-                #         print(f"Error executing: {e}")
-                # with concurrent.futures.ThreadPoolExecutor(max_workers=limite_threads) as executor:
-                #     resultados = executor.map(executar, lista)
+                            # dados para multa
+                            incidencia_multa = arg[7],
+                            valor_multa = arg[8],
+                            vencimento_multa = arg[9],
+                            planos_contas = arg[10]
+                        )
+                    except Exception as e:
+                        print(f"Error executing: {e}")
+                with concurrent.futures.ThreadPoolExecutor(max_workers=limite_threads) as executor:
+                    resultados = executor.map(executar, lista)
             except:
                 print("Error executing")
             # ...
