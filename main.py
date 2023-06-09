@@ -4,6 +4,7 @@ from pyrogram.types import Message
 from dotenv import load_dotenv
 from service.service_spc import handle_include_spc
 from service.service_cancelamento_mk import handle_cancelamento_mk
+from service.service_relatorio import handle_relatorio
 
 
 load_dotenv()
@@ -16,7 +17,7 @@ app = Client(
     )
 
 @app.on_message(filters.command("start"))
-def process(client, message: Message):
+def start(client, message: Message):
     message.reply_text(f"""
 /mis - comando para setor MIS
 /ost - comando para setor OST
@@ -24,13 +25,13 @@ def process(client, message: Message):
 """)
 
 @app.on_message(filters.command("ost"))
-def process(client, message: Message):
+def ost(client, message: Message):
     message.reply_text(f"""
 /verificar - Verifica O.S de 
 """)
 
 @app.on_message(filters.command("mis"))
-def process(client, message: Message):
+def mis(client, message: Message):
     message.reply_text(f"""
 /includespc - Inclui clientes no sistema do spc
 /cancelamento - Cancelamento de cliente mk
@@ -47,6 +48,9 @@ app.on_message(filters.command("includespc"))(handle_include_spc)
 
 # cancelar contrato no sistema mk
 app.on_message(filters.command("cancelamento"))(handle_cancelamento_mk)
+
+# cancelar contrato no sistema mk
+app.on_message(filters.command("relatorio-cancelamento") & filters.text)(handle_relatorio)
 
 
 print("Serve Telegram Up!")
