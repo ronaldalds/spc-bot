@@ -114,20 +114,34 @@ def cancelamento(
     instance.write('//input[@title="Código do cliente."]', cod_pessoa)
     instance.click('//button[@title="Clique para efetivar sua pesquisa."]')
 
-    # click no resultado de pesquisa avançada
-    instance.iframeGrid(financeiro, painel_do_cliente)
-    instance.dbclick(f'//div[text()={cod_pessoa}]')
+    try:
+        # click no resultado de pesquisa avançada
+        instance.iframeGrid(financeiro, painel_do_cliente)
+        instance.dbclick(f'//div[text()={cod_pessoa}]')
+    except:
+        logging.warning(f'Código da pessoa Número {cod_pessoa} não encontrado')
+        instance.close()
+        return
 
-    # click no resultado do click duplo no cadastro do cliente
-    instance.iframeGridRes(financeiro, painel_do_cliente)
-    instance.click(f'//div[text()={contrato}]')
-
+    try:
+        # click no resultado do click duplo no cadastro do cliente
+        instance.iframeGridRes(financeiro, painel_do_cliente)
+        instance.click(f'//div[text()={contrato}]')
+    except:
+        logging.warning(f'Contrato da pessoa Número {contrato} não encontrado')
+        instance.close()
+        return
+    
     # criar multa em caso do contrato ter multa
     if incidencia_multa:
-
-        # click no botão editar contrato
-        instance.iframePainel(financeiro, painel_do_cliente)
-        instance.click('//*[@title="Alterar contrato"]')
+        try:
+            # click no botão editar contrato
+            instance.iframePainel(financeiro, painel_do_cliente)
+            instance.click('//*[@title="Alterar contrato"]')
+        except:
+            logging.warning(f'Contrato da pessoa Número {contrato} cancelado')
+            instance.close()
+            return
 
         # click no botão contas associadas
         instance.iframeForm()
@@ -144,17 +158,27 @@ def cancelamento(
 
         # valor da multa
         instance.write('//*[@title="Valor do lançamento"]', valor_multa)
-
-        # vencimento da multa
-        instance.write('//*[@title="Data de vencimento da conta."]', vencimento_multa)
+        
+        try:
+            # vencimento da multa
+            instance.write('//*[@title="Data de vencimento da conta."]', vencimento_multa)
+        except:
+            logging.error(f'Error na data {vencimento_multa}')
+            instance.close()
+            return
 
         # quantidade de parcelas
         instance.write('//*[@title="Número de parcela"]', 1)
 
-        # plano de contas
-        instance.click('//*[@title="Unidade de plano de contas referenciada para o lançamento"]/div/button')
-        instance.write('//input[@id="lookupSearchQuery"]', f"{planos_contas.split()[0]}" + Keys.ENTER)
-        instance.click(f'//option[@value="{planos_contas.split()[0]}"]')
+        try:
+            # plano de contas
+            instance.click('//*[@title="Unidade de plano de contas referenciada para o lançamento"]/div/button')
+            instance.write('//input[@id="lookupSearchQuery"]', f"{planos_contas.split()[0]}" + Keys.ENTER)
+            instance.click(f'//option[@value="{planos_contas.split()[0]}"]')
+        except:
+            logging.error(f'Error na plano {planos_contas}')
+            instance.close()
+            return
 
         # próxima etapa da multa
         instance.click('//*[@title="Próxima etapa."]')
@@ -178,13 +202,21 @@ def cancelamento(
         instance.iframeMain()
         instance.click('//div[@class="OptionClose"]')
 
+        # log de multa concluído
+        logging.log(SUCESS, f"Multa de R$ {valor_multa} incluida no contrato {contrato}.")
+
     # click no resultado do click duplo no cadastro do cliente
     instance.iframeGridRes(financeiro, painel_do_cliente)
     instance.click(f'//div[text()={contrato}]')
 
-    # click cancelar contrato
-    instance.iframePainel(financeiro, painel_do_cliente)
-    instance.click('//*[@title="Cancelar contrato"]')
+    try:
+        # click cancelar contrato
+        instance.iframePainel(financeiro, painel_do_cliente)
+        instance.click('//*[@title="Cancelar contrato"]')
+    except:
+            logging.warning(f'Contrato da pessoa Número {contrato} cancelado')
+            instance.close()
+            return
 
     # Motivo de cancelamento
     instance.iframeForm()
@@ -204,15 +236,25 @@ def cancelamento(
     # checkbox Abrir O.S de retirada de equipamentos
     instance.click('//*[@title="Marque esta opção, para que seja aberta uma O.S. de retirada de equipamentos para este cliente."]')
 
-    # Tipo da O.S
-    instance.click('//div[@title="Informa qual o tipo da Ordem de Serviço."]/div/button')
-    instance.write('//input[@id="lookupSearchQuery"]', tipo_da_os + Keys.ENTER)
-    instance.click(f'//option[@value="{valor_tipo_de_os}"]')
+    try:
+        # Tipo da O.S
+        instance.click('//div[@title="Informa qual o tipo da Ordem de Serviço."]/div/button')
+        instance.write('//input[@id="lookupSearchQuery"]', tipo_da_os + Keys.ENTER)
+        instance.click(f'//option[@value="{valor_tipo_de_os}"]')
+    except:
+        logging.error(f'Error no tipo da O.S {tipo_da_os}')
+        instance.close()
+        return
 
-    # Grupo de atendimento
-    instance.click('//div[@class="HTMLTabContainer"]/div[5]/div[7]/div[2]/div/button')
-    instance.write('//input[@id="lookupSearchQuery"]', grupo_atendimento_os + Keys.ENTER)
-    instance.click(f'//option[@value="{valor_grupo_atendimento}"]')
+    try:
+        # Grupo de atendimento
+        instance.click('//div[@class="HTMLTabContainer"]/div[5]/div[7]/div[2]/div/button')
+        instance.write('//input[@id="lookupSearchQuery"]', grupo_atendimento_os + Keys.ENTER)
+        instance.click(f'//option[@value="{valor_grupo_atendimento}"]')
+    except:
+        logging.error(f'Error no grupo de atendimento {grupo_atendimento_os}')
+        instance.close()
+        return
 
     # Defeito
     instance.click('//div[@title="Neste campo é informado o defeito associado a esta Ordem de Serviço."]/div/button')
@@ -233,6 +275,9 @@ def cancelamento(
 
     # alert concluir cancelamento
     instance.include()
+
+    # log cancelamento de contrato conluído
+    logging.log(SUCESS, f"Cancelamento do {contrato} concluído.")
 
     time.sleep(10)
     instance.close()
