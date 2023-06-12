@@ -25,6 +25,11 @@ def relatorio(client: Client, message: Message, process: str):
         if f'{process}_{data}' in arquivo:  # Substitua pelo formato correto do nome do arquivo
             arquivo_encontrado = arquivo
             break
+        else:
+            # Arquivo não encontrado, envie uma resposta de erro
+            client.send_message(message.chat.id, f"Arquivo não encontrado.")
+            return
+
 
     caminho_arquivo = os.path.join(diretorio_logs, arquivo_encontrado)
     if arquivo_encontrado and (os.path.getsize(caminho_arquivo) > 0):
@@ -34,3 +39,4 @@ def relatorio(client: Client, message: Message, process: str):
     else:
         # Arquivo não encontrado, envie uma resposta de erro
         client.send_message(message.chat.id, f"Arquivo não encontrado.")
+        return
