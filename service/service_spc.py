@@ -1,15 +1,16 @@
 import pandas
 import os
 from process.spc import include
-from pyrogram.types import Message
-import concurrent.futures
 from dotenv import load_dotenv
+from pyrogram.types import Message
+from pyrogram import Client
+import concurrent.futures
 from driver.formatador import formatar_data
 
 load_dotenv()
 
-def handle_include_spc(client, message: Message):
-    if str(message.from_user.id) == str(os.getenv("CHAT_ID_SPC")):
+def handle_include_spc(client: Client, message: Message):
+    if str(message.chat.id) == str(os.getenv("CHAT_ID_SPC")):
         # Verifique se a mensagem contém um documento e se o tipo MIME do documento é "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
             # Criando Pool
@@ -74,4 +75,4 @@ def handle_include_spc(client, message: Message):
             # Responder à mensagem do usuário com uma mensagem de erro
             message.reply_text("Por favor, envie um arquivo XLSX para processar.")
     else:
-        message.reply_text("command indisponível no momento.")
+        message.reply_text("Você não está autorizado a usar este comando.")

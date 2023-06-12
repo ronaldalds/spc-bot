@@ -1,19 +1,20 @@
 import pandas
 import os
 from process.cancelamento import cancelamento
-from pyrogram.types import Message
-import concurrent.futures
 from dotenv import load_dotenv
+from pyrogram.types import Message
+from pyrogram import Client
+import concurrent.futures
 from driver.formatador import formatar_data, formatar_incidencia, formatar_valor_multa, formatar_int
 
 load_dotenv()
 
-def handle_cancelamento_mk(client, message: Message):
-    if str(message.from_user.id) == str(os.getenv("CHAT_ID_FINANCEIRO")):
+def handle_cancelamento_mk(client: Client, message: Message):
+    if str(message.chat.id) == str(os.getenv("CHAT_ID_CANCELAMENTO")):
         # Verifique se a mensagem contém um documento e se o tipo MIME do documento é "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
             # Criando Pool
-            limite_threads = 4
+            limite_threads = 12
 
             # Baixe o arquivo XLSX
             message.reply_text("Preparando arquivo XLSX")
@@ -43,8 +44,6 @@ def handle_cancelamento_mk(client, message: Message):
                         print(f"Error: na linha {i[0] + 2}")
 
                 message.reply_text(f"Processando arquivo XLSX com {len(lista)} contratos")
-                # for c,i in enumerate(lista):
-                #     print(c+2,i[0],i[1],i[2],i[3][0:10],i[4],i[5],i[6][0:10],i[7],i[8],i[9],i[10])
                 def executar(arg):
                     try:
                         cancelamento(
@@ -74,4 +73,4 @@ def handle_cancelamento_mk(client, message: Message):
             # Responder à mensagem do usuário com uma mensagem de erro
             message.reply_text("Por favor, envie um arquivo XLSX para processar.")
     else:
-        message.reply_text("command indisponível no momento.")
+        message.reply_text("Você não está autorizado a usar este comando.")

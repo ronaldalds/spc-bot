@@ -4,7 +4,7 @@ from pyrogram.types import Message
 from dotenv import load_dotenv
 from service.service_spc import handle_include_spc
 from service.service_cancelamento_mk import handle_cancelamento_mk
-from service.service_relatorio import handle_relatorio
+from service.service_relatorio import handle_relatorio_cancelamento, handle_relatorio_spc
 
 
 load_dotenv()
@@ -46,11 +46,14 @@ def handle_chat_id(client, message: Message):
 # incluir clientes no sistema do spc
 app.on_message(filters.command("includespc"))(handle_include_spc)
 
+# relatório de inclusões no sistema spc
+app.on_message(filters.command("relatorio-spc") & filters.text)(handle_relatorio_spc)
+
 # cancelar contrato no sistema mk
 app.on_message(filters.command("cancelamento"))(handle_cancelamento_mk)
 
-# cancelar contrato no sistema mk
-app.on_message(filters.command("relatorio-cancelamento") & filters.text)(handle_relatorio)
+# relatório cancelamentos no sistema mk
+app.on_message(filters.command("relatorio-cancelamento") & filters.text)(handle_relatorio_cancelamento)
 
 
 print("Serve Telegram Up!")

@@ -6,6 +6,9 @@ from selenium.webdriver.common.keys import Keys
 from driver.mk.mk_select import (
     TIPO_DA_OS,
     DEFEITO,
+    PROFILE_TEST,
+    PROFILE_MK01,
+    PROFILE_MK03,
     MOTIVO_DE_CANCELAMENTO_TEST,
     MOTIVO_DE_CANCELAMENTO_MK01,
     MOTIVO_DE_CANCELAMENTO_MK03,
@@ -19,16 +22,6 @@ import logging
 from datetime import datetime
 
 load_dotenv()
-
-file_log = datetime.now().strftime("cancelamento_%d_%m_%Y.log")
-logging.basicConfig(
-    filename=os.path.join(os.path.dirname(__file__), 'logs', file_log),
-    encoding='utf-8',
-    filemode='a',
-    format='%(levelname)s - %(asctime)s - %(message)s',
-    datefmt='%m/%d/%Y %I:%M:%S %p',
-    level=logging.WARNING
-)
 
 SUCESS = 35
 logging.addLevelName(SUCESS,'SUCESS')
@@ -48,6 +41,16 @@ def cancelamento(
         vencimento_multa,
         planos_contas
         ):
+    
+    file_log = datetime.now().strftime("cancelamento_%Y-%m-%d.log")
+    logging.basicConfig(
+        filename=os.path.join(os.path.dirname(__file__), 'logs', file_log),
+        encoding='utf-8',
+        filemode='a',
+        format='%(levelname)s - %(asctime)s - %(message)s',
+        datefmt='%m/%d/%Y %I:%M:%S %p',
+        level=logging.WARNING
+    )
 
     if mk == "test":
         instance = Mk(
@@ -55,6 +58,7 @@ def cancelamento(
             password=os.getenv('PASSWORD_MK_TEST'),
             url=os.getenv('URL_MK_TEST'),
         )
+        profile = PROFILE_TEST['Boleto Digital - Bradesco']
         motivo_de_cancelamento  = MOTIVO_DE_CANCELAMENTO_TEST["Inadimplência"]
         valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
         valor_grupo_atendimento = GRUPO_DE_ATENDIMENTO_TEST[grupo_atendimento_os]
@@ -64,6 +68,7 @@ def cancelamento(
             password=os.getenv('PASSWORD_MK1'),
             url=os.getenv('URL_MK1'),
         )
+        profile = PROFILE_MK01['Boleto Digital - Bradesco']
         motivo_de_cancelamento  = MOTIVO_DE_CANCELAMENTO_MK01["Inadimplência"]
         valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
         valor_grupo_atendimento = GRUPO_DE_ATENDIMENTO_MK01[grupo_atendimento_os]
@@ -73,6 +78,7 @@ def cancelamento(
             password=os.getenv('PASSWORD_MK3'),
             url=os.getenv('URL_MK3'),
         )
+        profile = PROFILE_MK03['Boleto Digital - Bradesco']
         motivo_de_cancelamento  = MOTIVO_DE_CANCELAMENTO_MK03["Inadimplência"]
         valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
         valor_grupo_atendimento = GRUPO_DE_ATENDIMENTO_MK03[grupo_atendimento_os]
@@ -114,8 +120,8 @@ def cancelamento(
     instance.write('//input[@title="Código do cliente."]', cod_pessoa)
     instance.click('//button[@title="Clique para efetivar sua pesquisa."]')
 
+    # click no resultado de pesquisa avançada
     try:
-        # click no resultado de pesquisa avançada
         instance.iframeGrid(financeiro, painel_do_cliente)
         instance.dbclick(f'//div[text()={cod_pessoa}]')
     except:
@@ -123,8 +129,8 @@ def cancelamento(
         instance.close()
         return
 
+    # click no resultado do click duplo no cadastro do cliente
     try:
-        # click no resultado do click duplo no cadastro do cliente
         instance.iframeGridRes(financeiro, painel_do_cliente)
         instance.click(f'//div[text()={contrato}]')
     except:
@@ -134,8 +140,8 @@ def cancelamento(
     
     # criar multa em caso do contrato ter multa
     if incidencia_multa:
+        # click no botão editar contrato
         try:
-            # click no botão editar contrato
             instance.iframePainel(financeiro, painel_do_cliente)
             instance.click('//*[@title="Alterar contrato"]')
         except:
@@ -159,8 +165,8 @@ def cancelamento(
         # valor da multa
         instance.write('//*[@title="Valor do lançamento"]', valor_multa)
         
+        # vencimento da multa
         try:
-            # vencimento da multa
             instance.write('//*[@title="Data de vencimento da conta."]', vencimento_multa)
         except:
             logging.error(f'Error na data {vencimento_multa}')
@@ -170,8 +176,8 @@ def cancelamento(
         # quantidade de parcelas
         instance.write('//*[@title="Número de parcela"]', 1)
 
+        # plano de contas
         try:
-            # plano de contas
             instance.click('//*[@title="Unidade de plano de contas referenciada para o lançamento"]/div/button')
             instance.write('//input[@id="lookupSearchQuery"]', f"{planos_contas.split()[0]}" + Keys.ENTER)
             instance.click(f'//option[@value="{planos_contas.split()[0]}"]')
@@ -189,8 +195,8 @@ def cancelamento(
 
         # qual profile usar
         instance.click('//div[@title="Selecione a profile desejada"]/div/button')
-        instance.write('//input[@id="lookupSearchQuery"]', "5155" + Keys.ENTER)
-        instance.click('//option[@value="590"]')
+        instance.write('//input[@id="lookupSearchQuery"]', "B" + Keys.ENTER)
+        instance.click(f'//option[@value="{profile}"]')
 
         # marca check box
         instance.click('//input[@title="Marque essa opção para confirmar seu desejo de inserir a nova conta."]')
@@ -209,14 +215,14 @@ def cancelamento(
     instance.iframeGridRes(financeiro, painel_do_cliente)
     instance.click(f'//div[text()={contrato}]')
 
+    # click cancelar contrato
     try:
-        # click cancelar contrato
         instance.iframePainel(financeiro, painel_do_cliente)
         instance.click('//*[@title="Cancelar contrato"]')
     except:
-            logging.warning(f'Contrato da pessoa Número {contrato} cancelado')
-            instance.close()
-            return
+        logging.warning(f'Contrato da pessoa Número {contrato} cancelado')
+        instance.close()
+        return
 
     # Motivo de cancelamento
     instance.iframeForm()
@@ -236,8 +242,8 @@ def cancelamento(
     # checkbox Abrir O.S de retirada de equipamentos
     instance.click('//*[@title="Marque esta opção, para que seja aberta uma O.S. de retirada de equipamentos para este cliente."]')
 
+    # Tipo da O.S
     try:
-        # Tipo da O.S
         instance.click('//div[@title="Informa qual o tipo da Ordem de Serviço."]/div/button')
         instance.write('//input[@id="lookupSearchQuery"]', tipo_da_os + Keys.ENTER)
         instance.click(f'//option[@value="{valor_tipo_de_os}"]')
@@ -246,8 +252,8 @@ def cancelamento(
         instance.close()
         return
 
+    # Grupo de atendimento
     try:
-        # Grupo de atendimento
         instance.click('//div[@class="HTMLTabContainer"]/div[5]/div[7]/div[2]/div/button')
         instance.write('//input[@id="lookupSearchQuery"]', grupo_atendimento_os + Keys.ENTER)
         instance.click(f'//option[@value="{valor_grupo_atendimento}"]')

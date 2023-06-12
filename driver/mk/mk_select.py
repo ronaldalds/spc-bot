@@ -1,3 +1,21 @@
+PROFILE_TEST = {
+    "Boleto Digital - Bradesco": 607
+}
+PROFILE_MK01 = {
+    "Boleto Digital - Bradesco": 1908,
+    "Boleto Digital - Santander": 3534,
+    "Carne Próprio Varjota": 3476,
+    "Depósito Bancário": 625,
+    "ONLINE PARTICIPAÇÕES": 3535,
+    "X.Não User - BRAD": 1910
+}
+PROFILE_MK03 = {
+    "BB ABAETETUBA": 593,
+    "Boleto Digital - Bradesco": 629,
+    "BRADESCO AR GERENCIADORA": 606,
+    "Depósito Bancário": 1250
+}
+
 MOTIVO_DE_CANCELAMENTO_TEST = {
     "Inadimplência": 11
 }
