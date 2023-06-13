@@ -16,6 +16,29 @@ app = Client(
     bot_token=os.getenv("BOT_TOKEN_TELEGRAM")
     )
 
+chat_mis = [
+    os.getenv("CHAT_ID_ADM"),
+    os.getenv("CHAT_ID_SPC"),
+    os.getenv("CHAT_ID_CANCELAMENTO"),
+    os.getenv("CHAT_ID_RECOLHIMENTO"),
+]
+
+chat_ost = [
+    os.getenv("CHAT_ID_ADM"),
+]
+
+# Verificação de autorização
+def autorizado(ids_autorizados):
+    def decorador(func):
+        def verificacao(client, message: Message):
+            if str(message.chat.id) in ids_autorizados:
+                return func(client, message)
+            else:
+                message.reply_text("Você não está autorizado a usar este bot.")
+        return verificacao
+    return decorador
+
+
 @app.on_message(filters.command("start"))
 def start(client, message: Message):
     message.reply_text(f"""
@@ -44,16 +67,29 @@ def handle_chat_id(client, message: Message):
     print(message.from_user.id)
 
 # incluir clientes no sistema do spc
-app.on_message(filters.command("includespc"))(handle_include_spc)
+
+@app.on_message(filters.command("includespc"))
+@autorizado(chat_mis)
+def includespc(client: Client, message: Message):
+    handle_include_spc(client, message)
 
 # relatório de inclusões no sistema spc
-app.on_message(filters.command("relatorio-spc") & filters.text)(handle_relatorio_spc)
+@app.on_message(filters.command("relatorio-spc") & filters.text)
+@autorizado(chat_mis)
+def relatori_spc(client: Client, message: Message):
+    handle_relatorio_spc(client, message)
 
 # cancelar contrato no sistema mk
-app.on_message(filters.command("cancelamento"))(handle_cancelamento_mk)
+@app.on_message(filters.command("cancelamento"))
+@autorizado(chat_mis)
+def cancelamento(client: Client, message: Message):
+    handle_cancelamento_mk(client, message)
 
 # relatório cancelamentos no sistema mk
-app.on_message(filters.command("relatorio-cancelamento") & filters.text)(handle_relatorio_cancelamento)
+@app.on_message(filters.command("relatorio-cancelamento") & filters.text)
+@autorizado(chat_mis)
+def relatorio_cancelamento(client: Client, message: Message):
+    handle_relatorio_cancelamento(client, message)
 
 
 print("Serve Telegram Up!")

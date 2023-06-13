@@ -280,8 +280,13 @@ def cancelamento(
     instance.click('//div[@class="HTMLTabContainer"]/div[5]/div[@class="next"]')
 
     # click checkbox cancelar contrato
-    instance.click(f'//div[@class="HTMLTabContainer"]/div[6]/div[{div_cancelar}]/input[@type="checkbox"]')
-
+    try:
+        instance.click(f'//div[@class="HTMLTabContainer"]/div[6]/div[{div_cancelar}]/input[@type="checkbox"]')
+    except:
+        logging.error('Error em marcar checkbox pra concluir o cancelamento do contrato')
+        instance.close()
+        return
+    
     # Terminar cancelamento contrato
     instance.click('//button[@title="Clique para finalizar"]')
 
