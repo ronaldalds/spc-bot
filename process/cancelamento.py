@@ -140,7 +140,7 @@ def cancelamento(
         instance.iframeGridRes(financeiro, painel_do_cliente)
         instance.click(f'//div[text()={contrato}]')
     except:
-        logging.warning(f'Contrato da pessoa Número {contrato} não encontrado')
+        logging.warning(f'Contrato {contrato} não encontrado')
         instance.close()
         return
     
@@ -151,7 +151,7 @@ def cancelamento(
             instance.iframePainel(financeiro, painel_do_cliente)
             instance.click('//*[@title="Alterar contrato"]')
         except:
-            logging.warning(f'Contrato da pessoa Número {contrato} cancelado')
+            logging.warning(f'Contrato {contrato} cancelado')
             instance.close()
             return
 
@@ -226,7 +226,7 @@ def cancelamento(
         instance.iframePainel(financeiro, painel_do_cliente)
         instance.click('//*[@title="Cancelar contrato"]')
     except:
-        logging.warning(f'Contrato da pessoa Número {contrato} cancelado')
+        logging.warning(f'Contrato {contrato} cancelado')
         instance.close()
         return
 
@@ -294,7 +294,7 @@ def cancelamento(
     instance.include()
 
     # log cancelamento de contrato conluído
-    logging.log(SUCESS, f"Cancelamento do {contrato} concluído.")
+    logging.log(SUCESS, f"Cancelamento do contrato {contrato} concluído.")
 
     time.sleep(10)
     instance.close()
