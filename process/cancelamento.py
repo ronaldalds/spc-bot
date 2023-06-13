@@ -6,6 +6,9 @@ from selenium.webdriver.common.keys import Keys
 from driver.mk.mk_select import (
     TIPO_DA_OS,
     DEFEITO,
+    CHECK_BOX_CANCELAR_TEST,
+    CHECK_BOX_CANCELAR_MK01,
+    CHECK_BOX_CANCELAR_MK03,
     PROFILE_TEST,
     PROFILE_MK01,
     PROFILE_MK03,
@@ -62,6 +65,7 @@ def cancelamento(
         motivo_de_cancelamento  = MOTIVO_DE_CANCELAMENTO_TEST["Inadimplência"]
         valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
         valor_grupo_atendimento = GRUPO_DE_ATENDIMENTO_TEST[grupo_atendimento_os]
+        div_cancelar = CHECK_BOX_CANCELAR_TEST["Cancelar"]
     elif mk == 1:
         instance = Mk(
             username=os.getenv('USERNAME_MK1'),
@@ -72,6 +76,7 @@ def cancelamento(
         motivo_de_cancelamento  = MOTIVO_DE_CANCELAMENTO_MK01["Inadimplência"]
         valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
         valor_grupo_atendimento = GRUPO_DE_ATENDIMENTO_MK01[grupo_atendimento_os]
+        div_cancelar = CHECK_BOX_CANCELAR_MK01["Cancelar"]
     elif mk == 3:
         instance = Mk(
             username=os.getenv('USERNAME_MK3'),
@@ -82,6 +87,7 @@ def cancelamento(
         motivo_de_cancelamento  = MOTIVO_DE_CANCELAMENTO_MK03["Inadimplência"]
         valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
         valor_grupo_atendimento = GRUPO_DE_ATENDIMENTO_MK03[grupo_atendimento_os]
+        div_cancelar = CHECK_BOX_CANCELAR_MK03["Cancelar"]
 
     else:
         logging.warning('Error na escolha do mk')
@@ -274,7 +280,7 @@ def cancelamento(
     instance.click('//div[@class="HTMLTabContainer"]/div[5]/div[@class="next"]')
 
     # click checkbox cancelar contrato
-    instance.click('//div[@class="HTMLTabContainer"]/div[6]/div[12]/input[@type="checkbox"]')
+    instance.click(f'//div[@class="HTMLTabContainer"]/div[6]/div[{div_cancelar}]/input[@type="checkbox"]')
 
     # Terminar cancelamento contrato
     instance.click('//button[@title="Clique para finalizar"]')

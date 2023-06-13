@@ -137,3 +137,14 @@ GRUPO_DE_ATENDIMENTO_MK03 = {
 DEFEITO = {
     "Cancelamento contratual": 9
 }
+
+CHECK_BOX_CANCELAR_TEST = {
+    "Cancelar": 12
+}
+CHECK_BOX_CANCELAR_MK01 = {
+    "Cancelar": 17
+}
+
+CHECK_BOX_CANCELAR_MK03 = {
+    "Cancelar": 17
+}
