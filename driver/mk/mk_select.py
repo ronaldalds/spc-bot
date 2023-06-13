@@ -31,7 +31,7 @@ MOTIVO_DE_CANCELAMENTO_MK03 = {
 TIPO_DA_OS = {
     "Cancelamento - Fibra": 95,
     "Cancelamento - Fibra + TV": 104,
-    "Cancelamento - Rádio": 96
+    "Cancelamento - Radio": 96
 }
 
 GRUPO_DE_ATENDIMENTO_TEST = {
@@ -130,7 +130,8 @@ GRUPO_DE_ATENDIMENTO_MK03 = {
     "TERCEIRIZADA ROLIFILDE": 191,
     "TERCEIRIZADA WRE SERVIÇO": 215,
     "TERRA ALTA": 396,
-    "TUCURUÍ": 130,
+    "TUCURUI": 130,
+    "VIGIA": 135,
     "VILA DOS CABANOS": 138
 }
 
