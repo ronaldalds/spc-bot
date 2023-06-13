@@ -134,8 +134,8 @@ def include(
         spc.write('//*[@id="valorDebito"]', valor_debito + Keys.TAB)
 
         # concluir inclusão do cliente
-        # spc.click('//*[@id="idButtonNotificacaoDebitoFisica"]')
-        # spc.include()
+        spc.click('//*[@id="idButtonNotificacaoDebitoFisica"]')
+        spc.include()
 
         logging.log(SUCESS, f'CPF: {cpf_cnpj} - Cadastrado com sucesso')
         time.sleep(10)
