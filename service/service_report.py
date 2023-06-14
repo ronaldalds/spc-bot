@@ -6,11 +6,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def handle_relatorio_cancelamento(client: Client, message: Message):
+def handle_report_cancellation(client: Client, message: Message):
     # Verifique se a mensagem contém um comando válido
     relatorio(client, message, process='cancelamento')
 
-def handle_relatorio_spc(client: Client, message: Message):
+def handle_report_spc(client: Client, message: Message):
     # Verifique se a mensagem contém um comando válido
     relatorio(client, message, process='spc')
 

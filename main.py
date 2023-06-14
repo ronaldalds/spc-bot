@@ -3,9 +3,8 @@ import os
 from pyrogram.types import Message
 from dotenv import load_dotenv
 from service.service_spc import handle_include_spc
-from service.service_cancelamento_mk import handle_cancelamento_mk
-from service.service_relatorio import handle_relatorio_cancelamento, handle_relatorio_spc
-
+from service.service_cancellation_mk import handle_cancellation_mk
+from service.service_report import handle_report_cancellation, handle_report_spc
 
 load_dotenv()
 
@@ -22,14 +21,14 @@ chat_mis = [
     os.getenv("CHAT_ID_SPC"),
     os.getenv("CHAT_ID_CANCELAMENTO"),
     os.getenv("CHAT_ID_RECOLHIMENTO"),
-]
+    ]
 
 chat_ost = [
     os.getenv("CHAT_ID_ADM"),
-]
+    ]
 
 # Verificação de autorização
-def autorizado(ids_autorizados):
+def authorization(ids_autorizados):
     def decorador(func):
         def verificacao(client, message: Message):
             if str(message.chat.id) in ids_autorizados:
@@ -68,29 +67,28 @@ def handle_chat_id(client, message: Message):
     print(message.from_user.id)
 
 # incluir clientes no sistema do spc
-
 @app.on_message(filters.command("includespc"))
-@autorizado(chat_mis)
-def includespc(client: Client, message: Message):
+@authorization(chat_mis)
+def include_spc(client: Client, message: Message):
     handle_include_spc(client, message)
 
 # relatório de inclusões no sistema spc
 @app.on_message(filters.command("relatorio-spc") & filters.text)
-@autorizado(chat_mis)
-def relatori_spc(client: Client, message: Message):
-    handle_relatorio_spc(client, message)
+@authorization(chat_mis)
+def report_spc(client: Client, message: Message):
+    handle_report_spc(client, message)
 
 # cancelar contrato no sistema mk
 @app.on_message(filters.command("cancelamento"))
-@autorizado(chat_mis)
-def cancelamento(client: Client, message: Message):
-    handle_cancelamento_mk(client, message)
+@authorization(chat_mis)
+def cancellation(client: Client, message: Message):
+    handle_cancellation_mk(client, message)
 
 # relatório cancelamentos no sistema mk
 @app.on_message(filters.command("relatorio-cancelamento") & filters.text)
-@autorizado(chat_mis)
-def relatorio_cancelamento(client: Client, message: Message):
-    handle_relatorio_cancelamento(client, message)
+@authorization(chat_mis)
+def report_cancellation(client: Client, message: Message):
+    handle_report_cancellation(client, message)
 
 
 print("Serve Telegram Up!")

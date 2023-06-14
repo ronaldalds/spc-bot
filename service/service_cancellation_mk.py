@@ -9,7 +9,7 @@ from driver.formatador import formatar_data, formatar_incidencia, formatar_valor
 
 load_dotenv()
 
-def handle_cancelamento_mk(client: Client, message: Message):
+def handle_cancellation_mk(client: Client, message: Message):
     # Verifique se a mensagem contém um documento e se o tipo MIME do documento é "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
         # Quantidade de itens na Pool
