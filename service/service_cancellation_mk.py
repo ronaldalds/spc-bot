@@ -32,7 +32,7 @@ def handle_cancellation_mk(client: Client, message: Message):
                         formatar_int(i[1]['Contrato']), # Contrato
                         i[1]['Detalhes Cancelamento'], # Detalhes Cancelamento
                         i[1]['Tipo OS'], # Tipo OS
-                        i[1]['Grupo Atendimento OS'], # Grupo Atendimento OS
+                        str(i[1]['Grupo Atendimento OS']).strip(), # Grupo Atendimento OS
                         i[1]['Relato do problema'], # Relato do problema
                         formatar_incidencia(i[1]['Incidencia de Multa']), # Incidencia de Multa
                         formatar_valor_multa(i[1]['Valor Multa']), # Valor Multa
