@@ -18,6 +18,7 @@ app = Client(
 
 chat_mis = [
     os.getenv("CHAT_ID_ADM"),
+    os.getenv("CHAT_ID_GESTOR_MIS"),
     os.getenv("CHAT_ID_SPC"),
     os.getenv("CHAT_ID_CANCELAMENTO"),
     os.getenv("CHAT_ID_RECOLHIMENTO"),
