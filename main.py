@@ -8,6 +8,8 @@ from service.service_report import handle_report_cancellation, handle_report_spc
 
 load_dotenv()
 
+version = "0.0.1"
+
 app = Client(
     name=os.getenv("BOT_NAME_TELEGRAM"), 
     api_hash=os.getenv("API_HASH_TELEGRAM"),
@@ -92,4 +94,5 @@ def report_cancellation(client: Client, message: Message):
 
 
 print("Serve Telegram Up!")
+print(f"Version {version}")
 app.run()
