@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 import time
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.service import Service
@@ -21,6 +22,7 @@ class Spc:
         self._operation: str = operation
         self._password: str = password
         self._secret: str = secret
+        capabilities = DesiredCapabilities.CHROME.copy()
         largura = 1280
         altura = 960
         options = webdriver.ChromeOptions()
@@ -37,6 +39,7 @@ class Spc:
         options.headless = headless
         self._driver = webdriver.Chrome(
             service=Service(ChromeDriverManager().install()),
+            desired_capabilities=capabilities,
             options=options
             )
         self._wdw = WebDriverWait(self._driver, 300)

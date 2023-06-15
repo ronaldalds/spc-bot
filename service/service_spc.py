@@ -60,7 +60,7 @@ def handle_include_spc(client: Client, message: Message):
                         valor_debito = arg[12],
                         )
                 except Exception as e:
-                    print(f"Error executing: {e}")
+                    print(f"Error executing: cpf:{arg[0]} - {e}")
             with concurrent.futures.ThreadPoolExecutor(max_workers=limite_threads) as executor:
                 resultados = executor.map(executar, lista)
             

@@ -3,6 +3,7 @@ from driver.mk.aside.aside import Aside
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 import time
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.service import Service
@@ -18,6 +19,7 @@ class Mk:
     def __init__(self, username: str, password: str, url: str, headless: bool = False):
         self._username: str = username
         self._password: str = password
+        capabilities = DesiredCapabilities.CHROME.copy()
         largura = 1280
         altura = 960
         options = webdriver.ChromeOptions()
@@ -34,6 +36,7 @@ class Mk:
         options.headless = headless
         self._driver = webdriver.Chrome(
             service=Service(ChromeDriverManager().install()),
+            desired_capabilities=capabilities,
             options=options
             )
         self._wdw = WebDriverWait(self._driver, 300)

@@ -59,7 +59,7 @@ def handle_cancellation_mk(client: Client, message: Message):
                         planos_contas = arg[10]
                         )
                 except Exception as e:
-                    print(f"Error executing na função executar:{arg[0]} cod:{arg[1]} contrato:{arg[2]} {e}")
+                    print(f"Error executing na função executar:mk:{arg[0]} cod:{arg[1]} contrato:{arg[2]} {e}")
             # Criando Pool
             with concurrent.futures.ThreadPoolExecutor(max_workers=limite_threads) as executor:
                 resultados = executor.map(executar, lista)
