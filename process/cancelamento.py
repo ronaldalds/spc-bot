@@ -104,7 +104,7 @@ def cancelamento(
         instance.iframeMain()
         instance.click('//div[@class="OptionClose"]')
     except:
-        print("Sem tela de complete seu cadastro")
+        print(f"Sem tela de complete seu cadastro MK{mk}")
         
     # click na moeda financeiro
     instance.iframeCoin()
@@ -131,7 +131,7 @@ def cancelamento(
         instance.iframeGrid(financeiro, painel_do_cliente)
         instance.dbclick(f'//div[text()={cod_pessoa}]')
     except:
-        logging.warning(f'Código da pessoa Número {cod_pessoa} não encontrado')
+        logging.warning(f'Código da pessoa {cod_pessoa} MK{mk} não encontrado')
         instance.close()
         return
 
@@ -140,7 +140,7 @@ def cancelamento(
         instance.iframeGridRes(financeiro, painel_do_cliente)
         instance.click(f'//div[text()={contrato}]')
     except:
-        logging.warning(f'Contrato {contrato} não encontrado')
+        logging.warning(f'Código da pessoa {cod_pessoa} contrato {contrato} MK{mk} não encontrado')
         instance.close()
         return
     
@@ -151,7 +151,7 @@ def cancelamento(
             instance.iframePainel(financeiro, painel_do_cliente)
             instance.click('//*[@title="Alterar contrato"]')
         except:
-            logging.warning(f'Contrato {contrato} cancelado')
+            logging.warning(f'Código da pessoa {cod_pessoa} contrato {contrato} cancelado MK{mk}')
             instance.close()
             return
 
@@ -175,7 +175,7 @@ def cancelamento(
         try:
             instance.write('//*[@title="Data de vencimento da conta."]', vencimento_multa)
         except:
-            logging.error(f'Error na data {vencimento_multa}')
+            logging.error(f'Código da pessoa {cod_pessoa} contrato {contrato} error na data {vencimento_multa} MK{mk}')
             instance.close()
             return
 
@@ -188,7 +188,7 @@ def cancelamento(
             instance.write('//input[@id="lookupSearchQuery"]', f"{planos_contas.split()[0]}" + Keys.ENTER)
             instance.click(f'//option[@value="{planos_contas.split()[0]}"]')
         except:
-            logging.error(f'Error na plano {planos_contas}')
+            logging.error(f'Código da pessoa {cod_pessoa} contrato {contrato} error no plano {planos_contas} MK{mk}')
             instance.close()
             return
 
@@ -215,7 +215,7 @@ def cancelamento(
         instance.click('//div[@class="OptionClose"]')
 
         # log de multa concluído
-        logging.log(SUCESS, f"Multa de R$ {valor_multa} incluida no contrato {contrato}.")
+        logging.log(SUCESS, f"Código da pessoa {cod_pessoa} contrato {contrato} multa de R$ {valor_multa} incluida no MK{mk}.")
 
     # click no resultado do click duplo no cadastro do cliente
     instance.iframeGridRes(financeiro, painel_do_cliente)
@@ -226,7 +226,7 @@ def cancelamento(
         instance.iframePainel(financeiro, painel_do_cliente)
         instance.click('//*[@title="Cancelar contrato"]')
     except:
-        logging.warning(f'Contrato {contrato} cancelado')
+        logging.warning(f'Código da pessoa {cod_pessoa} contrato {contrato} MK{mk} cancelado')
         instance.close()
         return
 
@@ -254,7 +254,7 @@ def cancelamento(
         instance.write('//input[@id="lookupSearchQuery"]', tipo_da_os + Keys.ENTER)
         instance.click(f'//option[@value="{valor_tipo_de_os}"]')
     except:
-        logging.error(f'Error no tipo da O.S {tipo_da_os}')
+        logging.error(f'Código da pessoa {cod_pessoa} contrato {contrato} error no tipo da O.S {tipo_da_os} MK{mk}')
         instance.close()
         return
 
@@ -264,7 +264,7 @@ def cancelamento(
         instance.write('//input[@id="lookupSearchQuery"]', grupo_atendimento_os + Keys.ENTER)
         instance.click(f'//option[@value="{valor_grupo_atendimento}"]')
     except:
-        logging.error(f'Error no grupo de atendimento {grupo_atendimento_os}')
+        logging.error(f'Código da pessoa {cod_pessoa} contrato {contrato} error no grupo de atendimento {grupo_atendimento_os} MK{mk}')
         instance.close()
         return
 
@@ -294,7 +294,7 @@ def cancelamento(
     instance.include()
 
     # log cancelamento de contrato conluído
-    logging.log(SUCESS, f"Cancelamento do contrato {contrato} concluído.")
+    logging.log(SUCESS, f"Cancelamento do código da pessoa {cod_pessoa} contrato {contrato} MK{mk} concluído.")
 
     time.sleep(10)
     instance.close()

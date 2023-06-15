@@ -38,7 +38,7 @@ def handle_cancellation_mk(client: Client, message: Message):
                         formatar_valor_multa(i[1]['Valor Multa']), # Valor Multa
                         formatar_data(i[1]['Data Vcto Multa Contratual']), # Data Vcto Multa Contratual
                         i[1]['Planos de Contas'] # Planos de Contas
-                    ))
+                        ))
                 except:
                     print(f"Error: na linha {i[0] + 2}")
 
@@ -57,9 +57,9 @@ def handle_cancellation_mk(client: Client, message: Message):
                         valor_multa = arg[8],
                         vencimento_multa = arg[9],
                         planos_contas = arg[10]
-                    )
+                        )
                 except Exception as e:
-                    print(f"Error executing na função executar: {e}")
+                    print(f"Error executing na função executar:{arg[0]} cod:{arg[1]} contrato:{arg[2]} {e}")
             # Criando Pool
             with concurrent.futures.ThreadPoolExecutor(max_workers=limite_threads) as executor:
                 resultados = executor.map(executar, lista)

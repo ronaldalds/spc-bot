@@ -40,7 +40,7 @@ def handle_include_spc(client: Client, message: Message):
                         formatar_data(str(i[1]['Data Compra'])),  # data_compra
                         str(i[1]['Cod Cliente']),  # cod_cliente
                         str(i[1]['Valor do Débito']).replace('.', ','),  # valor_debito
-                    ))
+                        ))
 
             def executar(arg):
                 try:
@@ -58,7 +58,7 @@ def handle_include_spc(client: Client, message: Message):
                         data_compra = arg[10],
                         cod_cliente = arg[11],
                         valor_debito = arg[12],
-                    )
+                        )
                 except Exception as e:
                     print(f"Error executing: {e}")
             with concurrent.futures.ThreadPoolExecutor(max_workers=limite_threads) as executor:
