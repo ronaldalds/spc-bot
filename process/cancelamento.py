@@ -53,7 +53,7 @@ def cancelamento(
         format='%(levelname)s - %(asctime)s - %(message)s',
         datefmt='%m/%d/%Y %I:%M:%S %p',
         level=logging.WARNING
-    )
+        )
 
     if mk == "test":
         instance = Mk(

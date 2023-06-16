@@ -25,7 +25,7 @@ def include(
         data_compra,
         cod_cliente,
         valor_debito,
-):
+        ):
     file_log = datetime.now().strftime("spc_%Y-%m-%d.log")
     logging.basicConfig(
         filename=os.path.join(os.path.dirname(__file__), 'logs', file_log),
@@ -34,16 +34,18 @@ def include(
         format='%(levelname)s - %(asctime)s - %(message)s',
         datefmt='%m/%d/%Y %I:%M:%S %p',
         level=logging.WARNING
-    )
-    print(
-        f'cadastrando {cpf_cnpj}')
+        )
+    
+    print(f'cadastrando {cpf_cnpj}')
+    
     try:
         spc = Spc(
             url=os.getenv('URL_SPC'),
             operation=os.getenv('OPERATION_SPC'),
             password=os.getenv('PASSWORD_SPC'),
             secret=os.getenv('SECRET_KEY_SPC'),
-        )
+            )
+        
         try:
             # login no sistema spc
             spc.login()

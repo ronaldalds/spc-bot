@@ -1,6 +1,16 @@
+FATURAMENTO = {
+    "Dia 02": 3,
+    "Dia 05": 6,
+    "Dia 08": 9,
+    "Dia 17": 18,
+    "Dia 25": 26,
+    "Dia 27": 28,
+}
+
 PROFILE_TEST = {
     "Boleto Digital - Bradesco": 607
 }
+
 PROFILE_MK01 = {
     "Boleto Digital - Bradesco": 1908,
     "Boleto Digital - Santander": 3534,
@@ -9,6 +19,7 @@ PROFILE_MK01 = {
     "ONLINE PARTICIPAÇÕES": 3535,
     "X.Não User - BRAD": 1910
 }
+
 PROFILE_MK03 = {
     "BB ABAETETUBA": 593,
     "Boleto Digital - Bradesco": 629,
