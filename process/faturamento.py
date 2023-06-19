@@ -20,7 +20,10 @@ def faturamento(
         data_final,
         data_vecimento
         ):
-    
+    print(f"regra {regra}")
+    print(f"data atual {data_inicial}")
+    print(f"data final {data_final}")
+    print(f"data vencimento {data_vecimento}")
     file_log = datetime.now().strftime("faturamento_%Y-%m-%d.log")
     logging.basicConfig(
         filename=os.path.join(os.path.dirname(__file__), 'logs', file_log),

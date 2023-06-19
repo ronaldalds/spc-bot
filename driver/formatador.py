@@ -28,7 +28,7 @@ def formatar_int(num):
         if type(num) == int:
             return num
     except:
-        return False
+        return "test"
 
 def formatar_incidencia(incidencia):
     # verifica se é S = a True ou N = a False

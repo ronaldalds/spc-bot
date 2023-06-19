@@ -9,7 +9,9 @@ from driver.formatador import formatar_data, formatar_incidencia, formatar_valor
 
 load_dotenv()
 
-def handle_cancellation_mk(client: Client, message: Message):
+def handle_start_cancellation_mk(client: Client, message: Message):
+    global running
+    running = True
     # Verifique se a mensagem contém um documento e se o tipo MIME do documento é "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
         # Quantidade de itens na Pool
@@ -44,22 +46,27 @@ def handle_cancellation_mk(client: Client, message: Message):
 
             message.reply_text(f"Processando arquivo XLSX com {len(lista)} contratos")
             def executar(arg):
-                try:
-                    cancelamento(
-                        mk = arg[0],
-                        cod_pessoa = arg[1],
-                        contrato = arg[2],
-                        detalhes_cancelamento = arg[3],
-                        tipo_da_os = arg[4],
-                        grupo_atendimento_os = arg[5],
-                        relato_do_problema = arg[6],
-                        incidencia_multa = arg[7],
-                        valor_multa = arg[8],
-                        vencimento_multa = arg[9],
-                        planos_contas = arg[10]
+
+                if running:
+                    try:
+                        cancelamento(
+                            mk=arg[0],
+                            cod_pessoa=arg[1],
+                            contrato=arg[2],
+                            detalhes_cancelamento=arg[3],
+                            tipo_da_os=arg[4],
+                            grupo_atendimento_os=arg[5],
+                            relato_do_problema=arg[6],
+                            incidencia_multa=arg[7],
+                            valor_multa=arg[8],
+                            vencimento_multa=arg[9],
+                            planos_contas=arg[10]
                         )
-                except Exception as e:
-                    print(f"Error executing na função executar:mk:{arg[0]} cod:{arg[1]} contrato:{arg[2]} {e}")
+                    except Exception as e:
+                        print(f"Error executing na função executar:mk:{arg[0]} cod:{arg[1]} contrato:{arg[2]} {e}")
+                else:
+                    message.reply_text(f"Cancelamento mk:{arg[0]} cod:{arg[1]} contrato:{arg[2]} parado.")
+
             # Criando Pool
             with concurrent.futures.ThreadPoolExecutor(max_workers=limite_threads) as executor:
                 resultados = executor.map(executar, lista)
@@ -72,3 +79,18 @@ def handle_cancellation_mk(client: Client, message: Message):
     else:
         # Responder à mensagem do usuário com uma mensagem de erro
         message.reply_text("Por favor, envie um arquivo XLSX para processar.")
+
+def handle_stop_cancellation_mk(client: Client, message: Message):
+    global running
+    running = False
+    message.reply_text("Pedido de parada iniciado...")
+
+def handle_status_cancellation_mk(client: Client, message: Message):
+    global running
+    try:
+        if running:
+            message.reply_text("Cancelamento em execução")
+        else:
+            message.reply_text("Cancelamento parado")
+    except:
+        message.reply_text("Cancelamento parado")
