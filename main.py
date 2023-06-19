@@ -5,11 +5,18 @@ from dotenv import load_dotenv
 from service.service_spc import handle_include_spc
 from service.service_cancellation_mk import handle_start_cancellation_mk, handle_stop_cancellation_mk, handle_status_cancellation_mk
 from service.service_report import handle_report_cancellation, handle_report_spc, handle_report_invoicing
-from service.service_invoicing import handle_start_invoicing, handle_stop_invoicing, handle_status_invoicing
+from service.service_invoicing import (
+    handle_start_invoicing_mk1,
+    handle_stop_invoicing_mk1,
+    handle_status_invoicing_mk1,
+    handle_start_invoicing_mk3,
+    handle_stop_invoicing_mk3,
+    handle_status_invoicing_mk3
+    )
 
 load_dotenv()
 
-version = "0.0.1"
+version = "0.0.2"
 
 app = Client(
     name=os.getenv("BOT_NAME_TELEGRAM"), 
@@ -100,9 +107,12 @@ def cancelamento(client, message: Message):
 @authorization(chat_mis)
 def faturamento(client, message: Message):
     message.reply_text(f"""
-/iniciar_faturamento - Inciar faturamento
-/parar_faturamento - Parar faturamento
-/status_faturamento - Status faturamento
+/iniciar_faturamento_mk1 - Inciar faturamento mk1
+/parar_faturamento_mk1 - Parar faturamento mk1
+/status_faturamento_mk1 - Status faturamento mk1
+/iniciar_faturamento_mk3 - Inciar faturamento mk3
+/parar_faturamento_mk3 - Parar faturamento mk3
+/status_faturamento_mk3 - Status faturamento mk3
 /relatorio_faturamento dd/mm/yyyy - relatório logs faturamento
 """)
 
@@ -150,29 +160,48 @@ def report_cancellation(client: Client, message: Message):
     handle_report_cancellation(client, message)
 
 ############################################# INVOICING #############################################
-# start running invoicing
-@app.on_message(filters.command("iniciar_faturamento"))
+# start running invoicing mk1
+@app.on_message(filters.command("iniciar_faturamento_mk1"))
 @authorization(chat_financeiro)
 def iniciar_faturamento(client: Client, message: Message):
-    handle_start_invoicing(client, message)
+    handle_start_invoicing_mk1(client, message)
 
-# stop running invoicing
-@app.on_message(filters.command("parar_faturamento"))
+# stop running invoicing mk1
+@app.on_message(filters.command("parar_faturamento_mk1"))
 @authorization(chat_financeiro)
 def parar_faturamento(client: Client, message: Message):
-    handle_stop_invoicing(client, message)
+    handle_stop_invoicing_mk1(client, message)
 
-# status invoicing
-@app.on_message(filters.command("status_faturamento"))
+# status invoicing mk1
+@app.on_message(filters.command("status_faturamento_mk1"))
 @authorization(chat_financeiro)
 def status_faturamento(client: Client, message: Message):
-    handle_status_invoicing(client, message)
+    handle_status_invoicing_mk1(client, message)
+
+# start running invoicing mk3
+@app.on_message(filters.command("iniciar_faturamento_mk3"))
+@authorization(chat_financeiro)
+def iniciar_faturamento(client: Client, message: Message):
+    handle_start_invoicing_mk3(client, message)
+
+# stop running invoicing mk3
+@app.on_message(filters.command("parar_faturamento_mk3"))
+@authorization(chat_financeiro)
+def parar_faturamento(client: Client, message: Message):
+    handle_stop_invoicing_mk3(client, message)
+
+# status invoicing mk3
+@app.on_message(filters.command("status_faturamento_mk3"))
+@authorization(chat_financeiro)
+def status_faturamento(client: Client, message: Message):
+    handle_status_invoicing_mk3(client, message)
 
 # relatório faturamento no sistema mk
 @app.on_message(filters.command("relatorio_faturamento") & filters.text)
 @authorization(chat_financeiro)
 def report_invoicing(client: Client, message: Message):
     handle_report_invoicing(client, message)
+
 
 print("Serve Telegram Up!")
 print(f"Version {version}")

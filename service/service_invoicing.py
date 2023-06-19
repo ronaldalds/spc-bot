@@ -7,54 +7,107 @@ import time
 
 load_dotenv()
 
+running_mk1 = False
+running_mk3 = False
+regra = [2,5,8,17,25,27]
 
-def handle_start_invoicing(client: Client, message: Message):
-    global running
-    running = True
-    regra = [2,5,8,17,25,27]
-    faturamento_processado = False
+def handle_start_invoicing_mk1(client: Client, message: Message):
+    global running_mk1
+    if not running_mk1:
+        running_mk1 = True
+        faturamento_processado = False
 
-    while running:
-        data_atual = datetime.now()
-        data_final = data_atual + timedelta(days=29) 
-        data_vencimento = data_atual + timedelta(days=8)
+        while running_mk1:
+            data_atual = datetime.now()
+            data_final = data_atual + timedelta(days=29) 
+            data_vencimento = data_atual + timedelta(days=8)
 
-        if data_vencimento.day in regra:
-            if not faturamento_processado:
-                faturamento(
-                    regra = f"Dia {data_vencimento.day:02}",
-                    data_inicial = datetime.strftime(data_atual, "%d%m%Y"),
-                    data_final = datetime.strftime(data_final, "%d%m%Y"),
-                    data_vecimento = datetime.strftime(data_vencimento, "%d%m%Y")
-                    )
-                faturamento_processado = True
+            if data_vencimento.day in regra:
+                if not faturamento_processado:
+                    faturamento(
+                        mk = "test",
+                        regra = f"Dia {data_vencimento.day:02}",
+                        data_inicial = datetime.strftime(data_atual, "%d%m%Y"),
+                        data_final = datetime.strftime(data_final, "%d%m%Y"),
+                        data_vecimento = datetime.strftime(data_vencimento, "%d%m%Y")
+                        )
+                    faturamento_processado = True
 
-        if faturamento_processado and (data_vencimento.day not in regra):
-            faturamento_processado = False
+            if faturamento_processado and (data_vencimento.day not in regra):
+                faturamento_processado = False
 
+            # Aguarda antes de verificar novamente valor em segundos
+            time.sleep(5 * 1 * 1) # segundos * minutos * horas
 
+            # Verifica se a execução deve continuar ou parar
+            if not running_mk1:
+                message.reply_text("Faturamento mk1 parado.")
+                break
+    else:
+        message.reply_text("Faturamento mk1 em execução.")
 
-
-        # Aguarda antes de verificar novamente valor em segundos
-        time.sleep(5 * 1 * 1) # segundos * minutos * horas
-
-        # Verifica se a execução deve continuar ou parar
-        if not running:
-            message.reply_text("Faturamento parado")
-            break
-
-def handle_stop_invoicing(client: Client, message: Message):
-    global running
-    running = False
-    message.reply_text("Pedido de parada iniciado...")
+def handle_stop_invoicing_mk1(client: Client, message: Message):
+    global running_mk1
+    running_mk1 = False
+    message.reply_text("Pedido de parada mk1 iniciado...")
     
-
-def handle_status_invoicing(client: Client, message: Message):
-    global running
+def handle_status_invoicing_mk1(client: Client, message: Message):
+    global running_mk1
     try:
-        if running:
-            message.reply_text("Faturamento em execução")
+        if running_mk1:
+            message.reply_text("Faturamento mk1 em execução")
         else:
-            message.reply_text("Faturamento parado")
+            message.reply_text("Faturamento mk1 parado")
     except:
-        message.reply_text("Faturamento parado")
+        message.reply_text("Faturamento mk1 parado")
+
+def handle_start_invoicing_mk3(client: Client, message: Message):
+    global running_mk3
+    if not running_mk3:
+        running_mk3 = True
+        faturamento_processado = False
+
+        while running_mk3:
+            # data_atual = datetime.now()
+            data_atual = datetime(2023, 6, 24)
+            data_final = data_atual + timedelta(days=29) 
+            data_vencimento = data_atual + timedelta(days=8)
+
+            if data_vencimento.day in regra:
+                if not faturamento_processado:
+                    faturamento(
+                        mk = "test",
+                        regra = f"Dia {data_vencimento.day:02}",
+                        data_inicial = datetime.strftime(data_atual, "%d%m%Y"),
+                        data_final = datetime.strftime(data_final, "%d%m%Y"),
+                        data_vecimento = datetime.strftime(data_vencimento, "%d%m%Y")
+                        )
+                    faturamento_processado = True
+
+            if faturamento_processado and (data_vencimento.day not in regra):
+                faturamento_processado = False
+
+            # Aguarda antes de verificar novamente valor em segundos
+            time.sleep(5 * 1 * 1) # segundos * minutos * horas
+
+            # Verifica se a execução deve continuar ou parar
+            if not running_mk3:
+                message.reply_text("Faturamento mk3 parado.")
+                break
+    else:
+        message.reply_text("Faturamento mk3 em execução.")
+
+def handle_stop_invoicing_mk3(client: Client, message: Message):
+    global running_mk3
+    running_mk3 = False
+    message.reply_text("Pedido de parada mk3 iniciado...")
+    
+def handle_status_invoicing_mk3(client: Client, message: Message):
+    global running_mk3
+    try:
+        if running_mk3:
+            message.reply_text("Faturamento mk3 em execução")
+        else:
+            message.reply_text("Faturamento mk3 parado")
+    except:
+        message.reply_text("Faturamento mk3 parado")

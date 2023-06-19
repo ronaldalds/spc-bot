@@ -138,11 +138,25 @@ class Mk:
             (By.XPATH, '//iframe[@name="mainform"]')))
         return self
 
-    def iframeGrid(self, coin: Coin, aside: Aside):
+    def iframeGridCancelamento(self, coin: Coin, aside: Aside):
         self._driver.switch_to.default_content()
         self.iframePainel(coin, aside)
         self._wdw.until(frame_to_be_available_and_switch_to_it(
             (By.XPATH, '//div[@id="lay"]/div[2]/div[2]/div[1]/div/iframe')))
+        return self
+    
+    def iframeGridFaturamento(self, coin: Coin, aside: Aside):
+        self._driver.switch_to.default_content()
+        self.iframePainel(coin, aside)
+        self._wdw.until(frame_to_be_available_and_switch_to_it(
+            (By.XPATH, '//div[@id="lay"]/div[2]/div[2]/div[2]/div/iframe')))
+        return self
+    
+    def iframeGridResFaturamento(self, coin: Coin, aside: Aside):
+        self._driver.switch_to.default_content()
+        self.iframePainel(coin, aside)
+        self._wdw.until(frame_to_be_available_and_switch_to_it(
+            (By.XPATH, '//div[@id="lay"]/div[2]/div[3]/div[1]/div/iframe')))
         return self
 
     def iframeGridRes(self, coin: Coin, aside: Aside):

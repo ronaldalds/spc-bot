@@ -128,10 +128,10 @@ def cancelamento(
 
     # click no resultado de pesquisa avançada
     try:
-        instance.iframeGrid(financeiro, painel_do_cliente)
+        instance.iframeGridCancelamento(financeiro, painel_do_cliente)
         instance.dbclick(f'//div[text()={cod_pessoa}]')
     except:
-        logging.warning(f'Código da pessoa {cod_pessoa} MK{mk} não encontrado')
+        logging.warning(f'Código da pessoa {cod_pessoa} contrato {contrato} MK{mk} não encontrado')
         instance.close()
         return
 
