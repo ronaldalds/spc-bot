@@ -82,7 +82,9 @@ def mis(client, message: Message):
 @authorization(chat_financeiro)
 def financeiro(client, message: Message):
     message.reply_text(f"""
-/faturamento - Criar filtro de faturamento
+/faturamento_mk1 - Criar filtro de faturamento mk1
+/faturamento_mk3 - Criar filtro de faturamento mk3
+/relatorio_faturamento dd/mm/yyyy - relatório logs faturamento
 """)
 
 @app.on_message(filters.command("spc"))
@@ -103,17 +105,22 @@ def cancelamento(client, message: Message):
 /relatorio_cancelamento dd/mm/yyyy - relatório logs cancelamento
 """)
 
-@app.on_message(filters.command("faturamento"))
+@app.on_message(filters.command("faturamento_mk1"))
 @authorization(chat_financeiro)
 def faturamento(client, message: Message):
     message.reply_text(f"""
 /iniciar_faturamento_mk1 - Inciar faturamento mk1
 /parar_faturamento_mk1 - Parar faturamento mk1
 /status_faturamento_mk1 - Status faturamento mk1
+""")
+
+@app.on_message(filters.command("faturamento_mk3"))
+@authorization(chat_financeiro)
+def faturamento(client, message: Message):
+    message.reply_text(f"""
 /iniciar_faturamento_mk3 - Inciar faturamento mk3
 /parar_faturamento_mk3 - Parar faturamento mk3
 /status_faturamento_mk3 - Status faturamento mk3
-/relatorio_faturamento dd/mm/yyyy - relatório logs faturamento
 """)
 
 @app.on_message(filters.command("chat"))
