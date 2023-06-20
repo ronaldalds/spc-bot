@@ -10,7 +10,7 @@ load_dotenv()
 running_mk1 = False
 running_mk3 = False
 regra = [2,5,8,17,25,27]
-tempo_ciclo = 60 * 30 * 1 # segundos * minutos * horas
+tempo_ciclo = 60 * 1 * 1 # segundos * minutos * horas
 
 def handle_start_invoicing_mk1(client: Client, message: Message):
     global running_mk1
