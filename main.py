@@ -104,7 +104,7 @@ def cancelamento(client, message: Message):
 """)
 
 @app.on_message(filters.command("faturamento"))
-@authorization(chat_mis)
+@authorization(chat_financeiro)
 def faturamento(client, message: Message):
     message.reply_text(f"""
 /iniciar_faturamento_mk1 - Inciar faturamento mk1
