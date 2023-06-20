@@ -23,10 +23,6 @@ def faturamento(
         data_vecimento
         ):
     
-    print(f"regra {regra}")
-    print(f"data atual {data_inicial}")
-    print(f"data final {data_final}")
-    print(f"data vencimento {data_vecimento}")
     file_log = datetime.now().strftime("faturamento_%Y-%m-%d.log")
     logging.basicConfig(
         filename=os.path.join(os.path.dirname(__file__), 'logs', file_log),
@@ -155,39 +151,48 @@ def faturamento(
         return
 
     # marca todos
-    # try:
-    #     instance.iframeGridResFaturamento(financeiro, painel_faturamento)
-    #     instance.click(f'//input[@id="rowselectAll"]')
-    # except:
-    #     logging.warning(f'Filtro regra {regra} no MK{mk} não encontrado')
-    #     instance.close()
-    #     return
+    try:
+        instance.iframeGridResFaturamento(financeiro, painel_faturamento)
+        instance.click(f'//input[@id="rowselectAll"]')
+    except:
+        logging.warning(f'Filtro regra {regra} no MK{mk} não encontrado')
+        instance.close()
+        return
 
     # click ignorar faturamento
     instance.iframePainel(financeiro, painel_faturamento)
     instance.click('//*[@title="Ignorar contas para o faturamento."]')
 
+    # alert filtro aplicado
+    instance.include()
+
     # select Profile
-    # try:
-    #     instance.iframeGridResFaturamento(financeiro, painel_faturamento)
-    #     instance.write(f'//td[@column="10" and @class=" webix_last_row"]/div/input', "Bradesco")
-    # except:
-    #     logging.warning(f'Filtro Profile no MK{mk} não encontrado')
-    #     instance.close()
-    #     return
+    try:
+        instance.iframeGridResFaturamento(financeiro, painel_faturamento)
+        instance.write(f'//td[@column="10" and @class=" webix_last_row"]/div/input', "Boleto Digital")
+    except:
+        logging.warning(f'Filtro Profile no MK{mk} não encontrado')
+        instance.close()
+        return
 
     # marca todos
-    # try:
-    #     instance.iframeGridResFaturamento(financeiro, painel_faturamento)
-    #     instance.click(f'//input[@id="rowselectAll"]')
-    # except:
-    #     logging.warning(f'Filtro regra {regra} no MK{mk} não encontrado')
-    #     instance.close()
-    #     return
+    try:
+        instance.iframeGridResFaturamento(financeiro, painel_faturamento)
+        instance.dbclick(f'//input[@id="rowselectAll"]')
+    except:
+        logging.warning(f'Filtro regra {regra} no MK{mk} não encontrado')
+        instance.close()
+        return
 
     # click habilitar faturamento
     instance.iframePainel(financeiro, painel_faturamento)
     instance.click('//*[@title="Reabilitar contas para o faturamento."]')
+
+    # alert filtro aplicado
+    instance.include()
+
+    # log faturamentomk
+    logging.log(SUCESS, f"Faturamento MK{mk} regra:{regra} data atual:{data_inicial} data final: {data_final} vencimento:{data_vecimento} concluído.")
 
     time.sleep(10)
     instance.close()

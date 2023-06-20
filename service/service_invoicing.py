@@ -10,6 +10,7 @@ load_dotenv()
 running_mk1 = False
 running_mk3 = False
 regra = [2,5,8,17,25,27]
+tempo_ciclo = 60 * 30 * 1 # segundos * minutos * horas
 
 def handle_start_invoicing_mk1(client: Client, message: Message):
     global running_mk1
@@ -25,7 +26,7 @@ def handle_start_invoicing_mk1(client: Client, message: Message):
             if data_vencimento.day in regra:
                 if not faturamento_processado:
                     faturamento(
-                        mk = "test",
+                        mk = 1,
                         regra = f"Dia {data_vencimento.day:02}",
                         data_inicial = datetime.strftime(data_atual, "%d%m%Y"),
                         data_final = datetime.strftime(data_final, "%d%m%Y"),
@@ -33,11 +34,12 @@ def handle_start_invoicing_mk1(client: Client, message: Message):
                         )
                     faturamento_processado = True
 
+            # Reseta o valor da variavel de processo
             if faturamento_processado and (data_vencimento.day not in regra):
                 faturamento_processado = False
 
             # Aguarda antes de verificar novamente valor em segundos
-            time.sleep(5 * 1 * 1) # segundos * minutos * horas
+            time.sleep(tempo_ciclo)
 
             # Verifica se a execução deve continuar ou parar
             if not running_mk1:
@@ -68,15 +70,14 @@ def handle_start_invoicing_mk3(client: Client, message: Message):
         faturamento_processado = False
 
         while running_mk3:
-            # data_atual = datetime.now()
-            data_atual = datetime(2023, 6, 24)
+            data_atual = datetime.now()
             data_final = data_atual + timedelta(days=29) 
             data_vencimento = data_atual + timedelta(days=8)
 
             if data_vencimento.day in regra:
                 if not faturamento_processado:
                     faturamento(
-                        mk = "test",
+                        mk = 3,
                         regra = f"Dia {data_vencimento.day:02}",
                         data_inicial = datetime.strftime(data_atual, "%d%m%Y"),
                         data_final = datetime.strftime(data_final, "%d%m%Y"),
@@ -84,11 +85,12 @@ def handle_start_invoicing_mk3(client: Client, message: Message):
                         )
                     faturamento_processado = True
 
+            # Reseta o valor da variavel de processo
             if faturamento_processado and (data_vencimento.day not in regra):
                 faturamento_processado = False
 
             # Aguarda antes de verificar novamente valor em segundos
-            time.sleep(5 * 1 * 1) # segundos * minutos * horas
+            time.sleep(tempo_ciclo)
 
             # Verifica se a execução deve continuar ou parar
             if not running_mk3:
