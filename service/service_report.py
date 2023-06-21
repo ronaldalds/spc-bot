@@ -18,3 +18,7 @@ def handle_report_invoicing(client: Client, message: Message):
     # Verifique se a mensagem contém um comando válido
     relatorio(client, message, process='faturamento')
 
+def handle_report_retreat(client: Client, message: Message):
+    # Verifique se a mensagem contém um comando válido
+    relatorio(client, message, process='recolhimento')
+

@@ -36,7 +36,7 @@ def include(
         level=logging.WARNING
         )
     
-    print(f'cadastrando {cpf_cnpj}')
+    print(f'cadastrando cpf:{cpf_cnpj}')
     
     try:
         spc = Spc(

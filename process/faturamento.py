@@ -87,7 +87,7 @@ def faturamento(
     instance.iframePainel(financeiro, painel_faturamento)
     instance.click('//*[@title="Novo faturamento..."]')
 
-    # select regra de vencimento
+    # seleciona regra de vencimento
     try:
         instance.iframeForm()
         instance.click('//*[@title="Selecione a regra de faturamento desejada."]/div/button')
@@ -122,7 +122,7 @@ def faturamento(
         instance.close()
         return
     
-    # confirma geração
+    # click checkbox confirma geração de filtro de faturamento
     try:
         instance.click('//*[@title="Clique para confirmar a geração da prévia de faturamento."]/input[2]')
     except:
@@ -163,10 +163,10 @@ def faturamento(
     instance.iframePainel(financeiro, painel_faturamento)
     instance.click('//*[@title="Ignorar contas para o faturamento."]')
 
-    # alert filtro aplicado
+    # alert todos ignorados
     instance.include()
 
-    # select Profile
+    # selecionar todos os Profile com Boleto Digital
     try:
         instance.iframeGridResFaturamento(financeiro, painel_faturamento)
         instance.write(f'//td[@column="10" and @class=" webix_last_row"]/div/input', "Boleto Digital")
@@ -188,7 +188,7 @@ def faturamento(
     instance.iframePainel(financeiro, painel_faturamento)
     instance.click('//*[@title="Reabilitar contas para o faturamento."]')
 
-    # alert filtro aplicado
+    # alert de tirar o ignorar do Boleto Digital
     instance.include()
 
     # log faturamentomk

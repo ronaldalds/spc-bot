@@ -44,7 +44,7 @@ def cancelamento(
         vencimento_multa,
         planos_contas
         ):
-    
+    print(f'Iniciou cancelamento código: {cod_pessoa} contrato: {contrato} no MK:{mk}.')
     file_log = datetime.now().strftime("cancelamento_%Y-%m-%d.log")
     logging.basicConfig(
         filename=os.path.join(os.path.dirname(__file__), 'logs', file_log),
@@ -55,6 +55,7 @@ def cancelamento(
         level=logging.WARNING
         )
 
+    valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
     if mk == "test":
         instance = Mk(
             username=os.getenv('USERNAME_MK_TEST'),
@@ -63,7 +64,6 @@ def cancelamento(
         )
         profile = PROFILE_TEST['Boleto Digital - Bradesco']
         motivo_de_cancelamento  = MOTIVO_DE_CANCELAMENTO_TEST["Inadimplência"]
-        valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
         valor_grupo_atendimento = GRUPO_DE_ATENDIMENTO_TEST[grupo_atendimento_os]
         div_cancelar = CHECK_BOX_CANCELAR_TEST["Cancelar"]
     elif mk == 1:
@@ -74,7 +74,6 @@ def cancelamento(
         )
         profile = PROFILE_MK01['Boleto Digital - Bradesco']
         motivo_de_cancelamento  = MOTIVO_DE_CANCELAMENTO_MK01["Inadimplência"]
-        valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
         valor_grupo_atendimento = GRUPO_DE_ATENDIMENTO_MK01[grupo_atendimento_os]
         div_cancelar = CHECK_BOX_CANCELAR_MK01["Cancelar"]
     elif mk == 3:
@@ -85,7 +84,6 @@ def cancelamento(
         )
         profile = PROFILE_MK03['Boleto Digital - Bradesco']
         motivo_de_cancelamento  = MOTIVO_DE_CANCELAMENTO_MK03["Inadimplência"]
-        valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
         valor_grupo_atendimento = GRUPO_DE_ATENDIMENTO_MK03[grupo_atendimento_os]
         div_cancelar = CHECK_BOX_CANCELAR_MK03["Cancelar"]
 
@@ -104,7 +102,7 @@ def cancelamento(
         instance.iframeMain()
         instance.click('//div[@class="OptionClose"]')
     except:
-        print(f"Sem tela de complete seu cadastro MK{mk}")
+        pass
         
     # click na moeda financeiro
     instance.iframeCoin()

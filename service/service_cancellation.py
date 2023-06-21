@@ -1,5 +1,6 @@
-import pandas
+import openpyxl
 import os
+import time
 from process.cancelamento import cancelamento
 from dotenv import load_dotenv
 from pyrogram.types import Message
@@ -18,7 +19,7 @@ def handle_start_cancellation_mk(client: Client, message: Message):
         # Verifique se a mensagem contém um documento e se o tipo MIME do documento é "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
             # Quantidade de itens na Pool
-            limite_threads = 12
+            limite_threads = 20
 
             # Baixe o arquivo XLSX
             file_path = message.download()
@@ -26,28 +27,48 @@ def handle_start_cancellation_mk(client: Client, message: Message):
             
             # Processar o arquivo XLSX conforme necessário
             try:
-                file = pandas.read_excel(file_path)
+                try:
+                    workbook = openpyxl.load_workbook(file_path)
+                except openpyxl.utils.exceptions.InvalidFileException:
+                    message.reply_text("O arquivo fornecido não é um arquivo XLSX válido.")
+                    return
 
+                sheet = workbook.active
+                max_row = sheet.max_row
                 lista = []
-                for i in file.iterrows():
+                headers = [cell.value for cell in sheet[1]]
+                for row in sheet.iter_rows(min_row=2, max_row=max_row, values_only=True):
                     try:
-                        lista.append((
-                            formatar_int(i[1]['MK']), # mk
-                            formatar_int(i[1]['Cod Pessoa']), # Cod Pessoa
-                            formatar_int(i[1]['Contrato']), # Contrato
-                            i[1]['Detalhes Cancelamento'], # Detalhes Cancelamento
-                            i[1]['Tipo OS'], # Tipo OS
-                            str(i[1]['Grupo Atendimento OS']).strip(), # Grupo Atendimento OS
-                            i[1]['Relato do problema'], # Relato do problema
-                            formatar_incidencia(i[1]['Incidencia de Multa']), # Incidencia de Multa
-                            formatar_valor_multa(i[1]['Valor Multa']), # Valor Multa
-                            formatar_data(i[1]['Data Vcto Multa Contratual']), # Data Vcto Multa Contratual
-                            i[1]['Planos de Contas'] # Planos de Contas
-                            ))
-                    except:
-                        print(f"Error: na linha {i[0] + 2}")
+                        mk = formatar_int(row[headers.index("MK")])
+                        cod_pessoa = formatar_int(row[headers.index("Cod Pessoa")])
+                        contrato = formatar_int(row[headers.index("Contrato")])
+                        detalhes_cancelamento = row[headers.index("Detalhes Cancelamento")]
+                        tipo_da_os = row[headers.index("Tipo OS")]
+                        grupo_atendimento_os = str(row[headers.index("Grupo Atendimento OS")]).strip()
+                        relato_do_problema = row[headers.index("Relato do problema")]
+                        incidencia_multa = formatar_incidencia(row[headers.index("Incidencia de Multa")])
+                        valor_multa = formatar_valor_multa(row[headers.index("Valor Multa")])
+                        vencimento_multa = formatar_data(row[headers.index("Data Vcto Multa Contratual")])
+                        planos_contas = row[headers.index("Planos de Contas")]
 
-                message.reply_text(f"Processando arquivo XLSX com {len(lista)} contratos")
+                        # Se chegou até aqui, os dados são válidos, então adiciona à lista
+                        lista.append((
+                            mk,
+                            cod_pessoa,
+                            contrato,
+                            detalhes_cancelamento,
+                            tipo_da_os,
+                            grupo_atendimento_os,
+                            relato_do_problema,
+                            incidencia_multa,
+                            valor_multa,
+                            vencimento_multa,
+                            planos_contas
+                            ))
+                    except Exception as e:
+                        print(f"Error: na linha {len(lista) + 1}, {e}")
+
+                message.reply_text(f"Processando arquivo XLSX com {len(lista)} contratos...")
                 def executar(arg):
 
                     if running:
@@ -72,13 +93,15 @@ def handle_start_cancellation_mk(client: Client, message: Message):
 
                 # Criando Pool
                 with concurrent.futures.ThreadPoolExecutor(max_workers=limite_threads) as executor:
-                    resultados = executor.map(executar, lista)
+                    executor.map(executar, lista)
             # ...
             finally:
             # Excluir o arquivo XLSX
+                time.sleep(1)
                 os.remove(file_path)
             # Responder à mensagem do usuário com o resultado do processamento do arquivo
             message.reply_text("O arquivo XLSX foi processado com sucesso!")
+            running = False
         else:
             # Responder à mensagem do usuário com uma mensagem de erro
             message.reply_text("Por favor, envie um arquivo XLSX para processar.")

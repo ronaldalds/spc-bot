@@ -1,3 +1,7 @@
+NIVEL_DE_SLA = {
+    "Preventivo": 4
+}
+
 FATURAMENTO = {
     "Dia 02": 3,
     "Dia 05": 6,
@@ -42,7 +46,12 @@ MOTIVO_DE_CANCELAMENTO_MK03 = {
 TIPO_DA_OS = {
     "Cancelamento - Fibra": 95,
     "Cancelamento - Fibra + TV": 104,
-    "Cancelamento - Radio": 96
+    "Cancelamento - Radio": 96,
+    "Recolhimento de equipamento - Fibra": 113,
+    "Recolhimento de equipamento - Fibra + TV": 135,
+    "Recolhimento de equipamento - Rádio": 114,
+    "Recolhimento de equipamento - TV": 115,
+    "Recolhimento de equipamento - WiFi Adicional": 136,
 }
 
 GRUPO_DE_ATENDIMENTO_TEST = {

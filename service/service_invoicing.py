@@ -23,6 +23,7 @@ def handle_start_invoicing_mk1(client: Client, message: Message):
             data_final = data_atual + timedelta(days=29) 
             data_vencimento = data_atual + timedelta(days=8)
 
+            # saber se o vencimento esta dentro das regras de vencimento
             if data_vencimento.day in regra:
                 if not faturamento_processado:
                     faturamento(

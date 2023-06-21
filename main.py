@@ -2,9 +2,10 @@ from pyrogram import Client, filters
 import os
 from pyrogram.types import Message
 from dotenv import load_dotenv
-from service.service_spc import handle_include_spc
-from service.service_cancellation_mk import handle_start_cancellation_mk, handle_stop_cancellation_mk, handle_status_cancellation_mk
-from service.service_report import handle_report_cancellation, handle_report_spc, handle_report_invoicing
+from service.service_spc import handle_start_include_spc, handle_stop_include_spc, handle_status_include_spc
+from service.service_cancellation import handle_start_cancellation_mk, handle_stop_cancellation_mk, handle_status_cancellation_mk
+from service.service_retreat import handle_start_retreat_mk, handle_stop_retreat_mk, handle_status_retreat_mk
+from service.service_report import handle_report_cancellation, handle_report_spc, handle_report_invoicing, handle_report_retreat
 from service.service_invoicing import (
     handle_start_invoicing_mk1,
     handle_stop_invoicing_mk1,
@@ -16,7 +17,7 @@ from service.service_invoicing import (
 
 load_dotenv()
 
-version = "0.0.2"
+version = "0.0.3"
 
 app = Client(
     name=os.getenv("BOT_NAME_TELEGRAM"), 
@@ -76,6 +77,7 @@ def mis(client, message: Message):
     message.reply_text(f"""
 /spc - Inclui clientes no sistema do spc
 /cancelamento - Cancelamento de cliente mk
+/recolhimento - O.S de Recolhimento mk
 """)
     
 @app.on_message(filters.command("financeiro"))
@@ -91,7 +93,9 @@ def financeiro(client, message: Message):
 @authorization(chat_mis)
 def spc(client, message: Message):
     message.reply_text(f"""
-/include_spc - Inclui clientes no sistema do spc
+/iniciar_include_spc - Iniciar inclusões no sistema spc
+/parar_include_spc - Parar inclusões no sistema spc
+/status_include_spc - Status inclusões no sistema spc
 /relatorio_spc dd/mm/yyyy - relatório logs spc
 """)
 
@@ -103,6 +107,16 @@ def cancelamento(client, message: Message):
 /parar_cancelamento - Parar cancelamento
 /status_cancelamento - Status cancelamento
 /relatorio_cancelamento dd/mm/yyyy - relatório logs cancelamento
+""")
+
+@app.on_message(filters.command("recolhimento"))
+@authorization(chat_mis)
+def cancelamento(client, message: Message):
+    message.reply_text(f"""
+/iniciar_recolhimento - Iniciar recolhimento
+/parar_recolhimento - Parar recolhimento
+/status_recolhimento - Status recolhimento
+/relatorio_recolhimento dd/mm/yyyy - relatório logs recolhimento
 """)
 
 @app.on_message(filters.command("faturamento_mk1"))
@@ -129,11 +143,23 @@ def handle_chat_id(client, message: Message):
     print(message.from_user.id)
 
 ############################################# SPC #############################################
-# incluir clientes no sistema do spc
-@app.on_message(filters.command("include_spc"))
+# iniciar inclusões no sistema spc
+@app.on_message(filters.command("iniciar_include_spc"))
 @authorization(chat_mis)
-def include_spc(client: Client, message: Message):
-    handle_include_spc(client, message)
+def iniciar_include_spc(client: Client, message: Message):
+    handle_start_include_spc(client, message)
+
+# parar inclusões no sistema spc
+@app.on_message(filters.command("parar_include_spc"))
+@authorization(chat_mis)
+def parar_include_spc(client: Client, message: Message):
+    handle_stop_include_spc(client, message)
+
+# status inclusões no sistema spc
+@app.on_message(filters.command("status_include_spc"))
+@authorization(chat_mis)
+def status_include_spc(client: Client, message: Message):
+    handle_status_include_spc(client, message)
 
 # relatório de inclusões no sistema spc
 @app.on_message(filters.command("relatorio_spc") & filters.text)
@@ -142,62 +168,87 @@ def report_spc(client: Client, message: Message):
     handle_report_spc(client, message)
 
 ############################################# CANCELLATION #############################################
-# cancelar contrato no sistema mk
+# iniciar cancelamento no sistema mk
 @app.on_message(filters.command("iniciar_cancelamento"))
 @authorization(chat_mis)
 def iniciar_cancellation(client: Client, message: Message):
     handle_start_cancellation_mk(client, message)
 
-# start running invoicing
+# parar cancelamento no sistema mk
 @app.on_message(filters.command("parar_cancelamento"))
 @authorization(chat_mis)
 def parar_cancellation(client: Client, message: Message):
     handle_stop_cancellation_mk(client, message)
 
-# stop running invoicing
+# status cancelamento no sistema mk
 @app.on_message(filters.command("status_cancelamento"))
 @authorization(chat_mis)
 def status_cancellation(client: Client, message: Message):
     handle_status_cancellation_mk(client, message)
 
-# relatório cancelamentos no sistema mk
+# relatório cancelamento no sistema mk
 @app.on_message(filters.command("relatorio_cancelamento") & filters.text)
 @authorization(chat_mis)
 def report_cancellation(client: Client, message: Message):
     handle_report_cancellation(client, message)
 
+############################################# RETREAT #############################################
+# iniciar recolhimento no sistema mk
+@app.on_message(filters.command("iniciar_recolhimento"))
+@authorization(chat_mis)
+def iniciar_retreat(client: Client, message: Message):
+    handle_start_retreat_mk(client, message)
+
+# parar recolhimento no sistema mk
+@app.on_message(filters.command("parar_recolhimento"))
+@authorization(chat_mis)
+def parar_retreat(client: Client, message: Message):
+    handle_stop_retreat_mk(client, message)
+
+# status recolhimento no sistema mk
+@app.on_message(filters.command("status_recolhimento"))
+@authorization(chat_mis)
+def status_retreat(client: Client, message: Message):
+    handle_status_retreat_mk(client, message)
+
+# relatório recolhimento no sistema mk
+@app.on_message(filters.command("relatorio_recolhimento") & filters.text)
+@authorization(chat_mis)
+def report_retreat(client: Client, message: Message):
+    handle_report_retreat(client, message)
+
 ############################################# INVOICING #############################################
-# start running invoicing mk1
+# iniciar faturamento no sistema mk1
 @app.on_message(filters.command("iniciar_faturamento_mk1"))
 @authorization(chat_financeiro)
 def iniciar_faturamento(client: Client, message: Message):
     handle_start_invoicing_mk1(client, message)
 
-# stop running invoicing mk1
+# parar faturamento no sistema mk1
 @app.on_message(filters.command("parar_faturamento_mk1"))
 @authorization(chat_financeiro)
 def parar_faturamento(client: Client, message: Message):
     handle_stop_invoicing_mk1(client, message)
 
-# status invoicing mk1
+# status faturamento no sistema mk1
 @app.on_message(filters.command("status_faturamento_mk1"))
 @authorization(chat_financeiro)
 def status_faturamento(client: Client, message: Message):
     handle_status_invoicing_mk1(client, message)
 
-# start running invoicing mk3
+# iniciar faturamento no sistema mk3
 @app.on_message(filters.command("iniciar_faturamento_mk3"))
 @authorization(chat_financeiro)
 def iniciar_faturamento(client: Client, message: Message):
     handle_start_invoicing_mk3(client, message)
 
-# stop running invoicing mk3
+# parar faturamento no sistema mk3
 @app.on_message(filters.command("parar_faturamento_mk3"))
 @authorization(chat_financeiro)
 def parar_faturamento(client: Client, message: Message):
     handle_stop_invoicing_mk3(client, message)
 
-# status invoicing mk3
+# status faturamento no sistema mk3
 @app.on_message(filters.command("status_faturamento_mk3"))
 @authorization(chat_financeiro)
 def status_faturamento(client: Client, message: Message):

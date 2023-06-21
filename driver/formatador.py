@@ -9,6 +9,7 @@ def formatar_data(data):
             data = datetime(1899, 12, 30) + timedelta(days=int(data))
             return data.strftime("%d%m%Y")
         else:
+            # regex data
             df = re.compile("([0-9]{2,4})[-]?[/]?([0-9]{2})[-]?[/]?([0-9]{2,4})")
             data = df.findall(data)[0]
             if len(data[2]) == 2:
@@ -40,20 +41,17 @@ def formatar_incidencia(incidencia):
     else:
         return None
 
-def formatar_cpf(cpf):
-    # Remover cod: deixando somente possivél cpf
-    cpf = str(cpf).strip().split(" cod: ")[0]
-    # Remover caracteres não numéricos
-    cpf = ''.join(filter(str.isdigit, cpf))
-    # verifica se a str tem condições de ser um cpf
+def formatar_documento(doc):
     try:
-        if len(cpf) < 11:
-            return None
+        regex_cpf = re.compile("[0-9]{3}[.][0-9]{3}[.][0-9]{3}[-][0-9]{2}")
+        cpf = regex_cpf.match(doc).group()
     except:
-        return None
-    # Verificar se tem 11 dígitos numéricos
-    if len(cpf) == 11:
-        # Formatar como CPF (###.###.###-##)
-        cpf_formatado = cpf[:3] + '.' + cpf[3:6] + '.' + cpf[6:9] + '-' + cpf[9:]
-        return cpf_formatado
-    return None
+        cpf = "Não Encontrado"
+    try:
+        cod = str(doc).strip().split(" cod: ")[1]
+    except:
+        cod = "Não Encontrado"
+        
+    return {"cpf": cpf, "cod": cod}
+
+    
