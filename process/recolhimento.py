@@ -214,6 +214,9 @@ def recolhimento(
         instance.close()
         return
 
+    # alert concluir O.S recolhimento
+    instance.include()
+
     # log recolhimento de contrato conluído
     logging.log(SUCESS, f"Recolhimento do contrato:{contrato} conexao:{conexao_associada} MK{mk} concluído.")
 

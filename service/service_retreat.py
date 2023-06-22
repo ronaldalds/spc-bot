@@ -1,7 +1,6 @@
 import openpyxl
 import os
 import time
-import copy
 from process.recolhimento import recolhimento
 from dotenv import load_dotenv
 from pyrogram.types import Message
@@ -12,24 +11,51 @@ from driver.formatador import formatar_int, formatar_documento
 load_dotenv()
 
 running = False
+
 lojas_mk1 = {
+    "LOJA ALCÂNTARAS": 2,
+    "LOJA ANAPURUS": 2,
+    "LOJA ARARENDÁ": 2,
+    "LOJA BOA VIAGEM": 3,
+    "LOJA CAMOCIM": 10,
+    "LOJA CARIRÉ": 2,
+    "LOJA CARNAUBAL": 2,
+    "LOJA GUARACIABA DO NORTE": 5,
+    "LOJA HIDROLÂNDIA": 2,
+    "LOJA IBIAPINA": 2,
+    "LOJA IPUEIRAS": 2,
+    "LOJA ITATIRA": 2,
+    "LOJA LISIEUX": 2,
+    "LOJA MATA ROMA": 2,
+    "LOJA MERUOCA": 2,
+    "LOJA MONSENHOR TABOSA": 2,
+    "LOJA NOVO ORIENTE": 3,
+    "LOJA PEDRO II": 3,
+    "LOJA PIRACURUCA": 3,
+    "LOJA PIRIPIRI": 4,
+    "LOJA RERIUTABA": 2,
+    "LOJA SANTA QUITÉRIA": 3,
+    "LOJA SÃO BERNARDO": 2,
+    "LOJA TAMBORIL": 2,
+    "LOJA UBAJARA": 2,
+    "LOJA VARJOTA": 4,
 }
 
 lojas_mk3 = {
-    "LOJA CASTANHAL": 18,
+    "LOJA CASTANHAL": 8,
     "LOJA VIGIA": 5,
-    "LOJA TERRA ALTA": 5,
-    "LOJA ICOARACI": 18,
-    "LOJA MARITUBA": 20,
-    "LOJA VILA DOS CABANOS": 10,
-    "LOJA BARCARENA": 5,
-    "LOJA MAGUARI": 5,
-    "LOJA ABAETETUBA": 15,
-    "LOJA TUCURUI": 10,
-    "LOJA TAILÂNDIA": 10,
-    "LOJA MOJU": 8,
-    "LOJA MOCAJUBA": 5,
-    "LOJA BAIÃO": 5
+    "LOJA TERRA ALTA": 4,
+    "LOJA ICOARACI": 5,
+    "LOJA MARITUBA": 9,
+    "LOJA VILA DOS CABANOS": 8,
+    "LOJA BARCARENA": 4,
+    "LOJA MAGUARI": 4,
+    "LOJA ABAETETUBA": 12,
+    "LOJA TUCURUI": 5,
+    "LOJA TAILÂNDIA": 4,
+    "LOJA MOJU": 4,
+    "LOJA MOCAJUBA": 3,
+    "LOJA BAIÃO": 2
 }
 
 def __gerar_lista(workbook):
@@ -111,10 +137,11 @@ def handle_start_retreat_mk(client: Client, message: Message):
                 
                 # lista com todas as os
                 lista = __gerar_lista(workbook)
+                message.reply_text(f"Processando arquivo XLSX com {len(lista)} O.S...")
 
                 # lista com base na quantidade maxima de os que pode ser abertas por loja
                 lista = __limpa_lista(lista)
-                message.reply_text(f"Processando arquivo XLSX com {len(lista)} contratos...")
+                message.reply_text(f"Arquivo XLSX ajustado para {len(lista)} O.S...")
                 def executar(arg):
                     if running:
                         try:
