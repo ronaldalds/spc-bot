@@ -1,4 +1,25 @@
 from driver.formatador import formatar_documento
+import copy
+
+# original_dict = {'a': [1, 2, 3], 'b': {'x': 10, 'y': 20}}
+
+# # Criando uma cópia usando o método copy()
+# copia_shallow = original_dict.copy()
+
+# # Criando uma cópia usando o método deepcopy()
+# copia_deep = copy.deepcopy(original_dict)
+
+# # Modificando os valores nas cópias
+# copia_shallow['a'].append(4)
+# copia_shallow['b']['x'] = 100
+
+# copia_deep['a'].append(4)
+# copia_deep['b']['x'] = 100
+
+# # Imprimindo os dicionários
+# print("Original:", original_dict)
+# print("Cópia Shallow:", copia_shallow)
+# print("Cópia Deep:", copia_deep)
 
 # cancelamento(
 #         mk = "test",
@@ -19,4 +40,47 @@ from driver.formatador import formatar_documento
 #         vencimento_multa = '10062023',
 #         planos_contas = "01.02.07 Cliente - Pessoa Física"
 #     )
-print(formatar_documento("884.316.142-34 cod: 215082"))
+# print(formatar_documento("884.316.142-34 cod: 215082"))
+# lojas_mk3 = {
+#     "LOJA CASTANHAL": 18,
+#     "LOJA VIGIA": 5,
+#     "LOJA TERRA ALTA": 5,
+#     "LOJA ICOARACI": 18,
+#     "LOJA MARITUBA": 20,
+#     "LOJA VILA DOS CABANOS": 10,
+#     "LOJA BARCARENA": 5,
+#     "LOJA MAGUARI": 5,
+#     "LOJA ABAETETUBA": 15,
+#     "LOJA TUCURUI": 10,
+#     "LOJA TAILÂNDIA": 10,
+#     "LOJA MOJU": 8,
+#     "LOJA MOCAJUBA": 5,
+#     "LOJA BAIÃO": 5
+# }
+# a = "LOJA BAIÃ"
+# print(a in lojas_mk3.keys())
+# print(lojas_mk3[a] - 1)
+
+def contar_e_deletar_ocorrencias(dicionario, lista):
+    lista_resultante = []
+    ocorrencias_dict = {chave: 0 for chave in dicionario}
+    print(ocorrencias_dict)
+    for item in lista:
+        chave = item[1] # posicao da tupla onde esta o que voce quer contar a ocorrencia
+        if chave in dicionario:
+            valor_limite = dicionario[chave]
+            if ocorrencias_dict[chave] < valor_limite:
+                lista_resultante.append(item)
+                ocorrencias_dict[chave] += 1
+        else:
+            lista_resultante.append(item)
+
+    return lista_resultante
+
+# Exemplo de uso
+meu_dicionario = {'a': 1, 'b': 1, 'c': 1}
+minha_lista = [('valor1', 'a'), ('valor2', 'b'), ('valor3', 'c'), ('valor4', 'a'), ('valor5', 'a'), ('valor6', 'c'), ('valor7', 'c'), ('valor8', 'c'), ('valor9', 'd'), ('valor10', 'e'), ('valor11', 'e')]
+
+minha_lista_resultante = contar_e_deletar_ocorrencias(meu_dicionario, minha_lista)
+
+print("Lista resultante:", minha_lista_resultante)

@@ -28,9 +28,10 @@ def recolhimento(
         cod,
         tipo_da_os,
         grupo_atendimento_os,
-        detalhe_os
+        detalhe_os,
+        loja
         ):
-    print(f'Iniciou recolhimento contrato: {contrato} cpf: {cpf} no MK:{mk}.')
+    print(f'Iniciou recolhimento contrato: {contrato} cpf: {cpf} loja:{loja} MK:{mk}.')
     file_log = datetime.now().strftime("recolhimento_%Y-%m-%d.log")
     logging.basicConfig(
         filename=os.path.join(os.path.dirname(__file__), 'logs', file_log),
@@ -67,6 +68,7 @@ def recolhimento(
 
     else:
         logging.warning('Error na escolha do mk')
+    
     
     workspace = Workspace()
     ospainel = OsPainel()
@@ -132,6 +134,7 @@ def recolhimento(
     
     # Escolha nivel de SLA se habilitado
     try:
+        time.sleep(5)
         instance.iframeForm()
         instance.click('//*[@title="Escolhe o nível de prioridade deste serviço."]/div/button')
         instance.write('//input[@id="lookupSearchQuery"]', "Preventivo" + Keys.ENTER)
@@ -172,6 +175,42 @@ def recolhimento(
         instance.click('//div[@class="HTMLTabContainer"]/div[4]//button[@title="Avançar no assistente de O.S."]')
     except:
         logging.error(f'Error Avançar no assistente identificador O.S terceira tela MK{mk}')
+        instance.close()
+        return
+    
+    # Avançar no assistente de O.S quarta tela
+    try:
+        instance.click('//div[@class="HTMLTabContainer"]/div[8]//button[@title="Avançar no assistente de O.S."]')
+    except:
+        logging.error(f'Error Avançar no assistente identificador O.S quarta tela MK{mk}')
+        instance.close()
+        return
+
+
+    # Escolha Grupo de atendimento
+    try:
+        instance.iframeForm()
+        instance.click('//div[@class="HTMLTabContainer"]/div[9]//div[@class="HTMLLookup"]/div[2]/div/button')
+        instance.write('//input[@id="lookupSearchQuery"]', f"{grupo_atendimento_os}" + Keys.ENTER)
+        instance.click(f'//option[@value="{valor_grupo_atendimento}"]')
+    except:
+        logging.error(f'Error grupo de atendimento:{grupo_atendimento_os} MK{mk}')
+        instance.close()
+        return
+
+    # Avançar no assistente de O.S quinta tela
+    try:
+        instance.click('//div[@class="HTMLTabContainer"]/div[9]//button[@title="Avançar no assistente de O.S."]')
+    except:
+        logging.error(f'Error Avançar no assistente identificador O.S quinta tela MK{mk}')
+        instance.close()
+        return
+
+    # Avançar no assistente de O.S sexta tela
+    try:
+        instance.click('//div[@class="HTMLTabContainer"]/div[10]//button[@title="Clique para efetivar a criação desta O.S.."]')
+    except:
+        logging.error(f'Error Avançar no assistente identificador O.S quinta tela MK{mk}')
         instance.close()
         return
 
