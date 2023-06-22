@@ -19,7 +19,7 @@ def handle_start_cancellation_mk(client: Client, message: Message):
         # Verifique se a mensagem contém um documento e se o tipo MIME do documento é "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
             # Quantidade de itens na Pool
-            limite_threads = 20
+            limite_threads = 12
 
             # Baixe o arquivo XLSX
             file_path = message.download()
@@ -87,7 +87,7 @@ def handle_start_cancellation_mk(client: Client, message: Message):
                                 planos_contas=arg[10]
                             )
                         except Exception as e:
-                            print(f"Error executing na função executar:mk:{arg[0]} cod:{arg[1]} contrato:{arg[2]} {e}")
+                            print(f"Error executar na função cancelamento:mk:{arg[0]} cod:{arg[1]} contrato:{arg[2]} {e}")
                     else:
                         message.reply_text(f"Cancelamento mk:{arg[0]} cod:{arg[1]} contrato:{arg[2]} parado.")
 

@@ -17,6 +17,7 @@ def handle_start_invoicing_mk1(client: Client, message: Message):
     if not running_mk1:
         running_mk1 = True
         faturamento_processado = False
+        message.reply_text("Faturamento mk1 em execução.")
 
         while running_mk1:
             data_atual = datetime.now()
@@ -69,6 +70,7 @@ def handle_start_invoicing_mk3(client: Client, message: Message):
     if not running_mk3:
         running_mk3 = True
         faturamento_processado = False
+        message.reply_text("Faturamento mk3 em execução")
 
         while running_mk3:
             data_atual = datetime.now()
