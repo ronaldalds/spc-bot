@@ -49,7 +49,7 @@ TIPO_DA_OS = {
     "Cancelamento - Radio": 96,
     "Recolhimento de equipamento - Fibra": 113,
     "Recolhimento de equipamento - Fibra + TV": 135,
-    "Recolhimento de equipamento - Rádio": 114,
+    "Recolhimento de equipamento - Radio": 114,
     "Recolhimento de equipamento - TV": 115,
     "Recolhimento de equipamento - WiFi Adicional": 136,
 }

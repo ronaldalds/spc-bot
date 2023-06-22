@@ -38,6 +38,10 @@ chat_ost = [
     os.getenv("CHAT_ID_ADM"),
     ]
 
+chat_adm = [
+    os.getenv("CHAT_ID_ADM"),
+    ]
+
 chat_financeiro = [
     os.getenv("CHAT_ID_ADM"),
     os.getenv("CHAT_ID_ADM_MK"),
@@ -53,7 +57,6 @@ def authorization(ids_autorizados):
                 message.reply_text("Você não está autorizado a usar este bot.")
         return verificacao
     return decorador
-
 
 @app.on_message(filters.command("start"))
 def start(client, message: Message):
@@ -260,7 +263,14 @@ def status_faturamento(client: Client, message: Message):
 def report_invoicing(client: Client, message: Message):
     handle_report_invoicing(client, message)
 
+# stop service
+@app.on_message(filters.command("stop_service"))
+@authorization(chat_adm)
+def stop(client: Client, message: Message):
+    print("Service Stopping")
+    app.stop()
 
-print("Serve Telegram Up!")
+print("Service Telegram Up!")
 print(f"Version {version}")
 app.run()
+
