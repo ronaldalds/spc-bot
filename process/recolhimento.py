@@ -207,15 +207,15 @@ def recolhimento(
         return
 
     # Avançar no assistente de O.S sexta tela
-    # try:
-    #     instance.click('//div[@class="HTMLTabContainer"]/div[10]//button[@title="Clique para efetivar a criação desta O.S.."]')
-    # except:
-    #     logger_recolhimento.error(f'{prefixo_log_recolhimento} - Avançar no assistente de O.S sexta tela')
-    #     instance.close()
-    #     return
+    try:
+        instance.click('//div[@class="HTMLTabContainer"]/div[10]//button[@title="Clique para efetivar a criação desta O.S.."]')
+    except:
+        logger_recolhimento.error(f'{prefixo_log_recolhimento} - Avançar no assistente de O.S sexta tela')
+        instance.close()
+        return
 
     # alert concluir O.S recolhimento
-    # instance.include()
+    instance.include()
 
     # log recolhimento de contrato conluído
     logger_recolhimento.log(SUCESS, f'{prefixo_log_recolhimento} - recolhimento de contrato conluído')
