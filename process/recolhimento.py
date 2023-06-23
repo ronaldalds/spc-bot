@@ -17,9 +17,6 @@ from datetime import datetime
 
 load_dotenv()
 
-SUCESS = 35
-logging.addLevelName(SUCESS,'SUCESS')
-
 def recolhimento(
         mk,
         contrato,
@@ -32,15 +29,18 @@ def recolhimento(
         loja
         ):
     print(f'Iniciou recolhimento contrato: {contrato} cpf: {cpf} loja:{loja} MK:{mk}.')
-    file_log = datetime.now().strftime("recolhimento_%Y-%m-%d.log")
-    logging.basicConfig(
-        filename=os.path.join(os.path.dirname(__file__), 'logs', file_log),
-        encoding='utf-8',
-        filemode='a',
-        format='%(levelname)s - %(asctime)s - %(message)s',
-        datefmt='%m/%d/%Y %I:%M:%S %p',
-        level=logging.WARNING
-        )
+
+    # configuração logs
+    SUCESS = 35
+    logging.addLevelName(SUCESS,'SUCESS')
+    file_log_recolhimento = datetime.now().strftime("recolhimento_%Y-%m-%d.log")
+    logging.basicConfig(level=logging.WARNING)
+    logger_recolhimento = logging.getLogger("recolhimento")
+    formatter = logging.Formatter('%(levelname)s - %(name)s - %(asctime)s - %(message)s')
+    file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'logs', file_log_recolhimento))
+    file_handler.setFormatter(formatter)
+    logger_recolhimento.addHandler(file_handler)
+    prefixo_log_recolhimento = f'MK:{mk} contrato:{contrato} conexão:{conexao_associada} cpf:{cpf}'
 
     valor_nivel_sla = NIVEL_DE_SLA['Preventivo']
     valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
@@ -67,17 +67,17 @@ def recolhimento(
         valor_grupo_atendimento = GRUPO_DE_ATENDIMENTO_MK03[grupo_atendimento_os]
 
     else:
-        logging.warning('Error na escolha do mk')
+        logger_recolhimento.error(f'{prefixo_log_recolhimento} - Não foi possível criar instancia do mk...')
     
     
     workspace = Workspace()
     ospainel = OsPainel()
 
+    # login no sistema mk
     try:
-        # login no sistema mk
         instance.login()
     except:
-        logging.error(f'Failed to login MK{mk}')
+        logger_recolhimento.error(f'{prefixo_log_recolhimento} - Failed to login')
         instance.close()
         return
 
@@ -109,7 +109,7 @@ def recolhimento(
         instance.write('//input[@id="lookupSearchQuery"]', f"{cpf}" + Keys.ENTER)
         instance.click(f'//option[@value="{cod}"]')
     except:
-        logging.error(f'Error documento cpf:{cpf} ou código:{cod} MK{mk}')
+        logger_recolhimento.error(f'{prefixo_log_recolhimento} - Identificador O.S Nome / Documento / Código')
         instance.close()
         return
 
@@ -117,7 +117,7 @@ def recolhimento(
     try:
         instance.click('//div[@class="HTMLTabContainer"]/div[2]//button[@title="Avançar no assistente de O.S."]')
     except:
-        logging.error(f'Error Avançar no assistente identificador O.S primeira tela MK{mk}')
+        logger_recolhimento.error(f'{prefixo_log_recolhimento} - Avançar no assistente de O.S primeira tela')
         instance.close()
         return
     
@@ -128,7 +128,7 @@ def recolhimento(
         instance.write('//input[@id="lookupSearchQuery"]', f"{conexao_associada}" + Keys.ENTER)
         instance.click(f'//option[@value="{conexao_associada}"]')
     except:
-        logging.error(f'Error conexão:{conexao_associada} MK{mk}')
+        logger_recolhimento.error(f'{prefixo_log_recolhimento} - Escolha de conexão Conexão Associada')
         instance.close()
         return
     
@@ -140,13 +140,13 @@ def recolhimento(
         instance.write('//input[@id="lookupSearchQuery"]', "Preventivo" + Keys.ENTER)
         instance.click(f'//option[@value="{valor_nivel_sla}"]')
     except:
-        logging.warning(f'Nível de SLA não habilitado na conexão:{conexao_associada} MK{mk}')
+        logger_recolhimento.warning(f'{prefixo_log_recolhimento} - Escolha nivel de SLA se habilitado')
 
     # Avançar no assistente de O.S segunda tela
     try:
         instance.click('//div[@class="HTMLTabContainer"]/div[3]//button[@title="Avançar no assistente de O.S."]')
     except:
-        logging.error(f'Error Avançar no assistente identificador O.S segunda tela MK{mk}')
+        logger_recolhimento.error(f'{prefixo_log_recolhimento} - Avançar no assistente de O.S segunda tela')
         instance.close()
         return
 
@@ -157,7 +157,7 @@ def recolhimento(
         instance.write('//input[@id="lookupSearchQuery"]', f"{tipo_da_os}" + Keys.ENTER)
         instance.click(f'//option[@value="{valor_tipo_de_os}"]')
     except:
-        logging.error(f'Error tipo de os:{tipo_da_os} MK{mk}')
+        logger_recolhimento.error(f'{prefixo_log_recolhimento} - Escolha tipo de O.S')
         instance.close()
         return
 
@@ -166,7 +166,7 @@ def recolhimento(
         instance.iframeForm()
         instance.write('//textarea[@title="Neste campo é informado o relato do cliente perante a abertura da Ordem de Serviço."]', detalhe_os)
     except:
-        logging.error(f'Error detalhe da os MK{mk}')
+        logger_recolhimento.error(f'{prefixo_log_recolhimento} - Escrever Relato do problema')
         instance.close()
         return
 
@@ -174,7 +174,7 @@ def recolhimento(
     try:
         instance.click('//div[@class="HTMLTabContainer"]/div[4]//button[@title="Avançar no assistente de O.S."]')
     except:
-        logging.error(f'Error Avançar no assistente identificador O.S terceira tela MK{mk}')
+        logger_recolhimento.error(f'{prefixo_log_recolhimento} - Avançar no assistente de O.S terceira tela')
         instance.close()
         return
     
@@ -182,7 +182,7 @@ def recolhimento(
     try:
         instance.click('//div[@class="HTMLTabContainer"]/div[8]//button[@title="Avançar no assistente de O.S."]')
     except:
-        logging.error(f'Error Avançar no assistente identificador O.S quarta tela MK{mk}')
+        logger_recolhimento.error(f'{prefixo_log_recolhimento} - Avançar no assistente de O.S quarta tela')
         instance.close()
         return
 
@@ -194,7 +194,7 @@ def recolhimento(
         instance.write('//input[@id="lookupSearchQuery"]', f"{grupo_atendimento_os}" + Keys.ENTER)
         instance.click(f'//option[@value="{valor_grupo_atendimento}"]')
     except:
-        logging.error(f'Error grupo de atendimento:{grupo_atendimento_os} MK{mk}')
+        logger_recolhimento.error(f'{prefixo_log_recolhimento} - Escolha Grupo de atendimento')
         instance.close()
         return
 
@@ -202,23 +202,23 @@ def recolhimento(
     try:
         instance.click('//div[@class="HTMLTabContainer"]/div[9]//button[@title="Avançar no assistente de O.S."]')
     except:
-        logging.error(f'Error Avançar no assistente identificador O.S quinta tela MK{mk}')
+        logger_recolhimento.error(f'{prefixo_log_recolhimento} - Avançar no assistente de O.S quinta tela')
         instance.close()
         return
 
     # Avançar no assistente de O.S sexta tela
-    try:
-        instance.click('//div[@class="HTMLTabContainer"]/div[10]//button[@title="Clique para efetivar a criação desta O.S.."]')
-    except:
-        logging.error(f'Error Avançar no assistente identificador O.S quinta tela MK{mk}')
-        instance.close()
-        return
+    # try:
+    #     instance.click('//div[@class="HTMLTabContainer"]/div[10]//button[@title="Clique para efetivar a criação desta O.S.."]')
+    # except:
+    #     logger_recolhimento.error(f'{prefixo_log_recolhimento} - Avançar no assistente de O.S sexta tela')
+    #     instance.close()
+    #     return
 
     # alert concluir O.S recolhimento
-    instance.include()
+    # instance.include()
 
     # log recolhimento de contrato conluído
-    logging.log(SUCESS, f"Recolhimento do contrato:{contrato} conexao:{conexao_associada} MK{mk} concluído.")
+    logger_recolhimento.log(SUCESS, f'{prefixo_log_recolhimento} - recolhimento de contrato conluído')
 
     time.sleep(10)
     instance.close()
