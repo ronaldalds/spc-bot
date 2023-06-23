@@ -10,13 +10,11 @@ class Aside(ABC):
         self._painel: str = painel
         self._id: str = id
 
-    @abstractmethod
     def painel(self) -> str:
-        pass
+        return self._painel
 
-    @abstractmethod
     def id(self) -> str:
-        pass
+        return self._id
 
     def xpath(self) -> str:
         return f'//*[@id="{self._id}"]'
