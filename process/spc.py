@@ -207,15 +207,14 @@ def include(
 
     # click botão de incluir cliente
     try:
-        instance.click('//input[@value="INCLUIR E ENVIAR NOTIF. FÍSICA"]')
-        time.sleep(2)
-        instance.click('//input[@value="INCLUIR E ENVIAR NOTIF. FÍSICA"]')
+        instance.click('//*[@id="idButtonNotificacaoDebitoFisica"]')
+        instance.click('//*[@id="idButtonNotificacaoRegistroInteligente"]')
     except:
         logger_spc.error(f'{prefixo_log_spc}  - click botão de incluir cliente')
         instance.close()
         return
 
-    # alert concluir incluir spc
+    # alert concluir incluir spc 
     instance.include()
 
     # log incluir spc conluído
