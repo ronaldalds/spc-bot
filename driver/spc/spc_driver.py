@@ -47,19 +47,25 @@ class Spc:
         self._driver.get(url)
 
     def click(self, xpath: str):
+        time.sleep(5)
         self._mouse.move_to_element(self._driver.find_element(
             By.XPATH, xpath
-        )).pause(5).click().pause(5).perform()
+        )).click().perform()
+        time.sleep(5)
 
     def dbclick(self, xpath: str):
+        time.sleep(5)
         self._mouse.move_to_element(self._driver.find_element(
             By.XPATH, xpath
-        )).pause(5).double_click().pause(5).perform()
+        )).double_click().perform()
+        time.sleep(5)
 
     def write(self, xpath: str, text: str):
+        time.sleep(5)
         self._mouse.move_to_element(self._driver.find_element(
             By.XPATH, xpath
-        )).pause(2).click().send_keys(text).pause(2).perform()
+        )).click().send_keys(text).perform()
+        time.sleep(5)
 
     def text(self, xpath: str) -> str:
         value = self._driver.find_element(By.XPATH, xpath).get_attribute("value")

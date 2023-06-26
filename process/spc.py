@@ -207,7 +207,7 @@ def include(
 
     # click botão de incluir cliente
     try:
-        instance.click('//*[@id="idButtonNotificacaoDebitoFisica"]')
+        instance.click('//input[@id="idButtonNotificacaoDebitoFisica"]')
     except:
         logger_spc.error(f'{prefixo_log_spc}  - click botão de incluir cliente')
         instance.close()
