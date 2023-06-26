@@ -23,12 +23,19 @@ def faturamento(
     SUCESS = 35
     logging.addLevelName(SUCESS,'SUCESS')
     file_log_faturamento = datetime.now().strftime("faturamento_%Y-%m-%d.log")
-    logging.basicConfig(level=logging.WARNING)
+    logging.basicConfig(
+        level=logging.WARNING,
+        filename=os.path.join(os.path.dirname(__file__), 'logs', file_log_faturamento),
+        format='%(levelname)s - %(name)s - %(asctime)s - %(message)s',
+        datefmt='%d/%m/%Y %I:%M:%S %p',
+        encoding='utf-8',
+        filemode='a'
+        )
     logger_faturamento = logging.getLogger("faturamento")
-    formatter = logging.Formatter('%(levelname)s - %(name)s - %(asctime)s - %(message)s')
-    file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'logs', file_log_faturamento))
-    file_handler.setFormatter(formatter)
-    logger_faturamento.addHandler(file_handler)
+    # formatter = logging.Formatter('%(levelname)s - %(name)s - %(asctime)s - %(message)s')
+    # file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'logs', file_log_faturamento))
+    # file_handler.setFormatter(formatter)
+    # logger_faturamento.addHandler(file_handler)
     prefixo_log_faturamento = f'MK:{mk} regra:{regra} datainicial:{data_inicial} data final:{data_final} vencimento:{data_vecimento}'
     
     regra_faturamento = FATURAMENTO[regra]
@@ -62,7 +69,7 @@ def faturamento(
     except:
         logger_faturamento.error(f'{prefixo_log_faturamento} - login no mk')
         instance.close()
-        return
+        return False
     
     instance.minimizeChat()
 
@@ -94,7 +101,7 @@ def faturamento(
     except:
         logger_faturamento.error(f'{prefixo_log_faturamento} - seleciona regra de vencimento')
         instance.close()
-        return
+        return False
     
     # Data Inicial
     try:
@@ -102,7 +109,7 @@ def faturamento(
     except:
         logger_faturamento.error(f'{prefixo_log_faturamento} - Data Inicial')
         instance.close()
-        return
+        return False
     
     # Data final
     try:
@@ -110,7 +117,7 @@ def faturamento(
     except:
         logger_faturamento.error(f'{prefixo_log_faturamento} - Data final')
         instance.close()
-        return
+        return False
     
     # Data vencimento
     try:
@@ -118,7 +125,7 @@ def faturamento(
     except:
         logger_faturamento.error(f'{prefixo_log_faturamento} - Data vencimento')
         instance.close()
-        return
+        return False
     
     # click checkbox confirma geração de filtro de faturamento
     try:
@@ -126,7 +133,7 @@ def faturamento(
     except:
         logger_faturamento.error(f'{prefixo_log_faturamento} - click checkbox confirma geração de filtro de faturamento')
         instance.close()
-        return
+        return False
     
     # executar filtro de faturamento
     try:
@@ -134,7 +141,7 @@ def faturamento(
     except:
         logger_faturamento.error(f'{prefixo_log_faturamento} - executar filtro de faturamento')
         instance.close()
-        return
+        return False
 
     # alert filtro aplicado
     instance.include()
@@ -146,7 +153,7 @@ def faturamento(
     except:
         logger_faturamento.error(f'{prefixo_log_faturamento} - dbclick novo filtro')
         instance.close()
-        return
+        return False
 
     # marca todos para ignorar
     try:
@@ -155,7 +162,7 @@ def faturamento(
     except:
         logger_faturamento.error(f'{prefixo_log_faturamento} - marca todos para ignorar')
         instance.close()
-        return
+        return False
 
     # click ignorar faturamento
     instance.iframePainel(financeiro, painel_faturamento)
@@ -171,7 +178,7 @@ def faturamento(
     except:
         logger_faturamento.error(f'{prefixo_log_faturamento} - selecionar todos os Profile com Boleto Digital')
         instance.close()
-        return
+        return False
 
     # marca todos para habilitar faturamento com Boleto Digital
     try:
@@ -180,7 +187,7 @@ def faturamento(
     except:
         logger_faturamento.error(f'{prefixo_log_faturamento} - marca todos para habilitar faturamento com Boleto Digital')
         instance.close()
-        return
+        return False
 
     # click habilitar faturamento
     instance.iframePainel(financeiro, painel_faturamento)
@@ -194,3 +201,5 @@ def faturamento(
 
     time.sleep(10)
     instance.close()
+
+    return True

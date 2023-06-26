@@ -34,12 +34,19 @@ def recolhimento(
     SUCESS = 35
     logging.addLevelName(SUCESS,'SUCESS')
     file_log_recolhimento = datetime.now().strftime("recolhimento_%Y-%m-%d.log")
-    logging.basicConfig(level=logging.WARNING)
+    logging.basicConfig(
+        level=logging.WARNING,
+        filename=os.path.join(os.path.dirname(__file__), 'logs', file_log_recolhimento),
+        format='%(levelname)s - %(name)s - %(asctime)s - %(message)s',
+        datefmt='%d/%m/%Y %I:%M:%S %p',
+        encoding='utf-8',
+        filemode='a'
+        )
     logger_recolhimento = logging.getLogger("recolhimento")
-    formatter = logging.Formatter('%(levelname)s - %(name)s - %(asctime)s - %(message)s')
-    file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'logs', file_log_recolhimento))
-    file_handler.setFormatter(formatter)
-    logger_recolhimento.addHandler(file_handler)
+    # formatter = logging.Formatter('%(levelname)s - %(name)s - %(asctime)s - %(message)s')
+    # file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'logs', file_log_recolhimento))
+    # file_handler.setFormatter(formatter)
+    # logger_recolhimento.addHandler(file_handler)
     prefixo_log_recolhimento = f'MK:{mk} contrato:{contrato} conexão:{conexao_associada} cpf:{cpf}'
 
     valor_nivel_sla = NIVEL_DE_SLA['Preventivo']

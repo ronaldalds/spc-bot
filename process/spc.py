@@ -28,12 +28,19 @@ def include(
     SUCESS = 35
     logging.addLevelName(SUCESS,'SUCESS')
     file_log_spc = datetime.now().strftime("spc_%Y-%m-%d.log")
-    logging.basicConfig(level=logging.WARNING)
+    logging.basicConfig(
+        level=logging.WARNING,
+        filename=os.path.join(os.path.dirname(__file__), 'logs', file_log_spc),
+        format='%(levelname)s - %(name)s - %(asctime)s - %(message)s',
+        datefmt='%d/%m/%Y %I:%M:%S %p',
+        encoding='utf-8',
+        filemode='a'
+        )
     logger_spc = logging.getLogger("spc")
-    formatter = logging.Formatter('%(levelname)s - %(name)s - %(asctime)s - %(message)s')
-    file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'logs', file_log_spc))
-    file_handler.setFormatter(formatter)
-    logger_spc.addHandler(file_handler)
+    # formatter = logging.Formatter('%(levelname)s - %(name)s - %(asctime)s - %(message)s')
+    # file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'logs', file_log_spc))
+    # file_handler.setFormatter(formatter)
+    # logger_spc.addHandler(file_handler)
     prefixo_log_spc = f'Cpf:{cpf_cnpj} código:{cod_cliente} valor debito:{valor_debito}'
 
     print(f'Incluindo spc cpf:{cpf_cnpj}')

@@ -16,7 +16,7 @@ def handle_start_invoicing_mk1(client: Client, message: Message):
     global running_mk1
     if not running_mk1:
         running_mk1 = True
-        faturamento_processado = False
+        faturamento_processado_mk1 = False
         message.reply_text("Faturamento mk1 em execução.")
 
         while running_mk1:
@@ -26,19 +26,18 @@ def handle_start_invoicing_mk1(client: Client, message: Message):
 
             # saber se o vencimento esta dentro das regras de vencimento
             if data_vencimento.day in regra:
-                if not faturamento_processado:
-                    faturamento(
+                if not faturamento_processado_mk1:
+                    faturamento_processado_mk1 = faturamento(
                         mk = 1,
                         regra = f"Dia {data_vencimento.day:02}",
                         data_inicial = datetime.strftime(data_atual, "%d%m%Y"),
                         data_final = datetime.strftime(data_final, "%d%m%Y"),
                         data_vecimento = datetime.strftime(data_vencimento, "%d%m%Y")
                         )
-                    faturamento_processado = True
 
             # Reseta o valor da variavel de processo
-            if faturamento_processado and (data_vencimento.day not in regra):
-                faturamento_processado = False
+            if faturamento_processado_mk1 and (data_vencimento.day not in regra):
+                faturamento_processado_mk1 = False
 
             # Aguarda antes de verificar novamente valor em segundos
             time.sleep(tempo_ciclo)
@@ -69,7 +68,7 @@ def handle_start_invoicing_mk3(client: Client, message: Message):
     global running_mk3
     if not running_mk3:
         running_mk3 = True
-        faturamento_processado = False
+        faturamento_processado_mk3 = False
         message.reply_text("Faturamento mk3 em execução")
 
         while running_mk3:
@@ -78,22 +77,21 @@ def handle_start_invoicing_mk3(client: Client, message: Message):
             data_vencimento = data_atual + timedelta(days=8)
 
             if data_vencimento.day in regra:
-                if not faturamento_processado:
-                    faturamento(
+                if not faturamento_processado_mk3:
+                    faturamento_processado_mk3 = faturamento(
                         mk = 3,
                         regra = f"Dia {data_vencimento.day:02}",
                         data_inicial = datetime.strftime(data_atual, "%d%m%Y"),
                         data_final = datetime.strftime(data_final, "%d%m%Y"),
                         data_vecimento = datetime.strftime(data_vencimento, "%d%m%Y")
                         )
-                    faturamento_processado = True
 
             # Reseta o valor da variavel de processo
-            if faturamento_processado and (data_vencimento.day not in regra):
-                faturamento_processado = False
+            if faturamento_processado_mk3 and (data_vencimento.day not in regra):
+                faturamento_processado_mk3 = False
 
             # Aguarda antes de verificar novamente valor em segundos
-            time.sleep(tempo_ciclo)
+            time.sleep(tempo_ciclo * 10)
 
             # Verifica se a execução deve continuar ou parar
             if not running_mk3:

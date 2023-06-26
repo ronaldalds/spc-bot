@@ -47,12 +47,19 @@ def cancelamento(
     SUCESS = 35
     logging.addLevelName(SUCESS,'SUCESS')
     file_log_cancelamento = datetime.now().strftime("cancelamento_%Y-%m-%d.log")
-    logging.basicConfig(level=logging.WARNING)
+    logging.basicConfig(
+        level=logging.WARNING,
+        filename=os.path.join(os.path.dirname(__file__), 'logs', file_log_cancelamento),
+        format='%(levelname)s - %(name)s - %(asctime)s - %(message)s',
+        datefmt='%d/%m/%Y %I:%M:%S %p',
+        encoding='utf-8',
+        filemode='a'
+        )
     logger_cancelamento = logging.getLogger("cancelamento")
-    formatter = logging.Formatter('%(levelname)s - %(name)s - %(asctime)s - %(message)s')
-    file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'logs', file_log_cancelamento))
-    file_handler.setFormatter(formatter)
-    logger_cancelamento.addHandler(file_handler)
+    # formatter = logging.Formatter('%(levelname)s - %(name)s - %(asctime)s - %(message)s')
+    # file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'logs', file_log_cancelamento))
+    # file_handler.setFormatter(formatter)
+    # logger_cancelamento.addHandler(file_handler)
     prefixo_log_cancelamento = f'MK:{mk} código:{cod_pessoa} contrato:{contrato}'
 
     valor_tipo_de_os = TIPO_DA_OS[tipo_da_os]
