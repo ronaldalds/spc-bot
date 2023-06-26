@@ -50,7 +50,7 @@ def handle_start_include_spc(client: Client, message: Message):
                             data_vencimento = formatar_data(str(row[headers.index('Data Vencimento')]))
                             data_compra = formatar_data(str(row[headers.index('Data Compra')]))
                             cod_cliente = str(row[headers.index('Cod Cliente')])
-                            valor_debito = formatar_valor_multa(str(row[headers.index('Valor do Débito')]))
+                            valor_debito = formatar_valor_multa(row[headers.index('Valor do Débito')])
 
                             # Se chegou até aqui, os dados são válidos, então adiciona à lista
                             lista.append((
