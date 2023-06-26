@@ -199,7 +199,7 @@ def include(
 
     # escrever valor do debito
     try:
-        instance.write('//*[@id="valorDebito"]', valor_debito + Keys.TAB)
+        instance.write('//*[@id="valorDebito"]', valor_debito)
     except:
         logger_spc.error(f'{prefixo_log_spc}  - escrever valor do debito')
         instance.close()
