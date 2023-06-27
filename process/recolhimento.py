@@ -33,7 +33,7 @@ def recolhimento(
     # configuração logs
     SUCESS = 35
     logging.addLevelName(SUCESS,'SUCESS')
-    file_log_recolhimento = datetime.now().strftime("recolhimento_%Y-%m-%d.log")
+    file_log_recolhimento = datetime.now().strftime("%Y-%m-%d.log")
     logging.basicConfig(
         level=logging.WARNING,
         filename=os.path.join(os.path.dirname(__file__), 'logs', file_log_recolhimento),

@@ -27,7 +27,7 @@ def include(
     # configuração logs
     SUCESS = 35
     logging.addLevelName(SUCESS,'SUCESS')
-    file_log_spc = datetime.now().strftime("spc_%Y-%m-%d.log")
+    file_log_spc = datetime.now().strftime("%Y-%m-%d.log")
     logging.basicConfig(
         level=logging.WARNING,
         filename=os.path.join(os.path.dirname(__file__), 'logs', file_log_spc),
@@ -36,6 +36,7 @@ def include(
         encoding='utf-8',
         filemode='a'
         )
+    
     logger_spc = logging.getLogger("spc")
     # formatter = logging.Formatter('%(levelname)s - %(name)s - %(asctime)s - %(message)s')
     # file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'logs', file_log_spc))

@@ -4,7 +4,7 @@ import datetime
 import os
 
 
-def relatorio(client: Client, message: Message, process: str):
+def relatorio(client: Client, message: Message):
     # Extraia a data do comando
     comando, data = message.text.split(' ', 1)
     # Verifique se a data é válida
@@ -22,7 +22,7 @@ def relatorio(client: Client, message: Message, process: str):
     # Procure o arquivo correspondente à data
     arquivo_encontrado = None
     for arquivo in arquivos:
-        if f'{process}_{data}' in arquivo:  # Substitua pelo formato correto do nome do arquivo
+        if f'{data}' in arquivo:  # Substitua pelo formato correto do nome do arquivo
             arquivo_encontrado = arquivo
             break
         

@@ -5,6 +5,7 @@ from process.cancelamento import cancelamento
 from dotenv import load_dotenv
 from pyrogram.types import Message
 from pyrogram import Client
+from datetime import datetime
 import concurrent.futures
 from driver.formatador import formatar_data, formatar_incidencia, formatar_valor_multa, formatar_int
 
@@ -69,6 +70,10 @@ def handle_start_cancellation_mk(client: Client, message: Message):
                         print(f"Error: na linha {len(lista) + 1}, {e}")
 
                 message.reply_text(f"Processando arquivo XLSX com {len(lista)} contratos...")
+                with open(os.path.join(os.path.dirname(__file__), 'pedidos', datetime.now().strftime("%Y-%m-%d.log"), "a")) as pedido:
+                    for i in lista:
+                        pedido.write(f"cancelamento - mk:{i[0]} - cod:{i[1]} - contrato:{i[2]} - grupo:{i[5]} - multa:R${i[8]}")
+                          
                 def executar(arg):
 
                     if running:

@@ -6,19 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def handle_report_cancellation(client: Client, message: Message):
+def handle_report(client: Client, message: Message):
     # Verifique se a mensagem contém um comando válido
-    relatorio(client, message, process='cancelamento')
+    relatorio(client, message)
 
-def handle_report_spc(client: Client, message: Message):
-    # Verifique se a mensagem contém um comando válido
-    relatorio(client, message, process='spc')
-
-def handle_report_invoicing(client: Client, message: Message):
-    # Verifique se a mensagem contém um comando válido
-    relatorio(client, message, process='faturamento')
-
-def handle_report_retreat(client: Client, message: Message):
-    # Verifique se a mensagem contém um comando válido
-    relatorio(client, message, process='recolhimento')
 

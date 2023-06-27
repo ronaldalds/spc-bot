@@ -46,7 +46,7 @@ def cancelamento(
     # configuração logs
     SUCESS = 35
     logging.addLevelName(SUCESS,'SUCESS')
-    file_log_cancelamento = datetime.now().strftime("cancelamento_%Y-%m-%d.log")
+    file_log_cancelamento = datetime.now().strftime("%Y-%m-%d.log")
     logging.basicConfig(
         level=logging.WARNING,
         filename=os.path.join(os.path.dirname(__file__), 'logs', file_log_cancelamento),

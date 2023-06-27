@@ -1,6 +1,7 @@
 import os
 import time
 import openpyxl
+from datetime import datetime
 from process.spc import include
 from dotenv import load_dotenv
 from pyrogram.types import Message
@@ -72,6 +73,9 @@ def handle_start_include_spc(client: Client, message: Message):
                             print(f"Error: na linha {len(lista) + 1}, {e}")
 
                 message.reply_text(f"Processando arquivo XLSX com {len(lista)} clientes...")
+                with open(os.path.join(os.path.dirname(__file__), 'pedidos', datetime.now().strftime("%Y-%m-%d.log"), "a")) as pedido:
+                    for i in lista:
+                        pedido.write(f"spc - cpf:{i[0]} - cod:{i[11]} - valor:{i[12]}")
                 def executar(arg):
                     if running:
                         try:
