@@ -20,7 +20,7 @@ def handle_start_cancellation_mk(client: Client, message: Message):
         # Verifique se a mensagem contém um documento e se o tipo MIME do documento é "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
             # Quantidade de itens na Pool
-            limite_threads = 12
+            limite_threads = 10
 
             # Baixe o arquivo XLSX
             file_path = message.download()
