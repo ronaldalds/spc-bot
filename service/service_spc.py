@@ -73,9 +73,11 @@ def handle_start_include_spc(client: Client, message: Message):
                             print(f"Error: na linha {len(lista) + 1}, {e}")
 
                 message.reply_text(f"Processando arquivo XLSX com {len(lista)} clientes...")
-                with open(os.path.join(os.path.dirname(__file__), 'pedidos', datetime.now().strftime("%Y-%m-%d.log"), "a")) as pedido:
-                    for i in lista:
-                        pedido.write(f"spc - cpf:{i[0]} - cod:{i[11]} - valor:{i[12]}")
+                file_pedido = datetime.now().strftime("%Y-%m-%d.log")
+                with open(os.path.join(os.path.dirname(__file__), 'docs_solicitacoes', file_pedido), "a") as pedido:
+                    for c, i in enumerate(lista):
+                        pedido.write(f"{(c + 1):03} - spc - cpf:{i[0]} - cod:{i[11]} - valor:{i[12]}\n")
+
                 def executar(arg):
                     if running:
                         try:

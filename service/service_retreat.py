@@ -143,9 +143,11 @@ def handle_start_retreat_mk(client: Client, message: Message):
                 # lista com base na quantidade maxima de os que pode ser abertas por loja
                 lista = __limpa_lista(lista)
                 message.reply_text(f"Arquivo XLSX ajustado para {len(lista)} O.S...")
-                with open(os.path.join(os.path.dirname(__file__), 'pedidos', datetime.now().strftime("%Y-%m-%d.log"), "a")) as pedido:
-                    for i in lista:
-                        pedido.write(f"recolhimento - mk:{i[0]} - contrato:{i[1]} - conexao:{i[2]} - grupo:{i[6]}")
+                file_pedido = datetime.now().strftime("%Y-%m-%d.log")
+                with open(os.path.join(os.path.dirname(__file__), 'docs_solicitacoes', file_pedido), "a") as pedido:
+                    for c, i in enumerate(lista):
+                        pedido.write(f"{(c + 1):03} - recolhimento - mk:{i[0]} - contrato:{i[1]} - conexao:{i[2]} - grupo:{i[6]}\n")
+
                 def executar(arg):
                     if running:
                         try:
