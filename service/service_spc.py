@@ -76,7 +76,7 @@ def handle_start_include_spc(client: Client, message: Message):
                 file_pedido = datetime.now().strftime("%Y-%m-%d.log")
                 with open(os.path.join(os.path.dirname(__file__), 'docs_solicitacoes', file_pedido), "a") as pedido:
                     for c, i in enumerate(lista):
-                        pedido.write(f"{(c + 1):03} - spc - cpf:{i[0]} - cod:{i[11]} - valor:{i[12]}\n")
+                        pedido.write(f"{(c + 1):03};SPC;cpf:{i[0]};cod:{i[11]};valor:{i[12]}\n")
 
                 def executar(arg):
                     if running:

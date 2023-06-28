@@ -73,7 +73,7 @@ def handle_start_cancellation_mk(client: Client, message: Message):
                 file_pedido = datetime.now().strftime("%Y-%m-%d.log")
                 with open(os.path.join(os.path.dirname(__file__), 'docs_solicitacoes', file_pedido), "a") as pedido:
                     for c,i in enumerate(lista):
-                        pedido.write(f"{(c + 1):03} - cancelamento - mk:{i[0]} - cod:{i[1]} - contrato:{i[2]} - grupo:{i[5]} - multa:R${i[8]}\n")
+                        pedido.write(f"{(c + 1):03};Cancelamento;mk:{i[0]};cod:{i[1]};contrato:{i[2]};grupo:{i[5]};multa:R${i[8]}\n")
                           
                 def executar(arg):
                     if running:
