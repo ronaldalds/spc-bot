@@ -149,7 +149,7 @@ def handle_start_retreat_mk(client: Client, message: Message):
                 with open(os.path.join(os.path.dirname(__file__), 'docs_solicitacoes', file_pedido), "a") as pedido:
                     for c, i in enumerate(lista):
                         pedido.write(f"{(c + 1):03};Recolhimento;mk:{i[0]};contrato:{i[1]};cpf:{i[3]};loja:{i[8]}\n")
-                    pedido.write("#" * 120 + "\n")
+                    pedido.write("#" * 120 + f"{message.chat.id}\n")
 
                     
                 def executar(arg):

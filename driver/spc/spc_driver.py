@@ -17,7 +17,7 @@ class Spc:
                  password: str, 
                  secret: str, 
                  url: str,
-                 headless: bool = False
+                 headless: bool = True
                  ):
         self._operation: str = operation
         self._password: str = password

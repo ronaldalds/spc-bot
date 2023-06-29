@@ -16,7 +16,7 @@ from selenium.webdriver.support.expected_conditions import (
 
 
 class Mk:
-    def __init__(self, username: str, password: str, url: str, headless: bool = False):
+    def __init__(self, username: str, password: str, url: str, headless: bool = True):
         self._username: str = username
         self._password: str = password
         capabilities = DesiredCapabilities.CHROME.copy()
