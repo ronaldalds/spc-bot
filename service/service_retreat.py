@@ -118,9 +118,9 @@ def __limpa_lista(lista):
 def handle_start_retreat_mk(client: Client, message: Message):
     global running
     if not running:
-        running = True
         # Verifique se a mensagem contém um documento e se o tipo MIME do documento é "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+            running = True
             # Quantidade de itens na Pool
             limite_threads = 10
 
@@ -143,11 +143,15 @@ def handle_start_retreat_mk(client: Client, message: Message):
                 # lista com base na quantidade maxima de os que pode ser abertas por loja
                 lista = __limpa_lista(lista)
                 message.reply_text(f"Arquivo XLSX de recolhimento ajustado para {len(lista)} O.S...")
+
+
                 file_pedido = datetime.now().strftime("%Y-%m-%d.log")
                 with open(os.path.join(os.path.dirname(__file__), 'docs_solicitacoes', file_pedido), "a") as pedido:
                     for c, i in enumerate(lista):
                         pedido.write(f"{(c + 1):03};Recolhimento;mk:{i[0]};contrato:{i[1]};cpf:{i[3]};loja:{i[8]}\n")
-                    pedido.write("#" * 120)
+                    pedido.write("#" * 120 + "\n")
+
+                    
                 def executar(arg):
                     if running:
                         try:

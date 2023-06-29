@@ -17,7 +17,7 @@ class Spc:
                  password: str, 
                  secret: str, 
                  url: str,
-                 headless: bool = True
+                 headless: bool = False
                  ):
         self._operation: str = operation
         self._password: str = password
@@ -26,23 +26,23 @@ class Spc:
         largura = 1280
         altura = 960
         options = webdriver.ChromeOptions()
-        prefs = {
-            "download.default_directory": "/dev/null",
-            "download.prompt_for_download": False,
-            "download.directory_upgrade": True,
-            "safebrowsing.enabled": True
-        }
-        options.add_experimental_option("prefs", prefs)
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--disable-cache")
-        options.add_argument("--disk-cache-size=0")
-        options.add_argument("--disable-application-cache")
-        options.add_argument("--disable-offline-load-stale-cache")
-        options.add_argument("--disable-gpu-shader-disk-cache")
-        options.add_argument("--disable-history")
-        options.add_argument("--user-data-dir=tmp/spc")
-        options.add_argument("--tempdir=tmp/spc")
+        # prefs = {
+        #     "download.default_directory": "/dev/null",
+        #     "download.prompt_for_download": False,
+        #     "download.directory_upgrade": True,
+        #     "safebrowsing.enabled": True
+        # }
+        # options.add_experimental_option("prefs", prefs)
+        # options.add_argument("--no-sandbox")
+        # options.add_argument("--disable-dev-shm-usage")
+        # options.add_argument("--disable-cache")
+        # options.add_argument("--disk-cache-size=0")
+        # options.add_argument("--disable-application-cache")
+        # options.add_argument("--disable-offline-load-stale-cache")
+        # options.add_argument("--disable-gpu-shader-disk-cache")
+        # options.add_argument("--disable-history")
+        # options.add_argument("--user-data-dir=tmp/spc")
+        # options.add_argument("--tempdir=tmp/spc")
         options.add_argument(f"--window-size={largura},{altura}")
         options.headless = headless
         self._driver = webdriver.Chrome(
@@ -82,10 +82,6 @@ class Spc:
     def include(self):
         self._wdw.until(alert_is_present())
         self._driver.switch_to.alert.accept()
-        self._driver.delete_all_cookies()
-        self._driver.execute_script("window.localStorage.clear();")
-        self._driver.execute_script("window.sessionStorage.clear();")
-        self._driver.execute_script("window.applicationCache.clear();")
         time.sleep(5)
 
     def login(self):

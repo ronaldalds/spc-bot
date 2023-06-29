@@ -16,9 +16,9 @@ running = False
 def handle_start_include_spc(client: Client, message: Message):
     global running
     if not running:
-        running = True
         # Verifique se a mensagem contém um documento e se o tipo MIME do documento é "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+            running = True
             # Criando Pool
             limite_threads = 4
             # Baixe o arquivo XLSX
@@ -77,7 +77,7 @@ def handle_start_include_spc(client: Client, message: Message):
                 with open(os.path.join(os.path.dirname(__file__), 'docs_solicitacoes', file_pedido), "a") as pedido:
                     for c, i in enumerate(lista):
                         pedido.write(f"{(c + 1):03};SPC;cpf:{i[0]};cod:{i[11]};valor:{i[12]}\n")
-                    pedido.write("#" * 120)
+                    pedido.write("#" * 120 + "\n")
                 def executar(arg):
                     if running:
                         try:

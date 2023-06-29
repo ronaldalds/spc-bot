@@ -16,30 +16,30 @@ from selenium.webdriver.support.expected_conditions import (
 
 
 class Mk:
-    def __init__(self, username: str, password: str, url: str, headless: bool = True):
+    def __init__(self, username: str, password: str, url: str, headless: bool = False):
         self._username: str = username
         self._password: str = password
         capabilities = DesiredCapabilities.CHROME.copy()
         largura = 1280
         altura = 960
         options = webdriver.ChromeOptions()
-        prefs = {
-            "download.default_directory": "/dev/null",
-            "download.prompt_for_download": False,
-            "download.directory_upgrade": True,
-            "safebrowsing.enabled": True
-        }
-        options.add_experimental_option("prefs", prefs)
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--disable-cache")
-        options.add_argument("--disk-cache-size=0")
-        options.add_argument("--disable-application-cache")
-        options.add_argument("--disable-offline-load-stale-cache")
-        options.add_argument("--disable-gpu-shader-disk-cache")
-        options.add_argument("--disable-history")
-        options.add_argument("--user-data-dir=tmp/mk")
-        options.add_argument("--tempdir=tmp/mk")
+        # prefs = {
+        #     "download.default_directory": "/dev/null",
+        #     "download.prompt_for_download": False,
+        #     "download.directory_upgrade": True,
+        #     "safebrowsing.enabled": True
+        # }
+        # options.add_experimental_option("prefs", prefs)
+        # options.add_argument("--no-sandbox")
+        # options.add_argument("--disable-dev-shm-usage")
+        # options.add_argument("--disable-cache")
+        # options.add_argument("--disk-cache-size=0")
+        # options.add_argument("--disable-application-cache")
+        # options.add_argument("--disable-offline-load-stale-cache")
+        # options.add_argument("--disable-gpu-shader-disk-cache")
+        # options.add_argument("--disable-history")
+        # options.add_argument("--user-data-dir=tmp/mk")
+        # options.add_argument("--tempdir=tmp/mk")
         options.add_argument(f"--window-size={largura},{altura}")
         options.headless = headless
         self._driver = webdriver.Chrome(
@@ -95,10 +95,6 @@ class Mk:
     def include(self):
         self._wdw.until(alert_is_present())
         self._driver.switch_to.alert.accept()
-        self._driver.delete_all_cookies()
-        self._driver.execute_script("window.localStorage.clear();")
-        self._driver.execute_script("window.sessionStorage.clear();")
-        self._driver.execute_script("window.applicationCache.clear();")
         time.sleep(5)
 
     def iframeMain(self):
