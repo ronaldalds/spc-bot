@@ -138,16 +138,16 @@ def handle_start_retreat_mk(client: Client, message: Message):
                 
                 # lista com todas as os
                 lista = __gerar_lista(workbook)
-                message.reply_text(f"Processando arquivo XLSX com {len(lista)} O.S...")
+                message.reply_text(f"Processando arquivo XLSX de recolhimento com {len(lista)} O.S...")
 
                 # lista com base na quantidade maxima de os que pode ser abertas por loja
                 lista = __limpa_lista(lista)
-                message.reply_text(f"Arquivo XLSX ajustado para {len(lista)} O.S...")
+                message.reply_text(f"Arquivo XLSX de recolhimento ajustado para {len(lista)} O.S...")
                 file_pedido = datetime.now().strftime("%Y-%m-%d.log")
                 with open(os.path.join(os.path.dirname(__file__), 'docs_solicitacoes', file_pedido), "a") as pedido:
                     for c, i in enumerate(lista):
-                        pedido.write(f"{(c + 1):03};Recolhimento;mk:{i[0]};contrato:{i[1]};conexao:{i[2]};grupo:{i[6]}\n")
-
+                        pedido.write(f"{(c + 1):03};Recolhimento;mk:{i[0]};contrato:{i[1]};cpf:{i[3]};loja:{i[8]}\n")
+                    pedido.write("#" * 120)
                 def executar(arg):
                     if running:
                         try:
@@ -176,7 +176,7 @@ def handle_start_retreat_mk(client: Client, message: Message):
                 time.sleep(1)
                 os.remove(file_path)
             # Responder à mensagem do usuário com o resultado do processamento do arquivo
-            message.reply_text("O arquivo XLSX foi processado com sucesso!")
+            message.reply_text("O arquivo XLSX de recolhimento foi processado com sucesso!")
             running = False
         else:
             # Responder à mensagem do usuário com uma mensagem de erro

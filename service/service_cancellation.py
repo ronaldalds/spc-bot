@@ -69,12 +69,12 @@ def handle_start_cancellation_mk(client: Client, message: Message):
                     except Exception as e:
                         print(f"Error: na linha {len(lista) + 1}, {e}")
 
-                message.reply_text(f"Processando arquivo XLSX com {len(lista)} contratos...")
+                message.reply_text(f"Processando arquivo XLSX de cancelamento com {len(lista)} contratos...")
                 file_pedido = datetime.now().strftime("%Y-%m-%d.log")
                 with open(os.path.join(os.path.dirname(__file__), 'docs_solicitacoes', file_pedido), "a") as pedido:
                     for c,i in enumerate(lista):
                         pedido.write(f"{(c + 1):03};Cancelamento;mk:{i[0]};cod:{i[1]};contrato:{i[2]};grupo:{i[5]};multa:R${i[8]}\n")
-                          
+                    pedido.write("#" * 120)  
                 def executar(arg):
                     if running:
                         try:
@@ -105,7 +105,7 @@ def handle_start_cancellation_mk(client: Client, message: Message):
                 time.sleep(1)
                 os.remove(file_path)
             # Responder à mensagem do usuário com o resultado do processamento do arquivo
-            message.reply_text("O arquivo XLSX foi processado com sucesso!")
+            message.reply_text("O arquivo XLSX de cancelamento foi processado com sucesso!")
             running = False
         else:
             # Responder à mensagem do usuário com uma mensagem de erro

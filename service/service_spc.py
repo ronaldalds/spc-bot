@@ -72,12 +72,12 @@ def handle_start_include_spc(client: Client, message: Message):
                         except Exception as e:
                             print(f"Error: na linha {len(lista) + 1}, {e}")
 
-                message.reply_text(f"Processando arquivo XLSX com {len(lista)} clientes...")
+                message.reply_text(f"Processando arquivo XLSX do SPC com {len(lista)} clientes...")
                 file_pedido = datetime.now().strftime("%Y-%m-%d.log")
                 with open(os.path.join(os.path.dirname(__file__), 'docs_solicitacoes', file_pedido), "a") as pedido:
                     for c, i in enumerate(lista):
                         pedido.write(f"{(c + 1):03};SPC;cpf:{i[0]};cod:{i[11]};valor:{i[12]}\n")
-
+                    pedido.write("#" * 120)
                 def executar(arg):
                     if running:
                         try:
@@ -109,7 +109,7 @@ def handle_start_include_spc(client: Client, message: Message):
                 time.sleep(1)
                 os.remove(file_path)
             # Responder à mensagem do usuário com o resultado do processamento do arquivo
-            message.reply_text("O arquivo XLSX foi processado com sucesso!")
+            message.reply_text("O arquivo XLSX do SPC foi processado com sucesso!")
             running = False
         else:
             # Responder à mensagem do usuário com uma mensagem de erro
