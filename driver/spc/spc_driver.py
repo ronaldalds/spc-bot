@@ -17,7 +17,7 @@ class Spc:
                  password: str, 
                  secret: str, 
                  url: str,
-                 headless: bool = False
+                 headless: bool = True
                  ):
         self._operation: str = operation
         self._password: str = password
@@ -41,8 +41,8 @@ class Spc:
         options.add_argument("--disable-offline-load-stale-cache")
         options.add_argument("--disable-gpu-shader-disk-cache")
         options.add_argument("--disable-history")
-        options.add_argument("--user-data-dir=~/www/tmp/spc")
-        options.add_argument("--tempdir=~/www/tmp/spc")
+        options.add_argument("--user-data-dir=tmp/spc")
+        options.add_argument("--tempdir=tmp/spc")
         options.add_argument(f"--window-size={largura},{altura}")
         options.headless = headless
         self._driver = webdriver.Chrome(
@@ -96,4 +96,4 @@ class Spc:
         self.click('//*[@id="submitButton"]')
 
     def close(self):
-        self._driver.close()
+        self._driver.quit()

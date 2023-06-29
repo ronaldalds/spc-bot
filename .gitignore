@@ -5,3 +5,4 @@
 *.session
 *.session-journal
 .bot-py
+*tmp/

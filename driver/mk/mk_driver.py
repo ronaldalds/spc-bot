@@ -16,7 +16,7 @@ from selenium.webdriver.support.expected_conditions import (
 
 
 class Mk:
-    def __init__(self, username: str, password: str, url: str, headless: bool = False):
+    def __init__(self, username: str, password: str, url: str, headless: bool = True):
         self._username: str = username
         self._password: str = password
         capabilities = DesiredCapabilities.CHROME.copy()
@@ -38,8 +38,8 @@ class Mk:
         options.add_argument("--disable-offline-load-stale-cache")
         options.add_argument("--disable-gpu-shader-disk-cache")
         options.add_argument("--disable-history")
-        options.add_argument("--user-data-dir=~/www/tmp/mk")
-        options.add_argument("--tempdir=~/www/tmp/mk")
+        options.add_argument("--user-data-dir=tmp/mk")
+        options.add_argument("--tempdir=tmp/mk")
         options.add_argument(f"--window-size={largura},{altura}")
         options.headless = headless
         self._driver = webdriver.Chrome(
