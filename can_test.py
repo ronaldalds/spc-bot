@@ -1,6 +1,41 @@
 from driver.formatador import formatar_documento
 import copy
+from driver.spc.spc_driver import Spc
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+import os
+
+# Obter a lista de arquivos na pasta /tmp
+arquivos_temporarios = os.listdir('/tmp')
+
+# Excluir cada arquivo temporário na lista
+for arquivo_temporario in arquivos_temporarios:
+    caminho_arquivo = os.path.join('/tmp', arquivo_temporario)
+    os.remove(caminho_arquivo)
+# instance = Spc(
+#         url=os.getenv('URL_SPC'),
+#         operation=os.getenv('OPERATION_SPC'),
+#         password=os.getenv('PASSWORD_SPC'),
+#         secret=os.getenv('SECRET_KEY_SPC'),
+#         )
+
+# instance.close()
+
+from selenium import webdriver
+
+# Lista para armazenar as instâncias do driver
+drivers = []
+
+# Abrir e armazenar instâncias do driver
+drivers.append(webdriver.Chrome())
+drivers.append(webdriver.Firefox())
+# Adicione outras instâncias do driver, se necessário
+
+# Encerrar todas as instâncias do driver
+for driver in drivers:
+    driver.quit()
 # original_dict = {'a': [1, 2, 3], 'b': {'x': 10, 'y': 20}}
 
 # # Criando uma cópia usando o método copy()
@@ -61,26 +96,26 @@ import copy
 # print(a in lojas_mk3.keys())
 # print(lojas_mk3[a] - 1)
 
-def contar_e_deletar_ocorrencias(dicionario, lista):
-    lista_resultante = []
-    ocorrencias_dict = {chave: 0 for chave in dicionario}
-    print(ocorrencias_dict)
-    for item in lista:
-        chave = item[1] # posicao da tupla onde esta o que voce quer contar a ocorrencia
-        if chave in dicionario:
-            valor_limite = dicionario[chave]
-            if ocorrencias_dict[chave] < valor_limite:
-                lista_resultante.append(item)
-                ocorrencias_dict[chave] += 1
-        else:
-            lista_resultante.append(item)
+# def contar_e_deletar_ocorrencias(dicionario, lista):
+#     lista_resultante = []
+#     ocorrencias_dict = {chave: 0 for chave in dicionario}
+#     print(ocorrencias_dict)
+#     for item in lista:
+#         chave = item[1] # posicao da tupla onde esta o que voce quer contar a ocorrencia
+#         if chave in dicionario:
+#             valor_limite = dicionario[chave]
+#             if ocorrencias_dict[chave] < valor_limite:
+#                 lista_resultante.append(item)
+#                 ocorrencias_dict[chave] += 1
+#         else:
+#             lista_resultante.append(item)
 
-    return lista_resultante
+#     return lista_resultante
 
-# Exemplo de uso
-meu_dicionario = {'a': 1, 'b': 1, 'c': 1}
-minha_lista = [('valor1', 'a'), ('valor2', 'b'), ('valor3', 'c'), ('valor4', 'a'), ('valor5', 'a'), ('valor6', 'c'), ('valor7', 'c'), ('valor8', 'c'), ('valor9', 'd'), ('valor10', 'e'), ('valor11', 'e')]
+# # Exemplo de uso
+# meu_dicionario = {'a': 1, 'b': 1, 'c': 1}
+# minha_lista = [('valor1', 'a'), ('valor2', 'b'), ('valor3', 'c'), ('valor4', 'a'), ('valor5', 'a'), ('valor6', 'c'), ('valor7', 'c'), ('valor8', 'c'), ('valor9', 'd'), ('valor10', 'e'), ('valor11', 'e')]
 
-minha_lista_resultante = contar_e_deletar_ocorrencias(meu_dicionario, minha_lista)
+# minha_lista_resultante = contar_e_deletar_ocorrencias(meu_dicionario, minha_lista)
 
-print("Lista resultante:", minha_lista_resultante)
+# print("Lista resultante:", minha_lista_resultante)
