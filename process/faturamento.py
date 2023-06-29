@@ -198,6 +198,7 @@ def faturamento(
 
     # log faturamento concluído
     logger_faturamento.log(SUCESS, f'{prefixo_log_faturamento} - faturamento concluído')
+    print(f"Processo Faturamento MK{mk:02} concluído.")
 
     time.sleep(10)
     instance.close()

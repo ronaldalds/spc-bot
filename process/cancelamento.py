@@ -41,7 +41,7 @@ def cancelamento(
         vencimento_multa,
         planos_contas
         ):
-    print(f'Iniciou cancelamento  MK:{mk} código:{cod_pessoa} contrato:{contrato} grupo:{grupo_atendimento_os} multa:{valor_multa}')
+    print(f'Iniciou cancelamento MK{mk:02} código:{cod_pessoa} contrato:{contrato} grupo:{grupo_atendimento_os} multa:{valor_multa}')
 
     # configuração logs
     SUCESS = 35

@@ -179,6 +179,7 @@ def handle_start_retreat_mk(client: Client, message: Message):
             # Excluir o arquivo XLSX
                 time.sleep(1)
                 os.remove(file_path)
+                print("Processo Recolhimento concluído.")
             # Responder à mensagem do usuário com o resultado do processamento do arquivo
             message.reply_text("O arquivo XLSX de recolhimento foi processado com sucesso!")
             running = False

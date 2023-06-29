@@ -28,7 +28,7 @@ def recolhimento(
         detalhe_os,
         loja
         ):
-    print(f'Iniciou recolhimento MK:{mk} contrato:{contrato} cpf:{cpf} loja:{loja}')
+    print(f'Iniciou recolhimento MK{mk:02} contrato:{contrato} cpf:{cpf} loja:{loja}')
 
     # configuração logs
     SUCESS = 35

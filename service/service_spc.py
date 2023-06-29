@@ -108,6 +108,7 @@ def handle_start_include_spc(client: Client, message: Message):
             # Excluir o arquivo XLSX
                 time.sleep(1)
                 os.remove(file_path)
+                print("Processo SPC concluído.")
             # Responder à mensagem do usuário com o resultado do processamento do arquivo
             message.reply_text("O arquivo XLSX do SPC foi processado com sucesso!")
             running = False
