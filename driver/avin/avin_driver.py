@@ -11,11 +11,10 @@ from selenium.webdriver.support.expected_conditions import (
 )
 
 
-class Spc:
-    def __init__(self, operation: str, password: str, secret: str, url: str, headless: bool = True):
-        self._operation: str = operation
+class Avin:
+    def __init__(self, username: str, password: str, url: str, headless: bool = False):
+        self._username: str = username
         self._password: str = password
-        self._secret: str = secret
         capabilities = DesiredCapabilities.CHROME.copy()
         largura = 1280
         altura = 960
@@ -32,28 +31,32 @@ class Spc:
         self._driver.get(url)
 
     def click(self, xpath: str):
-        time.sleep(5)
+        time.sleep(2)
         self._mouse.move_to_element(self._driver.find_element(
             By.XPATH, xpath
         )).click().perform()
-        time.sleep(5)
+        time.sleep(2)
 
     def dbclick(self, xpath: str):
-        time.sleep(5)
+        time.sleep(2)
         self._mouse.move_to_element(self._driver.find_element(
             By.XPATH, xpath
         )).double_click().perform()
-        time.sleep(5)
+        time.sleep(2)
 
     def write(self, xpath: str, text: str):
-        time.sleep(5)
+        time.sleep(2)
         self._mouse.move_to_element(self._driver.find_element(
             By.XPATH, xpath
-        )).click().send_keys(text).perform()
-        time.sleep(5)
+        )).click().double_click().send_keys(text).perform()
+        time.sleep(2)
 
     def text(self, xpath: str) -> str:
         value = self._driver.find_element(By.XPATH, xpath).get_attribute("value")
+        return value
+
+    def download(self, xpath: str) -> str:
+        value = self._driver.find_element(By.XPATH, xpath).get_attribute("download")
         return value
 
     def include(self):
@@ -62,11 +65,9 @@ class Spc:
         time.sleep(5)
 
     def login(self):
-        self.write('//*[@id="j_username"]', self._operation)
-        self.write('//*[@id="j_password"]', self._password)
-        self.click('//*[@id="submitButton"]')
-        self.write('//*[@id="passphrase"]', self._secret)
-        self.click('//*[@id="submitButton"]')
+        self.write('//*[@id="login"]', self._username)
+        self.write('//*[@id="password"]', self._password)
+        self.click('//*[@id="btn-login"]')
 
     def close(self):
         self._driver.quit()

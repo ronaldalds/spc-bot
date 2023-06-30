@@ -1,19 +1,33 @@
-from driver.formatador import formatar_documento
-import copy
-from driver.spc.spc_driver import Spc
-import os
-from dotenv import load_dotenv
+from process.x9 import x9
 
-load_dotenv()
-import os
+x9(
+    data_inicial = "11/06/2023",
+    hora_inicial = "09",
+    minuto_inicial = "30",
+    data_final = "29/06/2023",
+    hora_final = "11",
+    minuto_final = "30"
+    )
+
+
+
+
+# from driver.formatador import formatar_documento
+# import copy
+# from driver.spc.spc_driver import Spc
+# import os
+# from dotenv import load_dotenv
+
+# load_dotenv()
+# import os
 
 # Obter a lista de arquivos na pasta /tmp
-arquivos_temporarios = os.listdir('/tmp')
+# arquivos_temporarios = os.listdir('/tmp')
 
 # Excluir cada arquivo temporário na lista
-for arquivo_temporario in arquivos_temporarios:
-    caminho_arquivo = os.path.join('/tmp', arquivo_temporario)
-    os.remove(caminho_arquivo)
+# for arquivo_temporario in arquivos_temporarios:
+#     caminho_arquivo = os.path.join('/tmp', arquivo_temporario)
+#     os.remove(caminho_arquivo)
 # instance = Spc(
 #         url=os.getenv('URL_SPC'),
 #         operation=os.getenv('OPERATION_SPC'),
@@ -23,19 +37,19 @@ for arquivo_temporario in arquivos_temporarios:
 
 # instance.close()
 
-from selenium import webdriver
+# from selenium import webdriver
 
 # Lista para armazenar as instâncias do driver
-drivers = []
+# drivers = []
 
 # Abrir e armazenar instâncias do driver
-drivers.append(webdriver.Chrome())
-drivers.append(webdriver.Firefox())
+# drivers.append(webdriver.Chrome())
+# drivers.append(webdriver.Firefox())
 # Adicione outras instâncias do driver, se necessário
 
 # Encerrar todas as instâncias do driver
-for driver in drivers:
-    driver.quit()
+# for driver in drivers:
+#     driver.quit()
 # original_dict = {'a': [1, 2, 3], 'b': {'x': 10, 'y': 20}}
 
 # # Criando uma cópia usando o método copy()
