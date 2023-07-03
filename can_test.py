@@ -1,17 +1,33 @@
 from process.x9 import x9
+from datetime import datetime, timedelta
+# time = timedelta(minutes=31)
+# data_inicial = (datetime.now() - time).strftime('%d/%m/%Y')
+# hora_inicial = (datetime.now() - time).hour
+# minuto_inicial = (datetime.now() - time).minute
+# data_final = datetime.now().strftime('%d/%m/%Y')
+# hora_final = datetime.now().hour
+# minuto_final = datetime.now().minute
 
-x9(
-    data_inicial = "11/06/2023",
-    hora_inicial = "09",
-    minuto_inicial = "30",
-    data_final = "29/06/2023",
-    hora_final = "11",
-    minuto_final = "30"
-    )
+# print(data_inicial)
+# print(hora_inicial)
+# print(minuto_inicial)
+# print(data_final)
+# print(hora_final)
+# print(minuto_final)
+test = x9(datetime(day=12, month=6, year=2023, hour=8, minute=10))
+# test = x9(datetime.now())
+print(test)
+if test:
+    for i in test:
+        print(i)
 
-
-
-
+        
+data_inicial = "11/06/2023"
+hora_inicial = "09"
+minuto_inicial = "30"
+data_final = "29/06/2023"
+hora_final = "11"
+minuto_final = "30"
 # from driver.formatador import formatar_documento
 # import copy
 # from driver.spc.spc_driver import Spc

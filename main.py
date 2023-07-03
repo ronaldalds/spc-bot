@@ -14,6 +14,7 @@ from service.service_invoicing import (
     handle_stop_invoicing_mk3,
     handle_status_invoicing_mk3
     )
+from service.service_x9 import handle_start_x9_mk1, handle_stop_x9_mk1, handle_status_x9_mk1
 
 load_dotenv()
 
@@ -29,10 +30,13 @@ app = Client(
 chat_re = [
     os.getenv("CHAT_ID_ADM"),
     os.getenv("CHAT_ID_ADM_MK"),
-    os.getenv("CHAT_ID_GESTOR_MIS"),
     os.getenv("CHAT_ID_SPC"),
     os.getenv("CHAT_ID_CANCELAMENTO"),
     os.getenv("CHAT_ID_RECOLHIMENTO"),
+    os.getenv("CHAT_ID_INFRA"),
+    os.getenv("CHAT_ID_GESTOR_MIS"),
+    os.getenv("CHAT_ID_GESTOR_INFRA"),
+    os.getenv("CHAT_ID_LOGISTICA"),
     ]
 
 chat_mis = [
@@ -48,12 +52,19 @@ chat_ost = [
     ]
 
 chat_adm = [
-    os.getenv("CHAT_ID_ADM"),
+    os.getenv("CHAT_ID_ADM")
     ]
 
 chat_financeiro = [
     os.getenv("CHAT_ID_ADM"),
     os.getenv("CHAT_ID_ADM_MK"),
+    ]
+
+chat_logistica = [
+    os.getenv("CHAT_ID_ADM"),
+    os.getenv("CHAT_ID_INFRA"),
+    os.getenv("CHAT_ID_GESTOR_INFRA"),
+    os.getenv("CHAT_ID_LOGISTICA"),
     ]
 
 # Verificação de autorização
@@ -67,7 +78,13 @@ def authorization(ids_autorizados):
         return verificacao
     return decorador
 
+
+@app.on_message(filters.command("chatgroup"))
+def handle_chatgroup_id(client: Client, message: Message):
+    client.send_message(-1001550273372, message)
+
 @app.on_message(filters.command("start"))
+@authorization(chat_re)
 def start(client, message: Message):
     message.reply_text(f"""
 /mis - Setor MIS
@@ -147,8 +164,8 @@ def faturamento(client, message: Message):
 """)
 
 @app.on_message(filters.command("chat"))
-def handle_chat_id(client, message: Message):
-    message.reply_text(message.from_user.id)
+def handle_chat_id(client: Client, message: Message):
+    client.send_message(message.from_user.id, message.from_user.id,)
     print(message.from_user.id)
 
 # relatórios
@@ -250,6 +267,12 @@ def parar_faturamento(client: Client, message: Message):
 @authorization(chat_financeiro)
 def status_faturamento(client: Client, message: Message):
     handle_status_invoicing_mk3(client, message)
+
+# iniciar x9
+@app.on_message(filters.command("iniciar_x9"))
+@authorization(chat_adm)
+def iniciar_x9(client: Client, message: Message):
+    handle_start_x9_mk1(client, message)
 
 # stop service
 @app.on_message(filters.command("stop_service"))

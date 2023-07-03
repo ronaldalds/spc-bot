@@ -4,6 +4,7 @@ from pyrogram import Client
 from process.x9 import x9
 from datetime import datetime, timedelta
 import time
+import os
 
 load_dotenv()
 
@@ -18,8 +19,14 @@ def handle_start_x9_mk1(client: Client, message: Message):
 
         while running:
 
-            # saber se o vencimento esta dentro das regras de vencimento
-            x9()
+            # verificar ocorrências
+            ocorrencias = x9(datetime(day=12, month=6, year=2023, hour=8, minute=10))
+
+            if ocorrencias:
+                for ocorrencia in ocorrencias:
+                    print(ocorrencia)
+                    # enviar ocorrências
+                    client.send_message(int(os.getenv("CHAT_ID_GROUP_TEST")), ocorrencia)
 
             # Aguarda antes de verificar novamente valor em segundos
             time.sleep(tempo_ciclo)

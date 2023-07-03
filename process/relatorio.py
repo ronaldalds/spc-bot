@@ -22,7 +22,7 @@ def relatorio(client: Client, message: Message):
     # Procure o arquivo correspondente à data
     arquivo_encontrado = None
     for arquivo in arquivos:
-        if f'{data}' in arquivo:  # Substitua pelo formato correto do nome do arquivo
+        if data in arquivo:  # Substitua pelo formato correto do nome do arquivo
             arquivo_encontrado = arquivo
             break
         

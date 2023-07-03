@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 import time
+import os
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
@@ -19,6 +20,12 @@ class Avin:
         largura = 1280
         altura = 960
         options = webdriver.ChromeOptions()
+        options.add_experimental_option("prefs", {
+            "download.default_directory": os.path.join(os.getcwd(), 'process', 'downloads'),
+            "download.prompt_for_download": False,
+            "download.directory_upgrade": True,
+            "safebrowsing.enabled": True,
+        })
         options.add_argument(f"--window-size={largura},{altura}")
         options.headless = headless
         self._driver = webdriver.Chrome(
