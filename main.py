@@ -268,11 +268,24 @@ def parar_faturamento(client: Client, message: Message):
 def status_faturamento(client: Client, message: Message):
     handle_status_invoicing_mk3(client, message)
 
+############################################# X9 #############################################
 # iniciar x9
 @app.on_message(filters.command("iniciar_x9"))
-@authorization(chat_adm)
+@authorization(chat_logistica)
 def iniciar_x9(client: Client, message: Message):
     handle_start_x9_mk1(client, message)
+
+# parar x9
+@app.on_message(filters.command("parar_x9"))
+@authorization(chat_logistica)
+def parar_x9(client: Client, message: Message):
+    handle_stop_x9_mk1(client, message)
+
+# status x9
+@app.on_message(filters.command("status_x9"))
+@authorization(chat_logistica)
+def status_x9(client: Client, message: Message):
+    handle_status_x9_mk1(client, message)
 
 # stop service
 @app.on_message(filters.command("stop_service"))

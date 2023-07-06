@@ -227,5 +227,5 @@ def recolhimento(
     # log recolhimento de contrato conluído
     logger_recolhimento.log(SUCESS, f'{prefixo_log_recolhimento} - recolhimento de contrato conluído')
 
-    time.sleep(10)
+    time.sleep(5)
     instance.close()

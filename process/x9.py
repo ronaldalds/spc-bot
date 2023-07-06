@@ -3,9 +3,7 @@ from driver.avin.avin_driver import Avin
 from dotenv import load_dotenv
 import os
 import pandas
-import csv
 import logging
-import codecs
 from datetime import datetime, timedelta
 
 load_dotenv()
@@ -15,18 +13,6 @@ def ler_arquivo_csv(caminho_arquivo, data_atual):
     result = []
     avisos = pandas.read_csv(os.path.join(os.path.dirname(__file__), 'downloads', caminho_arquivo), encoding="ISO-8859-1", sep=';')
     avisos.drop(columns=['#', 'Data tratamento', 'Data GPS', 'Motorista', 'Atendente'], inplace=True)
-
-    # avisos['Ocorrência'] = avisos['Ocorrência'].apply(lambda data_str: data_str[:-3])
-
-    # Diferenca = list()
-
-    # for _, row in avisos.iterrows():
-    #     data_aviso = row[0]
-    #     diferenca = datetime.strptime(data_atual, "%d/%m/%Y %H:%M") - datetime.strptime(data_aviso,"%d/%m/%Y %H:%M")
-    #     Diferenca.append(diferenca.seconds)
-    
-    # avisos.insert(2, "segundos", Diferenca, True)
-    # avisos = avisos.loc[avisos["segundos"] <= 600]
 
     Veiculos = list(set(avisos['Veículo'].to_list()))
 
@@ -39,19 +25,9 @@ def ler_arquivo_csv(caminho_arquivo, data_atual):
             txt += '⏰ ' + ocor + '\n'
 
         result.append(txt)
-    # linhas = []
-
-    # with codecs.open(os.path.join(os.path.dirname(__file__), 'downloads', caminho_arquivo), 'r', encoding='utf-8', errors='replace') as arquivo_csv:
-    #     leitor_csv = csv.reader(arquivo_csv)
-    #     for linha in leitor_csv:
-    #         linhas.append(linha)
     
     os.remove(os.path.join(os.path.dirname(__file__), 'downloads', caminho_arquivo))
     
-    # if len(linhas) == 0:
-    #     return False
-
-    # return linhas
     return result
 
 def x9(data: datetime):
@@ -68,20 +44,17 @@ def x9(data: datetime):
         encoding='utf-8',
         filemode='a'
         )
+    
     logger_x9 = logging.getLogger("x9")
-    duracao = timedelta(minutes=31)
+    duracao = timedelta(minutes=30)
     data_inicial = (data - duracao).strftime('%d/%m/%Y')
     hora_inicial = (data - duracao).hour
     minuto_inicial = (data - duracao).minute
     data_final = data.strftime('%d/%m/%Y')
     hora_final = data.hour
     minuto_final = data.minute
-    # print(data_inicial)
-    # print(hora_inicial)
-    # print(minuto_inicial)
-    # print(data_final)
-    # print(hora_final)
-    # print(minuto_final)
+
+    # criar instancia
     try:
         instance = Avin(
             username=os.getenv('USERNAME_AVIN'),
@@ -91,6 +64,7 @@ def x9(data: datetime):
     except:
         logger_x9.error('Não foi possível criar instancia do avin...')
 
+    # login no site avin
     try:
         instance.login()
     except:
@@ -98,6 +72,7 @@ def x9(data: datetime):
         instance.close()
         return
 
+    # clica para abrir aside
     try:
         instance.click('//a[@class="pull-left sidebar-toggle ft-menu-toggle"]')
     except:
@@ -105,6 +80,7 @@ def x9(data: datetime):
         instance.close()
         return
 
+    # clica em relatórios
     try:
         instance.click('//span[text()="Relatórios"]')
     except:
@@ -112,6 +88,7 @@ def x9(data: datetime):
         instance.close()
         return
 
+    # clica em alertas
     try:
         instance.click('//a[@href="https://gpsa.avinrastreamento.com.br/relatorios/alertas_controller"]')
     except:
@@ -250,11 +227,15 @@ def x9(data: datetime):
                 break
         
         result_ocor = ler_arquivo_csv(caminho_arquivo, data) # faz leitura do arquivos csv em caso de existir alguma ocorrência
+
+        # log x9 concluído
+        logger_x9.log(SUCESS, f'x9 concluído - {result_ocor}')
+
+        time.sleep(5)
+        instance.close()
+        return result_ocor
     
-    # log x9 concluído
-    logger_x9.log(SUCESS, 'x9 concluído')
-
-    time.sleep(5)
-    instance.close()
-
-    return result_ocor
+    else:
+        time.sleep(5)
+        instance.close()
+        return

@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+import os
 from pyrogram.types import Message
 from pyrogram import Client
 from process.faturamento import faturamento
@@ -10,7 +11,7 @@ load_dotenv()
 running_mk1 = False
 running_mk3 = False
 regra = [2,5,8,17,25,27]
-tempo_ciclo = 60 * 1 * 1 # segundos * minutos * horas
+tempo_ciclo = int(os.getenv('TIME_CLICO_FATURAMENTO'))
 
 def handle_start_invoicing_mk1(client: Client, message: Message):
     global running_mk1

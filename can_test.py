@@ -1,5 +1,19 @@
 from process.x9 import x9
 from datetime import datetime, timedelta
+import os
+from dotenv import load_dotenv
+from pyrogram import Client
+load_dotenv()
+
+app = Client(
+    name=os.getenv("BOT_NAME_TELEGRAM"), 
+    api_hash=os.getenv("API_HASH_TELEGRAM"),
+    api_id=os.getenv("API_ID_TELEGRAM"),
+    bot_token=os.getenv("BOT_TOKEN_TELEGRAM")
+    )
+grupo_transport = int(os.getenv('CHAT_ID_GROUP_TEST'))
+# print(type(-1001550273372))
+# print(type(int(os.getenv('CHAT_ID_GROUP_TEST'))))
 # time = timedelta(minutes=31)
 # data_inicial = (datetime.now() - time).strftime('%d/%m/%Y')
 # hora_inicial = (datetime.now() - time).hour
@@ -14,20 +28,27 @@ from datetime import datetime, timedelta
 # print(data_final)
 # print(hora_final)
 # print(minuto_final)
-test = x9(datetime(day=12, month=6, year=2023, hour=8, minute=10))
 # test = x9(datetime.now())
-print(test)
-if test:
-    for i in test:
-        print(i)
-
+# app.start()
+# app.send_message(chat_id=grupo_transport, text="asdfasrtwqr")
+# app.stop()
+test = x9(datetime(day=12, month=6, year=2023, hour=8, minute=10))
+for ocorrencia in test:
+    app.start()
+    # enviar ocorrências
+    app.send_message(grupo_transport, ocorrencia)
+    app.stop()
+# print(test)
+# if test:
+#     for i in test:
+#         print(i)
         
-data_inicial = "11/06/2023"
-hora_inicial = "09"
-minuto_inicial = "30"
-data_final = "29/06/2023"
-hora_final = "11"
-minuto_final = "30"
+# data_inicial = "11/06/2023"
+# hora_inicial = "09"
+# minuto_inicial = "30"
+# data_final = "29/06/2023"
+# hora_final = "11"
+# minuto_final = "30"
 # from driver.formatador import formatar_documento
 # import copy
 # from driver.spc.spc_driver import Spc

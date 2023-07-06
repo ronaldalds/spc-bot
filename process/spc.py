@@ -221,6 +221,6 @@ def include(
     # log incluir spc conluído
     logger_spc.log(SUCESS, f'{prefixo_log_spc}  - incluir spc conluído')
 
-    time.sleep(10)
+    time.sleep(5)
     instance.close()
     

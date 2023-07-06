@@ -301,5 +301,5 @@ def cancelamento(
     # log cancelamento de contrato conluído
     logger_cancelamento.log(SUCESS, f'{prefixo_log_cancelamento} - cancelamento de contrato conluído')
 
-    time.sleep(10)
+    time.sleep(5)
     instance.close()
