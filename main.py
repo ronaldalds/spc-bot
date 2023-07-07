@@ -18,7 +18,7 @@ from service.service_x9 import handle_start_x9_mk1, handle_stop_x9_mk1, handle_s
 
 load_dotenv()
 
-version = "0.0.4"
+version = "0.0.5"
 
 app = Client(
     name=os.getenv("BOT_NAME_TELEGRAM"), 
@@ -90,6 +90,7 @@ def start(client, message: Message):
 /mis - Setor MIS
 /ost - Setor OST
 /financeiro - Setor Financeiro
+/logistica - Setor Logistica
 /chat - Para informa seu chat_id
 """)
 
@@ -116,6 +117,15 @@ def financeiro(client, message: Message):
     message.reply_text(f"""
 /faturamento_mk1 - Criar filtro de faturamento mk1
 /faturamento_mk3 - Criar filtro de faturamento mk3
+""")
+    
+@app.on_message(filters.command("logistica"))
+@authorization(chat_logistica)
+def financeiro(client, message: Message):
+    message.reply_text(f"""
+/iniciar_x9 - Iniciar x9
+/parar_x9 - Parar x9
+/status_x9 - Status x9
 """)
 
 @app.on_message(filters.command("spc"))
