@@ -18,13 +18,14 @@ grupo_transport = int(os.getenv('CHAT_ID_GROUP_TRANSPORT'))
 
 def chamada():
     global running
-    res = x9(datetime.now())
-    print(res, type(res))
+    # data = datetime(day=8, month=7, year=2023, hour=00, minute=00)
+    data = datetime.now()
+    print(f"iniciando verificação: {datetime.now()}")
+    res = x9(data, tempo_ciclo)
     if running and res:
-        resultado_x9.put(res)
+        res = resultado_x9.put(res)
 
 def agendar_funcao():
-    print(f"iniciando verificação: {datetime.now()}")
     threading.Thread(target=chamada).start()
 
 def handle_start_x9_mk1(client: Client, message: Message):
@@ -32,16 +33,15 @@ def handle_start_x9_mk1(client: Client, message: Message):
     if not running:
         running = True
         message.reply_text("X9 em execução.")
-        job_x9 = schedule.every(tempo_ciclo).minutes.do(agendar_funcao)
         print(f"X9 em execução: {datetime.now()}")
+        job_x9 = schedule.every(tempo_ciclo).minutes.do(agendar_funcao)
 
         while running:
             schedule.run_pending()
-            time.sleep(10)
+            time.sleep(1)
             # verifica se existe ocorrência
             if not resultado_x9.empty():
                 ocorrencias = resultado_x9.get()
-                print(ocorrencia)
                 for ocorrencia in ocorrencias:
                     # enviar ocorrências
                     client.send_message(grupo_transport, ocorrencia)

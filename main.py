@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from service.service_spc import handle_start_include_spc, handle_stop_include_spc, handle_status_include_spc
 from service.service_cancellation import handle_start_cancellation_mk, handle_stop_cancellation_mk, handle_status_cancellation_mk
 from service.service_retreat import handle_start_retreat_mk, handle_stop_retreat_mk, handle_status_retreat_mk
+from service.service_x9 import handle_start_x9_mk1, handle_stop_x9_mk1, handle_status_x9_mk1
 from service.service_report import handle_report
 from service.service_invoicing import (
     handle_start_invoicing_mk1,
@@ -14,7 +15,6 @@ from service.service_invoicing import (
     handle_stop_invoicing_mk3,
     handle_status_invoicing_mk3
     )
-from service.service_x9 import handle_start_x9_mk1, handle_stop_x9_mk1, handle_status_x9_mk1
 
 load_dotenv()
 
@@ -77,7 +77,6 @@ def authorization(ids_autorizados):
                 message.reply_text("Você não está autorizado a usar este bot.")
         return verificacao
     return decorador
-
 
 @app.on_message(filters.command("chatgroup"))
 def handle_chatgroup_id(client: Client, message: Message):
