@@ -8,23 +8,24 @@ from urllib import request, parse
 from collections import Counter
 load_dotenv()
 
-avin = APIavin()
-ajuste_gmt = timedelta(hours=3)
-data = datetime(day=8, month=7, year=2023, hour=00, minute=00)
+# avin = APIavin()
+# ajuste_gmt = timedelta(hours=3)
+data = datetime(day=13, month=7, year=2023, hour=15, minute=49)
 # data = datetime.now()
 duracao = timedelta(minutes=1440)
 data_inicial = (data - duracao)
 data_final = data
-print(data_inicial)
-print(data_final)
-print(data_inicial + ajuste_gmt)
-print(data_final + ajuste_gmt)
-print(int(data_inicial.timestamp()))
+# print(data_inicial)
+# print(data_final)
+# print(data_inicial + ajuste_gmt)
+# print(data_final + ajuste_gmt)
+# print(int(data_inicial.timestamp()))
 print(int(data_final.timestamp()))
-print(int(data_final.timestamp()) - int(data_inicial.timestamp()))
+print(1689274140)
+# print(int(data_final.timestamp()) - int(data_inicial.timestamp()))
 
 # dados = avin.alerts_period(inicial=int(data_inicial.timestamp()), final=int(data_final.timestamp()))
-print(x9(data, 1440))
+# print(x9(data, 1440))
 # for i in dados:
 #     placa = avin.veiculo_id(i['ras_eal_id_veiculo'])[0]['ras_vei_tag_identificacao']
 #     veiculo = avin.veiculo_id(i['ras_eal_id_veiculo'])[0]['ras_vei_veiculo']

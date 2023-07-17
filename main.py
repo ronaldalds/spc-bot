@@ -202,25 +202,6 @@ def parar_include_spc(client: Client, message: Message):
 def status_include_spc(client: Client, message: Message):
     handle_status_include_spc(client, message)
 
-############################################# CANCELLATION #############################################
-# iniciar cancelamento no sistema mk
-@app.on_message(filters.command("iniciar_cancelamento"))
-@authorization(chat_mis)
-def iniciar_cancellation(client: Client, message: Message):
-    handle_start_cancellation_mk(client, message)
-
-# parar cancelamento no sistema mk
-@app.on_message(filters.command("parar_cancelamento"))
-@authorization(chat_mis)
-def parar_cancellation(client: Client, message: Message):
-    handle_stop_cancellation_mk(client, message)
-
-# status cancelamento no sistema mk
-@app.on_message(filters.command("status_cancelamento"))
-@authorization(chat_mis)
-def status_cancellation(client: Client, message: Message):
-    handle_status_cancellation_mk(client, message)
-
 ############################################# RETREAT #############################################
 # iniciar recolhimento no sistema mk
 @app.on_message(filters.command("iniciar_recolhimento"))
@@ -276,25 +257,6 @@ def parar_faturamento(client: Client, message: Message):
 @authorization(chat_financeiro)
 def status_faturamento(client: Client, message: Message):
     handle_status_invoicing_mk3(client, message)
-
-############################################# X9 #############################################
-# iniciar x9
-@app.on_message(filters.command("iniciar_x9"))
-@authorization(chat_logistica)
-def iniciar_x9(client: Client, message: Message):
-    handle_start_x9_mk1(client, message)
-
-# parar x9
-@app.on_message(filters.command("parar_x9"))
-@authorization(chat_logistica)
-def parar_x9(client: Client, message: Message):
-    handle_stop_x9_mk1(client, message)
-
-# status x9
-@app.on_message(filters.command("status_x9"))
-@authorization(chat_logistica)
-def status_x9(client: Client, message: Message):
-    handle_status_x9_mk1(client, message)
 
 # stop service
 @app.on_message(filters.command("stop_service"))
