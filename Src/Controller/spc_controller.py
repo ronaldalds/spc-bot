@@ -1,13 +1,12 @@
 import os
-import time
-import openpyxl
-from datetime import datetime
-from process.spc import include
+import concurrent.futures
+import pandas as pd
 from dotenv import load_dotenv
 from pyrogram.types import Message
 from pyrogram import Client
-import concurrent.futures
-from driver.formatador import formatar_data, formatar_valor_multa
+from datetime import datetime
+from Src.Service.spc_service import include
+from Src.Util.formatador  import formatar_data, formatar_valor_multa
 
 load_dotenv()
 
@@ -21,114 +20,144 @@ def handle_start_include_spc(client: Client, message: Message):
             running = True
             # Criando Pool
             limite_threads = 4
+
             # Baixe o arquivo XLSX
+            file_path = message.download(in_memory=True)
+            hora = datetime.now()
+            file_name = hora.strftime("%S_%M_%H %Y-%m-%d.log")
             message.reply_text("Preparando arquivo XLSX")
-            file_path = message.download()
-            # Processar o arquivo XLSX conforme necessário
+
+            # caminho pasta de logs
+            diretorio_logs = os.path.join(os.path.dirname(__file__), 'logs')
+
+            # caminho pasta de docs
+            diretorio_docs = os.path.join(os.path.dirname(__file__), 'docs')
+
+            # cria pasta de logs em caso de nao existir
+            if not os.path.exists(diretorio_logs):
+                os.makedirs(diretorio_logs)
+
+            # cria pasta de docs em caso de nao existir
+            if not os.path.exists(diretorio_docs):
+                os.makedirs(diretorio_docs)
             try:
                 try:
-                    workbook = openpyxl.load_workbook(file_path)
-                except openpyxl.utils.exceptions.InvalidFileException:
+                    # Ler o arquivo XLSX usando pandas e especificar a codificação UTF-8
+                    df = pd.read_excel(file_path, engine='openpyxl')
+
+                    # Converter o dataframe para uma lista de dicionários
+                    lista = df.to_dict(orient='records')
+
+                    # Verificar se a chave 'MK' contém valor NaN
+                    lista = [dados for dados in lista if not pd.isna(dados.get('CPF/CNPJ'))]
+                    # print(lista)
+
+                    # Criar aquivo de log com todos os contratos enviados para cancelamento
+                    with open(os.path.join(diretorio_docs, file_name), "a") as pedido:
+                        for c,arg in enumerate(lista):
+                            pedido.write(f"{(c + 1):03};SPC;CPF/CNPJ:{int(arg.get('CPF/CNPJ'))};Consumidor:{int(arg.get('Nome Consumidor'))};Débito:{int(arg.get('Valor do Débito'))};Agente:{message.from_user.first_name}.{message.from_user.last_name}\n")
+                    
+                    # Envia arquivo de docs com todos as solicitações de cancelamento
+                    with open(os.path.join(diretorio_docs, file_name), "rb") as enviar_docs:
+                        client.send_document(os.getenv("CHAT_ID_ADM"),enviar_docs, caption=f"solicitações {file_name}", file_name=f"solicitações {file_name}")
+
+                    
+                    message.reply_text(f"Processando arquivo XLSX do SPC com {len(lista)}...")
+
+                except pd.errors.ParserError:
                     message.reply_text("O arquivo fornecido não é um arquivo XLSX válido.")
+                    running = False
                     return
                 
-                sheet = workbook.active
-                max_row = sheet.max_row
-                lista = []
-                headers = [cell.value for cell in sheet[1]]
-                for row in sheet.iter_rows(min_row=2, max_row=max_row, values_only=True):
-                    if row[headers.index('Tipo de Pessoa')] == 'física':
-                        try:
-                            cpf_cnpj = str(row[headers.index('CPF/CNPJ')])
-                            data_nascimento = formatar_data(str(row[headers.index('Data Nascimento')]))
-                            ddd = str(row[headers.index('DDD')])
-                            celular = str(row[headers.index('Celular')])
-                            cep = str(row[headers.index('CEP')])
-                            logradouro = str(row[headers.index('Logradouro')])
-                            numero = str(row[headers.index('Número')])
-                            complemento = str(row[headers.index('Complemento')])
-                            bairro = str(row[headers.index('Bairro')])
-                            data_vencimento = formatar_data(str(row[headers.index('Data Vencimento')]))
-                            data_compra = formatar_data(str(row[headers.index('Data Compra')]))
-                            cod_cliente = str(row[headers.index('Cod Cliente')])
-                            valor_debito = formatar_valor_multa(row[headers.index('Valor do Débito')])
-
-                            # Se chegou até aqui, os dados são válidos, então adiciona à lista
-                            lista.append((
-                                cpf_cnpj,
-                                data_nascimento,
-                                ddd,
-                                celular,
-                                cep,
-                                logradouro,
-                                numero,
-                                complemento,
-                                bairro,
-                                data_vencimento,
-                                data_compra,
-                                cod_cliente,
-                                valor_debito
-                                ))
-                        except Exception as e:
-                            print(f"Error: na linha {len(lista) + 1}, {e}")
-
-                message.reply_text(f"Processando arquivo XLSX do SPC com {len(lista)} clientes...")
-                file_pedido = datetime.now().strftime("%Y-%m-%d.log")
-                with open(os.path.join(os.path.dirname(__file__), 'docs_solicitacoes', file_pedido), "a") as pedido:
-                    for c, i in enumerate(lista):
-                        pedido.write(f"{(c + 1):03};SPC;cpf:{i[0]};cod:{i[11]};valor:{i[12]}\n")
-                    pedido.write("#" * 120 + f"{message.chat.id}\n")
-                def executar(arg):
+                def executar(arg: dict, message: Message):
                     if running:
                         try:
-                            include(
-                                cpf_cnpj = arg[0],
-                                data_nascimento = arg[1],
-                                ddd = arg[2],
-                                celular = arg[3],
-                                cep = arg[4],
-                                logradouro = arg[5],
-                                numero = arg[6],
-                                complemento = arg[7],
-                                bairro = arg[8],
-                                data_vencimento = arg[9],
-                                data_compra = arg[10],
-                                cod_cliente = arg[11],
-                                valor_debito = arg[12],
+                            cpf_cnpj = int(arg.get("CPF/CNPJ"))
+                            data_nascimento = formatar_data(arg.get("Data Nascimento"))
+                            ddd = int(arg.get("DDD"))
+                            celular = arg.get("Celular")
+                            cep = arg.get("CEP")
+                            logradouro = arg.get("Logradouro")
+                            numero = arg.get("Número")
+                            complemento = arg.get("Complemento")
+                            bairro = arg.get("Bairro")
+                            data_vencimento = formatar_data(arg.get("Data Vencimento"))
+                            data_compra = formatar_data(arg.get("Data Compra"))
+                            cod_cliente = arg.get("Cod Cliente")
+                            valor_debito = formatar_valor_multa(arg.get("Valor do Débito"))
+
+                            return include(
+                                cpf_cnpj = cpf_cnpj,
+                                data_nascimento = data_nascimento,
+                                ddd = ddd,
+                                celular = celular,
+                                cep = cep,
+                                logradouro = logradouro,
+                                numero = numero,
+                                complemento = complemento,
+                                bairro = bairro,
+                                data_vencimento = data_vencimento,
+                                data_compra = data_compra,
+                                cod_cliente = cod_cliente,
+                                valor_debito = valor_debito,
                                 )
                         except Exception as e:
-                            print(f"Error executing: cpf:{arg[0]} - {e}")
+                            print(f'Error executar na função cancelamento:mk:{int(arg.get("MK"))} cod:{int(arg.get("Cod Pessoa"))} contrato:{int(arg.get("Contrato"))} {e}')
                     else:
-                        message.reply_text(f"Inclusão SPC cpf:{arg[0]} parado.")
+                        message.reply_text(f'Cancelamento mk:{int(arg.get("MK"))} cod:{int(arg.get("Cod Pessoa"))} contrato:{int(arg.get("Contrato"))} parado.')
+
+                # Criando Pool
                 with concurrent.futures.ThreadPoolExecutor(max_workers=limite_threads) as executor:
-                    executor.map(executar, lista)
-                
-            # ...
+                    resultados = executor.map(executar, lista)
+            
+            except Exception as e:
+                print(f"Ocorreu um erro ao processar o arquivo XLSX: {e}")
+                running = False
+                return
+            
             finally:
-            # Excluir o arquivo XLSX
-                time.sleep(1)
-                os.remove(file_path)
+                # Criar aquivo de log com todos os resultados de cancelamento
+                with open(os.path.join(diretorio_logs, file_name), "a") as file:
+                    if resultados:
+                        for resultado in resultados:
+                            file.write(f"{resultado}\n")
+
+                # Envia arquivo de log com todos os resultados de cancelamento
+                with open(os.path.join(diretorio_logs, file_name), "rb") as enviar_logs:
+                    message.reply_document(enviar_logs, caption=file_name, file_name=file_name)
+                    client.send_document(os.getenv("CHAT_ID_ADM"), enviar_logs, caption=f"resultado {file_name}", file_name=f"resultado {file_name}")
+
                 print("Processo SPC concluído.")
-            # Responder à mensagem do usuário com o resultado do processamento do arquivo
-            message.reply_text("O arquivo XLSX do SPC foi processado com sucesso!")
-            running = False
+                message.reply_text("O arquivo XLSX de SPC foi processado com sucesso!")
+                running = False
+                return
+        
         else:
             # Responder à mensagem do usuário com uma mensagem de erro
             message.reply_text("Por favor, envie um arquivo XLSX para processar.")
+            return
     else:
-        message.reply_text("Inclusão SPC em execução.")
+        message.reply_text("SPC em execução.")
 
 def handle_stop_include_spc(client: Client, message: Message):
     global running
-    running = False
-    message.reply_text("Pedido de parada iniciado...")
-
+    if running:
+        running = False
+        message.reply_text("Pedido de parada iniciado...")
+        return
+    else:
+        message.reply_text("SPC parado")
+        return
+        
 def handle_status_include_spc(client: Client, message: Message):
     global running
     try:
         if running:
-            message.reply_text("Inclusão SPC em execução.")
+            message.reply_text("SPC em execução")
+            return
         else:
-            message.reply_text("Inclusão SPC parado.")
+            message.reply_text("SPC parado")
+            return
     except:
-        message.reply_text("Inclusão SPC parado.")
+        message.reply_text("SPC parado")
+        return

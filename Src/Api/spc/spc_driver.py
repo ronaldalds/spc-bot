@@ -7,7 +7,6 @@ from selenium.webdriver.support.expected_conditions import (
     alert_is_present,
 )
 
-
 class Spc:
     def __init__(self, operation: str, password: str, secret: str, url: str):
         self._operation: str = operation
