@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  spc:
+    container_name: spc
+    build: .
+    image: spc:0.0.5
+    shm_size: 2g
+    tty: true

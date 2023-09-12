@@ -22,7 +22,7 @@ chat_adm = [
 
 chat_group = [
     int(os.getenv("CHAT_ID_ADM")),
-    int(os.getenv("CHAT_ID_SPC")),
+    int(os.getenv("CHAT_ID_GROUP_SPC")),
     ]
 
 @app.on_message(filters.command("start"))
@@ -43,7 +43,7 @@ def spc(client, message: Message):
 """)
     
 @app.on_message(filters.command("chatgroup"))
-@authorization_adm(chat_adm)
+# @authorization_adm(chat_adm)
 def handle_chatgroup_id(client: Client, message: Message):
     client.send_message(message.from_user.id, message)
 
