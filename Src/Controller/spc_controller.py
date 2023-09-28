@@ -26,6 +26,7 @@ def handle_start_include_spc(client: Client, message: Message):
             hora = datetime.now()
             file_name = hora.strftime("%S_%M_%H %Y-%m-%d.log")
             message.reply_text("Preparando arquivo XLSX")
+            agente = f"{message.from_user.first_name}.{message.from_user.last_name}"
 
             # caminho pasta de logs
             diretorio_logs = os.path.join(os.path.dirname(__file__), 'logs')
@@ -57,7 +58,7 @@ def handle_start_include_spc(client: Client, message: Message):
                     # Criar aquivo de log com todos os contratos enviados para cancelamento
                     with open(os.path.join(diretorio_docs, file_name), "a") as pedido:
                         for c,arg in enumerate(lista):
-                            pedido.write(f"{(c + 1):03};SPC;CPF/CNPJ:{int(arg.get('CPF/CNPJ'))};Consumidor:{int(arg.get('Nome Consumidor'))};Débito:{int(arg.get('Valor do Débito'))};Agente:{message.from_user.first_name}.{message.from_user.last_name}\n")
+                            pedido.write(f"{(c + 1):03};SPC;CPF/CNPJ:{arg.get('CPF/CNPJ')};Consumidor:{arg.get('Nome Consumidor')};Débito:{arg.get('Valor do Débito')};Agente:{agente}\n")
                     
                     # Envia arquivo de docs com todos as solicitações de cancelamento
                     with open(os.path.join(diretorio_docs, file_name), "rb") as enviar_docs:
@@ -74,7 +75,7 @@ def handle_start_include_spc(client: Client, message: Message):
                 def executar(arg: dict, message: Message):
                     if running:
                         try:
-                            cpf_cnpj = int(arg.get("CPF/CNPJ"))
+                            cpf_cnpj = arg.get("CPF/CNPJ")
                             data_nascimento = formatar_data(arg.get("Data Nascimento"))
                             ddd = int(arg.get("DDD"))
                             celular = arg.get("Celular")
@@ -104,9 +105,9 @@ def handle_start_include_spc(client: Client, message: Message):
                                 valor_debito = valor_debito,
                                 )
                         except Exception as e:
-                            print(f'Error executar na função cancelamento:mk:{int(arg.get("MK"))} cod:{int(arg.get("Cod Pessoa"))} contrato:{int(arg.get("Contrato"))} {e}')
+                            print(f"Error executar na função include: CPF/CNPJ:{arg.get('CPF/CNPJ')} Consumidor:{arg.get('Nome Consumidor')} Débito:{arg.get('Valor do Débito')} {e}")
                     else:
-                        message.reply_text(f'Cancelamento mk:{int(arg.get("MK"))} cod:{int(arg.get("Cod Pessoa"))} contrato:{int(arg.get("Contrato"))} parado.')
+                        message.reply_text(f"SPC CPF/CNPJ:{arg.get('CPF/CNPJ')};Consumidor:{arg.get('Nome Consumidor')};Débito:{arg.get('Valor do Débito')} parado.")
 
                 # Criando Pool
                 with concurrent.futures.ThreadPoolExecutor(max_workers=limite_threads) as executor:
