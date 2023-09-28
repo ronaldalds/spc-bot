@@ -40,6 +40,8 @@ def handle_start_include_spc(client: Client, message: Message):
             # cria pasta de docs em caso de nao existir
             if not os.path.exists(diretorio_docs):
                 os.makedirs(diretorio_docs)
+            
+            resultados = []
             try:
                 try:
                     # Ler o arquivo XLSX usando pandas e especificar a codificação UTF-8
@@ -61,7 +63,7 @@ def handle_start_include_spc(client: Client, message: Message):
                     with open(os.path.join(diretorio_docs, file_name), "rb") as enviar_docs:
                         client.send_document(os.getenv("CHAT_ID_ADM"),enviar_docs, caption=f"solicitações {file_name}", file_name=f"solicitações {file_name}")
 
-                    resultados = None
+                    
                     message.reply_text(f"Processando arquivo XLSX do SPC com {len(lista)}...")
 
                 except pd.errors.ParserError:
