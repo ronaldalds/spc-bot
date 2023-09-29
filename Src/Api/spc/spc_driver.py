@@ -2,6 +2,8 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.expected_conditions import (
     alert_is_present,
@@ -18,8 +20,9 @@ class Spc:
         options.add_argument("--port=4444")
         options.add_argument('--no-sandbox')
         options.add_argument(f"--window-size={largura},{altura}")
-        options.add_argument('--headless')
+        # options.add_argument('--headless')
         self._driver = webdriver.Chrome(
+            service=Service(ChromeDriverManager().install()),
             options=options
             )
         self._wdw = WebDriverWait(self._driver, 300)

@@ -190,7 +190,7 @@ def include(
 
     # escrever valor do debito
     try:
-        instance.write('//*[@id="valorDebito"]', valor_debito)
+        instance.write('//*[@id="valorDebito"]', valor_debito + Keys.TAB)
     except:
         instance.close()
         print(f'{error};{prefixo_log_spc};escrever valor do debito')
@@ -198,7 +198,7 @@ def include(
 
     # click botão de incluir cliente
     try:
-        instance.click('//*[@class="btn_footer"]/input[1]')
+        instance.click('//*[@value="INCLUIR E ENVIAR NOTIF. FÍSICA"]')
     except:
         instance.close()
         print(f'{error};{prefixo_log_spc};click botão de incluir cliente')
