@@ -19,7 +19,7 @@ def handle_start_include_spc(client: Client, message: Message):
         if message.document and message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
             running = True
             # Criando Pool
-            limite_threads = 1
+            limite_threads = 4
 
             # Baixe o arquivo XLSX
             file_path = message.download(in_memory=True)
