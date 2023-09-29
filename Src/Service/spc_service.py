@@ -198,8 +198,7 @@ def include(
 
     # click botão de incluir cliente
     try:
-        instance.click('//*[@id="idButtonNotificacaoDebitoFisica"]')
-        instance.click('//*[@id="idButtonNotificacaoRegistroInteligente"]')
+        instance.click('//*[@class="btn_footer"]/input[1]')
     except:
         instance.close()
         print(f'{error};{prefixo_log_spc};click botão de incluir cliente')

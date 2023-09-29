@@ -52,6 +52,7 @@ class Spc:
         return value
 
     def include(self):
+        time.sleep(5)
         self._wdw.until(alert_is_present())
         self._driver.switch_to.alert.accept()
         time.sleep(5)

@@ -72,36 +72,36 @@ def handle_start_include_spc(client: Client, message: Message):
                     running = False
                     return
                 
-                def executar(arg: dict, message: Message):
+                def executar(arg: dict):
                     if running:
                         try:
-                            cpf_cnpj = arg.get("CPF/CNPJ")
+                            cpf_cnpj: str = str(arg.get("CPF/CNPJ"))
                             data_nascimento = formatar_data(arg.get("Data Nascimento"))
-                            ddd = int(arg.get("DDD"))
-                            celular = arg.get("Celular")
-                            cep = arg.get("CEP")
+                            ddd: str = str(arg.get("DDD"))
+                            celular: str = str(arg.get("Celular"))
+                            cep: str = str(arg.get("CEP"))
                             logradouro = arg.get("Logradouro")
                             numero = arg.get("Número")
                             complemento = arg.get("Complemento")
                             bairro = arg.get("Bairro")
                             data_vencimento = formatar_data(arg.get("Data Vencimento"))
                             data_compra = formatar_data(arg.get("Data Compra"))
-                            cod_cliente = arg.get("Cod Cliente")
+                            cod_cliente: str = str(arg.get("Cod Cliente"))
                             valor_debito = formatar_valor_multa(arg.get("Valor do Débito"))
 
                             return include(
-                                cpf_cnpj = cpf_cnpj,
+                                cpf_cnpj = ''.join(caractere for caractere in cpf_cnpj if caractere.isnumeric()),
                                 data_nascimento = data_nascimento,
-                                ddd = ddd,
-                                celular = celular,
-                                cep = cep,
+                                ddd = ''.join(caractere for caractere in ddd if caractere.isnumeric()),
+                                celular = ''.join(caractere for caractere in celular if caractere.isnumeric()),
+                                cep = ''.join(caractere for caractere in cep if caractere.isnumeric()),
                                 logradouro = logradouro,
                                 numero = numero,
                                 complemento = complemento,
                                 bairro = bairro,
                                 data_vencimento = data_vencimento,
                                 data_compra = data_compra,
-                                cod_cliente = cod_cliente,
+                                cod_cliente = ''.join(caractere for caractere in cod_cliente if caractere.isnumeric()),
                                 valor_debito = valor_debito,
                                 )
                         except Exception as e:
